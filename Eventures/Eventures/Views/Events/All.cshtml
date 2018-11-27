@@ -1,0 +1,38 @@
+﻿@model Eventures.ViewModels.AllEventsViewModel
+@{
+    ViewData["Title"] = "All Events";
+}
+
+<div class="col-lg-offset-1 col-lg-10">
+    <h1 class="text-center">All Events</h1>
+    <hr class="bg-secondary " />
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">Name</th>
+                <th scope="col">Start</th>
+                <th scope="col">End</th>
+                <th scope="col">Place</th>
+            </tr>
+        </thead>
+        <tbody>
+            @{ var index = 1; }
+            @for (var i = 0; i < Model.Events.Count(); i++)
+            {
+                {
+                    var e = Model.Events.ToList()[i];
+                    <tr>
+                        <th scope="row">@index</th>
+                        <td>@e.Name</td>
+                        <td>@e.Start</td>
+                        <td>@e.End</td>
+                        <td>@e.Place</td>
+                    </tr>
+                }
+                { index++; }
+            }
+        </tbody>
+    </table>
+    <hr class="bg-secondary"/>
+</div>

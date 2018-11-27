@@ -1,0 +1,49 @@
+﻿@model Eventures.ViewModels.RegisterViewModel
+@{
+    ViewData["Title"] = "Register";
+}
+
+<h1 class="text-center">Register</h1>
+<hr class="bg-secondary half-width" />
+<form class="mx-auto half-width" method="post" asp-controller="Accounts" asp-action="Register">
+    <div class="row">
+        <div class="col-6 form-group">
+            <label asp-for="Username">Username</label>
+            <input type="text" asp-for="Username" class="form-control" placeholder="Username...">
+        </div>
+        <div class="col-6 form-group">
+            <label asp-for="Email">Email</label>
+            <input asp-for="Email" type="email" class="form-control" placeholder="Email...">
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-6 form-group">
+            <label asp-for="Password">Password</label>
+            <input asp-for="Password" type="password" class="form-control" placeholder="Password...">
+        </div>
+        <div class="col-6 form-group">
+            <label asp-for="ConfirmPassword">Confirm Password</label>
+            <input asp-for="ConfirmPassword" type="password" class="form-control" placeholder="Confirm Password...">
+        </div>
+    </div>
+    <hr class="bg-secondary" />
+    <div class="row">
+        <div class="col-6 form-group">
+            <label asp-for="FirstName">First Name</label>
+            <input asp-for="FirstName" type="text" class="form-control" placeholder="First Name...">
+        </div>
+        <div class="col-6 form-group">
+            <label asp-for="LastName">First Name</label>
+            <input asp-for="LastName" type="text" class="form-control" placeholder="Last Name...">
+        </div>
+    </div>
+    <div class=" form-group">
+        <label asp-for="UCN">UCN</label>
+        <input asp-for="UCN" type="text" class="form-control" placeholder="Universal Citizen Number...">
+    </div>
+    <hr class="bg-secondary" />
+    <div class="button-holder d-flex justify-content-center">
+        <button type="submit" class="btn event-bg-color">Register</button>
+    </div>
+</form>
+
