@@ -38,13 +38,24 @@
                                 </a>
                                 <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                                     <a asp-controller="Events" asp-action="All" class="dropdown-item">All Events</a>
+                                    <a asp-controller="Events" asp-action="My" class="dropdown-item">My Events</a>
                                     @if (User.IsInRole("Admin"))
                                     {
                                         <a asp-controller="Events" asp-action="Create" class="dropdown-item">Create Event</a>
                                     }
                                 </div>
                             </li>
-
+                            @if (User.IsInRole("Admin"))
+                            {
+                                <li class="nav-item dropdown">
+                                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        Orders
+                                    </a>
+                                    <div class="dropdown-menu" aria-labelledby="navbarDropdown2">
+                                        <a asp-controller="Orders" asp-action="All" class="dropdown-item">All Orders</a>
+                                    </div>
+                                </li>
+                            }
                         }
                     </ul>
                 </div>
@@ -81,7 +92,7 @@
             @RenderBody()
         </main>
         <hr />
-        <footer class="col-lg-offset-1 col-lg-10 event-bg-color text-center">
+        <footer class="pt-1 col-lg-offset-1 col-lg-10 event-bg-color text-center">
             <p>&copy; CopyRight Eventures Inc. 2018. All rights reserved.</p>
         </footer>
     </div>

@@ -11,6 +11,11 @@ a {
     width: 50%;
 }
 
+label {
+    display: block;
+    text-align: center;
+}
+
 textarea {
     resize: none;
 }
@@ -21,7 +26,23 @@ textarea {
 }
 
 .nav-link-dark {
-    color: #C0C0C0
+    color: blue
+}
+
+.text-grey{
+    color:grey;
+}
+
+.hr-turquoise {
+    background-color: paleturquoise;
+}
+
+.hr-grey{
+    background-color:grey;
+}
+
+.hr-black{
+    background-color:black;
 }
 
 .hr-2 {
@@ -43,4 +64,8 @@ footer {
     border: 0;
     width: 80%;
     color: black
+}
+
+#tickets{
+    display:inline-block;
 }

@@ -7,6 +7,8 @@ namespace Eventures.ViewModels
 {
     public class BaseEventViewModel
     {
+        public int Id { get; set; }
+
         public string Name { get; set; }
 
         public string Place { get; set; }
@@ -18,5 +20,7 @@ namespace Eventures.ViewModels
         public decimal PricePerTicket { get; set; }
         
         public int TotalTickets { get; set; }
+
+        public TicketsAmountBindingModel TicketsAmountModel { get; set; }
     }
 }

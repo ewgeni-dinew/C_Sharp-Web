@@ -1,20 +1,18 @@
-﻿@model Eventures.ViewModels.AllEventsViewModel<Eventures.ViewModels.BaseEventViewModel>
-
+﻿@model  Eventures.ViewModels.AllEventsViewModel<Eventures.ViewModels.BaseOrderViewModel>
 @{
-    ViewData["Title"] = "All Events";
+    ViewData["Title"] = "All Orders";
 }
 
 <div class="col-lg-offset-1 col-lg-10">
-    <h1 class="text-center">All Events</h1>
+    <h1 class="text-center">All Orders</h1>
     <hr class="hr-2 hr-turquoise" />
     <table class="table table-striped">
         <thead>
             <tr>
                 <th scope="col">#</th>
-                <th scope="col">Name</th>
-                <th scope="col">Start</th>
-                <th scope="col">End</th>
-                <th scope="col">Actions</th>
+                <th scope="col">Event</th>
+                <th scope="col">Customer</th>
+                <th scope="col">Ordered On</th>
             </tr>
         </thead>
         <tbody>
@@ -26,9 +24,8 @@
                     <tr>
                         <th scope="row">@index</th>
                         <td>@e.Name</td>
-                        <td>@e.Start</td>
-                        <td>@e.End</td>
-                        <td>@Html.Partial("TicketsFormPartial",e.TicketsAmountModel)</td>
+                        <td>@e.Customer</td>
+                        <td>@e.OrderedOn</td>
                     </tr>
                 }
                 { index++; }

@@ -1,11 +1,10 @@
-﻿@model Eventures.ViewModels.AllEventsViewModel<Eventures.ViewModels.BaseEventViewModel>
-
+﻿@model Eventures.ViewModels.AllEventsViewModel<Eventures.ViewModels.BaseMyEventViewModel>
 @{
-    ViewData["Title"] = "All Events";
+    ViewData["Title"] = "My Events";
 }
 
 <div class="col-lg-offset-1 col-lg-10">
-    <h1 class="text-center">All Events</h1>
+    <h1 class="text-center">My Events</h1>
     <hr class="hr-2 hr-turquoise" />
     <table class="table table-striped">
         <thead>
@@ -14,7 +13,7 @@
                 <th scope="col">Name</th>
                 <th scope="col">Start</th>
                 <th scope="col">End</th>
-                <th scope="col">Actions</th>
+                <th scope="col">Tickets</th>
             </tr>
         </thead>
         <tbody>
@@ -23,13 +22,13 @@
             {
                 {
                     var e = Model.Events.ToList()[i];
-                    <tr>
-                        <th scope="row">@index</th>
-                        <td>@e.Name</td>
-                        <td>@e.Start</td>
-                        <td>@e.End</td>
-                        <td>@Html.Partial("TicketsFormPartial",e.TicketsAmountModel)</td>
-                    </tr>
+            <tr>
+                <th scope="row">@index</th>
+                <td>@e.Name</td>
+                <td>@e.Start</td>
+                <td>@e.End</td>
+                <td>@e.Tickets</td>
+            </tr>
                 }
                 { index++; }
             }

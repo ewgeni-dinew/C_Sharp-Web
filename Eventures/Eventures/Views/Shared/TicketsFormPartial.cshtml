@@ -1,0 +1,12 @@
+﻿@model  Eventures.ViewModels.TicketsAmountBindingModel
+@{
+    ViewData["Title"] = "TicketsFormPartial";
+}
+
+<form asp-controller="Events" asp-action="Order" method="post" asp-route-id=@Model.EventId>
+    <label id="tickets" style="display:inline-block">Tickets</label>
+    <input type="number" id="tickets" asp-for="Tickets" />
+    <button type="submit" class="btn event-bg-color">Order</button>
+    <span asp-validation-for="Tickets"></span>
+</form>
+

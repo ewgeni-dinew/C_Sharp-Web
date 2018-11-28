@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Eventures.Models;
+using Eventures.Services.Contracts;
 using Eventures.ViewModels;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -12,9 +13,11 @@ namespace Eventures.Controllers
     public class AccountsController : Controller
     {
         private SignInManager<EventuresUser> signInManager;
+        private IErrorExtractor extractor;
 
-        public AccountsController(SignInManager<EventuresUser> signInManager)
+        public AccountsController(SignInManager<EventuresUser> signInManager, IErrorExtractor extractor)
         {
+            this.extractor = extractor;
             this.signInManager = signInManager;
         }
 
@@ -24,33 +27,46 @@ namespace Eventures.Controllers
         }
 
         [HttpPost]
-        public ActionResult Register(RegisterViewModel model)
+        ////[ValidateAntiForgeryToken]
+        public ActionResult Register(RegisterBindingModel model)
         {
-            var user = new EventuresUser()
+            if (ModelState.IsValid)
             {
-                UserName = model.Username,
-                Email = model.Email,
-                UCN=model.UCN,
-                FirstName=model.FirstName,
-                LastName=model.LastName,
-            };
-
-            var result = this.signInManager.UserManager.CreateAsync(user, model.Password).Result;
-
-            if (this.signInManager.UserManager.Users.Count() == 1)
-            {
-                var adminRoleResult = this.signInManager.UserManager.AddToRoleAsync(user, "Admin").Result;
-                if (adminRoleResult.Errors.Any())
+                var user = new EventuresUser()
                 {
-                    return this.View();
-                }
-            }
-            if (result.Succeeded)
-            {
-                return this.RedirectToAction("Index", "Home");
-            }
+                    UserName = model.Username,
+                    Email = model.Email,
+                    UCN = model.UCN,
+                    FirstName = model.FirstName,
+                    LastName = model.LastName,
+                };
 
-            return this.View();
+                var result = this.signInManager.UserManager.CreateAsync(user, model.Password).Result;
+
+                if (this.signInManager.UserManager.Users.Count() == 1)
+                {
+                    var adminRoleResult = this.signInManager.UserManager.AddToRoleAsync(user, "Admin").Result;
+                    if (adminRoleResult.Errors.Any())
+                    {
+                        return this.View();
+                    }
+                }
+                if (result.Succeeded)
+                {
+                    return this.RedirectToAction("Index", "Home");
+                }
+
+                return this.View();
+            }
+            else
+            {
+                var errorModel = new ErrorViewModel()
+                {
+                    Message = extractor.ExtractErrors(ModelState.Values)
+                };
+
+                return this.View("Error", errorModel);
+            }       
         }
 
         public ActionResult Login()
@@ -59,7 +75,7 @@ namespace Eventures.Controllers
         }
 
         [HttpPost]
-        public ActionResult Login(LoginViewModel model)
+        public ActionResult Login(LoginBindingModel model)
         {
             var user = this.signInManager
                 .UserManager

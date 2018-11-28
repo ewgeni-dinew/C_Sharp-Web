@@ -1,9 +1,9 @@
-﻿@model Eventures.ViewModels.CreateEventViewModel
+﻿@model Eventures.ViewModels.CreateEventBindingModel
 @{
     ViewData["Title"] = "Create";
 }
 <h1 class="text-center">Create Event</h1>
-<hr class="bg-secondary half-width" />
+<hr class="hr-2 hr-turquoise half-width" />
 <form class="mx-auto half-width" method="post" asp-controller="Events" asp-action="Create">
     <div class="row">
         <div class="col-6 form-group">
@@ -15,7 +15,7 @@
             <input asp-for="Place" type="text" class="form-control" placeholder="Place...">
         </div>
     </div>
-    <hr class="bg-secondary"/>
+    <hr class="hr-2 hr-turquoise" />
     <div class="row">
         <div class="col-6 form-group">
             <label asp-for="Start">Start</label>
@@ -26,7 +26,7 @@
             <input asp-for="End" type="date" class="form-control">
         </div>
     </div>
-    <hr class="bg-secondary" />
+    <hr class="hr-2 hr-turquoise" />
     <div class="row">
         <div class="col-6 form-group">
             <label asp-for="TotalTickets">Total Tickets</label>

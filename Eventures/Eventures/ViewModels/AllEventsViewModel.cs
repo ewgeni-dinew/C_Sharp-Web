@@ -5,8 +5,8 @@ using System.Threading.Tasks;
 
 namespace Eventures.ViewModels
 {
-    public class AllEventsViewModel
+    public class AllEventsViewModel<T>
     {
-        public ICollection<BaseEventViewModel> Events { get; set; }
+        public ICollection<T> Events { get; set; }
     }
 }

@@ -14,6 +14,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Eventures.Models;
 using Eventures.Utilities;
+using Eventures.Services.Contracts;
+using Eventures.Services;
 
 namespace Eventures
 {
@@ -57,8 +59,9 @@ namespace Eventures
                 options.Password.RequireLowercase = false;
                 options.Password.RequireNonAlphanumeric = false;
                 options.Password.RequireUppercase = false;
-                options.Password.RequiredLength = 6;
+                options.Password.RequiredLength = 5;
                 options.Password.RequiredUniqueChars = 0;
+                options.User.RequireUniqueEmail = true;
             })
                 .AddDefaultTokenProviders()
                 .AddEntityFrameworkStores<EventuresDbContext>();
@@ -69,6 +72,8 @@ namespace Eventures
                 options.LogoutPath = "/Identity/Accounts/Logout";
                 options.AccessDeniedPath = "/Accounts/AccessDenied";
             });
+
+            services.AddScoped<IErrorExtractor, ErrorExtractor>();
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
         }
