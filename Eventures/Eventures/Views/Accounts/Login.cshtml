@@ -28,6 +28,10 @@
             <button type="submit" class="btn event-bg-color">Login</button>
         </div>
     </form>
+    @foreach (var link in Model.ExternalLinks)
+    {
+        <a class="btn btn-primary" asp-action="signin" asp-route-provider=@link>@link</a>
+    }
     <div class="mt-3 mb-3">
         <div class="text-center"><a href="/">Forgot your password?</a></div>
         <div class="text-center"><a asp-controller="Accounts" asp-action="Register">Register as new user</a></div>

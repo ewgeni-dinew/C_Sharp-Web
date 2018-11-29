@@ -16,6 +16,8 @@ using Eventures.Models;
 using Eventures.Utilities;
 using Eventures.Services.Contracts;
 using Eventures.Services;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication.Facebook;
 
 namespace Eventures
 {
@@ -31,7 +33,7 @@ namespace Eventures
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            
+
             services.Configure<CookiePolicyOptions>(options =>
             {
                 // This lambda determines whether user consent for non-essential cookies is needed for a given request.
@@ -69,13 +71,27 @@ namespace Eventures
             services.ConfigureApplicationCookie(options =>
             {
                 options.LoginPath = "/Accounts/Login";
-                options.LogoutPath = "/Identity/Accounts/Logout";
+                options.LogoutPath = "/Accounts/Logout";
                 options.AccessDeniedPath = "/Accounts/AccessDenied";
             });
 
             services.AddScoped<IErrorExtractor, ErrorExtractor>();
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
+
+            services.AddAuthentication(options =>
+            {
+                    options.DefaultChallengeScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+                    options.DefaultSignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+                    options.DefaultAuthenticateScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+            })
+            .AddFacebook(fbOptions =>
+            {
+                fbOptions.AppId = Configuration["Authentication:Facebook:AppId"];
+                fbOptions.AppSecret = Configuration["Authentication:Facebook:AppSecret"];
+            })
+            .AddCookie()
+            ;
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -101,6 +117,10 @@ namespace Eventures
 
             app.UseMvc(routes =>
             {
+                //routes.MapRoute(
+                //    name: "areaRoute",
+                //    template:"{area:exists}/{controller=Admin}/{action=Index}/{id?}");
+
                 routes.MapRoute(
                     name: "default",
                     template: "{controller=Home}/{action=Index}/{id?}");

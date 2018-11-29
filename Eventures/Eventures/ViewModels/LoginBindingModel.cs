@@ -13,5 +13,7 @@ namespace Eventures.ViewModels
         [Required]
         [DataType(DataType.Password)]
         public string Password { get; set; }
+
+        public IEnumerable<string> ExternalLinks { get; set; }
     }
 }

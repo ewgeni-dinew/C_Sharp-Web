@@ -1,22 +1,30 @@
-﻿using System;
+﻿using System.Linq;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using Eventures.Models;
 using Eventures.Services.Contracts;
 using Eventures.ViewModels;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using System;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using System.Security.Claims;
 
 namespace Eventures.Controllers
 {
     public class AccountsController : Controller
     {
+        private readonly IAuthenticationSchemeProvider authenticationSchemeProvider;
         private SignInManager<EventuresUser> signInManager;
         private IErrorExtractor extractor;
 
-        public AccountsController(SignInManager<EventuresUser> signInManager, IErrorExtractor extractor)
+        public AccountsController(
+            IAuthenticationSchemeProvider authenticationSchemeProvider,
+            SignInManager<EventuresUser> signInManager,
+            IErrorExtractor extractor)
         {
+            this.authenticationSchemeProvider = authenticationSchemeProvider;
             this.extractor = extractor;
             this.signInManager = signInManager;
         }
@@ -66,29 +74,62 @@ namespace Eventures.Controllers
                 };
 
                 return this.View("Error", errorModel);
-            }       
+            }
         }
 
-        public ActionResult Login()
+        public async Task<ActionResult> Login()
         {
-            return this.View();
+            var allSchemeProvider = (await authenticationSchemeProvider
+                .GetAllSchemesAsync())
+                .Select(x => x.DisplayName)
+                .Where(x => !String.IsNullOrEmpty(x));
+
+            var model = new LoginBindingModel { ExternalLinks = allSchemeProvider };
+
+            return this.View(model);
         }
 
         [HttpPost]
-        public ActionResult Login(LoginBindingModel model)
+        public async Task<ActionResult> Login(LoginBindingModel model)
         {
             var user = this.signInManager
                 .UserManager
                 .Users
                 .FirstOrDefault(x => x.UserName.Equals(model.Username));
 
-            this.signInManager.PasswordSignInAsync(user, model.Password, false, false).Wait();
+            var claims = new List<Claim>
+
+            {
+                new Claim(ClaimTypes.Name, user.UserName),
+                new Claim("Email", user.Email),
+                new Claim("FirstName", user.FirstName),
+                new Claim("LastName", user.LastName),
+                new Claim("UCN", user.UCN),
+            };
+
+            var claimsIdentity = new ClaimsIdentity(
+                claims, CookieAuthenticationDefaults.AuthenticationScheme);
+
+            await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(claimsIdentity));
+            //var result = this.signInManager.PasswordSignInAsync(user.UserName, model.Password, true, false);
+            //await result;
+
+            //if (result.IsCompletedSuccessfully)
+            //{
+
+            //}
 
             return this.RedirectToAction("Index", "Home");
         }
 
+        public ActionResult SignIn(string provider)
+        {
+            return Challenge(new AuthenticationProperties { RedirectUri = "/" }, provider);
+        }
+
         public ActionResult Logout()
         {
+            HttpContext.SignOutAsync();
             this.signInManager.SignOutAsync();
             return this.RedirectToAction("Index", "Home");
         }

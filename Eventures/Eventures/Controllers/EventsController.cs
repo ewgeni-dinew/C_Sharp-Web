@@ -72,7 +72,7 @@ namespace Eventures.Controllers
         {
             var events = this.Db
                 .Orders
-                .Where(x=>x.User.UserName.Equals(this.User.Identity.Name))
+                .Where(x => x.User.UserName.Equals(this.User.Identity.Name))
                 .ToList();
 
             var list = new List<BaseMyEventViewModel>();
@@ -106,7 +106,10 @@ namespace Eventures.Controllers
         [Authorize]
         public ActionResult All()
         {
-            var events = this.Db.Events.ToList();
+            var events = this.Db
+                .Events
+                .Where(x => x.TotalTickets >= 0)
+                .ToList();
 
             var list = new List<BaseEventViewModel>();
 
@@ -121,7 +124,7 @@ namespace Eventures.Controllers
                     End = e.End,
                     TotalTickets = e.TotalTickets,
                     Place = e.Place,
-                    TicketsAmountModel=new TicketsAmountBindingModel { EventId=e.Id}
+                    TicketsAmountModel = new TicketsAmountBindingModel { EventId = e.Id }
                 };
 
                 list.Add(baseEvent);
@@ -151,17 +154,28 @@ namespace Eventures.Controllers
             {
                 return this.RedirectToAction("All", "Events");
             }
-            
+
+            if (eventuresEvent.TotalTickets < model.Tickets)
+            {
+                var errorViewModel = new ErrorViewModel
+                {
+                    Message = "Ordered tickets are MORE than event tickets!"
+                };
+
+                return this.View("Error", errorViewModel);
+            }
+
             var order = new EventuresOrder
             {
                 User = user,
-                UserId=user.Id,
-                Event=eventuresEvent,
-                EventId=eventuresEvent.Id,
-                TicketsCount=model.Tickets
+                UserId = user.Id,
+                Event = eventuresEvent,
+                EventId = eventuresEvent.Id,
+                TicketsCount = model.Tickets
             };
 
             this.Db.Orders.Add(order);
+            eventuresEvent.TotalTickets -= order.TicketsCount;
             this.Db.SaveChanges();
 
             return this.RedirectToAction("My", "Events");
