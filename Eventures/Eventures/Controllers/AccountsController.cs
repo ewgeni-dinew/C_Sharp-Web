@@ -92,10 +92,23 @@ namespace Eventures.Controllers
         [HttpPost]
         public async Task<ActionResult> Login(LoginBindingModel model)
         {
+            var hasher = new PasswordHasher<EventuresUser>();
+
             var user = this.signInManager
                 .UserManager
                 .Users
                 .FirstOrDefault(x => x.UserName.Equals(model.Username));
+
+            if (hasher.VerifyHashedPassword(user, user.PasswordHash, model.Password)
+                == PasswordVerificationResult.Failed)
+            {
+                var errorModel = new ErrorViewModel()
+                {
+                    Message = "Invalid username or password."
+                };
+
+                return this.View("Error", errorModel);
+            }
 
             var claims = new List<Claim>
 
@@ -110,14 +123,9 @@ namespace Eventures.Controllers
             var claimsIdentity = new ClaimsIdentity(
                 claims, CookieAuthenticationDefaults.AuthenticationScheme);
 
-            await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(claimsIdentity));
-            //var result = this.signInManager.PasswordSignInAsync(user.UserName, model.Password, true, false);
-            //await result;
-
-            //if (result.IsCompletedSuccessfully)
-            //{
-
-            //}
+            await HttpContext.SignInAsync(
+                CookieAuthenticationDefaults.AuthenticationScheme,
+                new ClaimsPrincipal(claimsIdentity));
 
             return this.RedirectToAction("Index", "Home");
         }
