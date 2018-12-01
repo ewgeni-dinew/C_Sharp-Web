@@ -18,6 +18,8 @@ using Eventures.Services.Contracts;
 using Eventures.Services;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.Facebook;
+using AutoMapper;
+using Eventures.ViewModels;
 
 namespace Eventures
 {
@@ -81,17 +83,26 @@ namespace Eventures
 
             services.AddAuthentication(options =>
             {
-                    options.DefaultChallengeScheme = CookieAuthenticationDefaults.AuthenticationScheme;
-                    options.DefaultSignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
-                    options.DefaultAuthenticateScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+                options.DefaultSignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+                options.DefaultAuthenticateScheme = CookieAuthenticationDefaults.AuthenticationScheme;
             })
             .AddFacebook(fbOptions =>
             {
                 fbOptions.AppId = Configuration["Authentication:Facebook:AppId"];
                 fbOptions.AppSecret = Configuration["Authentication:Facebook:AppSecret"];
             })
-            .AddCookie()
-            ;
+            .AddCookie();
+
+            services.AddAutoMapper(config =>
+            {
+                config.CreateMap<RegisterBindingModel, EventuresUser>()
+                .ForMember(dest => dest.UserName, opt => opt.MapFrom(src => src.Username));
+                config.CreateMap<CreateEventBindingModel, EventuresEvent>();
+                config.CreateMap<EventuresEvent, BaseEventViewModel>();
+                config.CreateMap<EventuresOrder, BaseMyEventViewModel>()
+                .ForMember(dest => dest.Tickets, opt => opt.MapFrom(src => src.TicketsCount));
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

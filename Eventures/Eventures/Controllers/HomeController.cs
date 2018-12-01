@@ -12,8 +12,6 @@ namespace Eventures.Controllers
     {
         public IActionResult Index()
         {
-            var user = this.User.Identity;
-
             return View();
         }
     }

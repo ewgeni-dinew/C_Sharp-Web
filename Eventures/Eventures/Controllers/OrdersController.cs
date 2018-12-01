@@ -11,7 +11,7 @@ namespace Eventures.Controllers
 {
     public class OrdersController : Controller
     {
-        private EventuresDbContext Db;
+        private readonly EventuresDbContext Db;
 
         public OrdersController(EventuresDbContext Db)
         {
@@ -27,20 +27,20 @@ namespace Eventures.Controllers
 
             foreach (var o in orders)
             {
-                var eventureEvent = this.Db
+                var eventureEventName = this.Db
                     .Events
                     .FirstOrDefault(x => x.Id.Equals(o.EventId))
                     .Name;
 
-                var customer = this.Db
+                var customerName = this.Db
                     .Users
                     .FirstOrDefault(x => x.Id.Equals(o.UserId))
                     .UserName;
 
                 var order = new BaseOrderViewModel
                 {
-                    Name = eventureEvent,
-                    Customer = customer,
+                    Name = eventureEventName,
+                    Customer = customerName,
                     OrderedOn = o.OrderedOn,
                 };
 

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using AutoMapper;
 using Eventures.Data;
 using Eventures.Models;
 using Eventures.Services;
@@ -17,9 +18,14 @@ namespace Eventures.Controllers
     {
         private EventuresDbContext Db;
         private IErrorExtractor extractor;
+        private readonly IMapper mapper;
 
-        public EventsController(EventuresDbContext db, IErrorExtractor extractor)
+        public EventsController(
+            EventuresDbContext db,
+            IErrorExtractor extractor,
+            IMapper mapper)
         {
+            this.mapper = mapper;
             this.Db = db;
             this.extractor = extractor;
         }
@@ -36,16 +42,8 @@ namespace Eventures.Controllers
         {
             if (this.ModelState.IsValid)
             {
-                var eventuresEvent = new EventuresEvent
-                {
-                    Name = model.Name.Trim(),
-                    PricePerTicket = model.PricePerTicket,
-                    Start = model.Start,
-                    End = model.End,
-                    TotalTickets = model.TotalTickets,
-                    Place = model.Place
-                };
-
+                var eventuresEvent = mapper.Map<EventuresEvent>(model);
+                
                 if (this.Db.Events.Any(x => x.Name.Equals(eventuresEvent.Name)))
                 {
                     return this.View();
@@ -79,18 +77,21 @@ namespace Eventures.Controllers
 
             foreach (var e in events)
             {
-                var eventureEvent = this.Db
+                var eventureEventName = this.Db
                     .Events
                     .FirstOrDefault(x => x.Id.Equals(e.EventId))
                     .Name;
 
-                var myEvent = new BaseMyEventViewModel
-                {
-                    Name = eventureEvent,
-                    Start = e.Event.Start,
-                    End = e.Event.End,
-                    Tickets = e.TicketsCount,
-                };
+                var myEvent = mapper.Map<BaseMyEventViewModel>(e);
+                myEvent.Name = eventureEventName;
+
+                //var myEvent = new BaseMyEventViewModel
+                //{
+                //    Name = eventureEventName,
+                //    Start = e.Event.Start,
+                //    End = e.Event.End,
+                //    Tickets = e.TicketsCount,
+                //};
 
                 list.Add(myEvent);
             }
@@ -115,18 +116,10 @@ namespace Eventures.Controllers
 
             foreach (var e in events)
             {
-                var baseEvent = new BaseEventViewModel
-                {
-                    Id = e.Id,
-                    Name = e.Name,
-                    PricePerTicket = e.PricePerTicket,
-                    Start = e.Start,
-                    End = e.End,
-                    TotalTickets = e.TotalTickets,
-                    Place = e.Place,
-                    TicketsAmountModel = new TicketsAmountBindingModel { EventId = e.Id }
-                };
+                var baseEvent = mapper.Map<BaseEventViewModel>(e);
 
+                baseEvent.TicketsAmountModel = new TicketsAmountBindingModel { EventId = e.Id };
+      
                 list.Add(baseEvent);
             }
 

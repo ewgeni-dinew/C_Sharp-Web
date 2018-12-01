@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Mvc;
 using System;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using System.Security.Claims;
+using AutoMapper;
 
 namespace Eventures.Controllers
 {
@@ -18,12 +19,15 @@ namespace Eventures.Controllers
         private readonly IAuthenticationSchemeProvider authenticationSchemeProvider;
         private SignInManager<EventuresUser> signInManager;
         private IErrorExtractor extractor;
+        private readonly IMapper mapper;
 
         public AccountsController(
             IAuthenticationSchemeProvider authenticationSchemeProvider,
             SignInManager<EventuresUser> signInManager,
-            IErrorExtractor extractor)
+            IErrorExtractor extractor,
+            IMapper mapper)
         {
+            this.mapper = mapper;
             this.authenticationSchemeProvider = authenticationSchemeProvider;
             this.extractor = extractor;
             this.signInManager = signInManager;
@@ -40,14 +44,16 @@ namespace Eventures.Controllers
         {
             if (ModelState.IsValid)
             {
-                var user = new EventuresUser()
-                {
-                    UserName = model.Username,
-                    Email = model.Email,
-                    UCN = model.UCN,
-                    FirstName = model.FirstName,
-                    LastName = model.LastName,
-                };
+                var user = mapper.Map<EventuresUser>(model);
+
+                //var user = new EventuresUser()
+                //{
+                //    UserName = model.Username,
+                //    Email = model.Email,
+                //    UCN = model.UCN,
+                //    FirstName = model.FirstName,
+                //    LastName = model.LastName,
+                //};
 
                 var result = this.signInManager.UserManager.CreateAsync(user, model.Password).Result;
 
@@ -99,6 +105,13 @@ namespace Eventures.Controllers
                 .Users
                 .FirstOrDefault(x => x.UserName.Equals(model.Username));
 
+            var role = this.signInManager
+                .UserManager
+                .GetRolesAsync(user)
+                .Result
+                .FirstOrDefault();
+
+
             if (hasher.VerifyHashedPassword(user, user.PasswordHash, model.Password)
                 == PasswordVerificationResult.Failed)
             {
@@ -111,7 +124,6 @@ namespace Eventures.Controllers
             }
 
             var claims = new List<Claim>
-
             {
                 new Claim(ClaimTypes.Name, user.UserName),
                 new Claim("Email", user.Email),
@@ -119,6 +131,11 @@ namespace Eventures.Controllers
                 new Claim("LastName", user.LastName),
                 new Claim("UCN", user.UCN),
             };
+
+            if (role != null)
+            {
+                claims.Add(new Claim(ClaimTypes.Role, role));
+            }
 
             var claimsIdentity = new ClaimsIdentity(
                 claims, CookieAuthenticationDefaults.AuthenticationScheme);
