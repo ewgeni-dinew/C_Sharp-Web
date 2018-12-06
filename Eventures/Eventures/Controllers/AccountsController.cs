@@ -11,6 +11,7 @@ using System;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using System.Security.Claims;
 using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Eventures.Controllers
 {
@@ -46,15 +47,6 @@ namespace Eventures.Controllers
             {
                 var user = mapper.Map<EventuresUser>(model);
 
-                //var user = new EventuresUser()
-                //{
-                //    UserName = model.Username,
-                //    Email = model.Email,
-                //    UCN = model.UCN,
-                //    FirstName = model.FirstName,
-                //    LastName = model.LastName,
-                //};
-
                 var result = this.signInManager.UserManager.CreateAsync(user, model.Password).Result;
 
                 if (this.signInManager.UserManager.Users.Count() == 1)
@@ -81,7 +73,7 @@ namespace Eventures.Controllers
 
                 return this.View("Error", errorModel);
             }
-        }
+        }     
 
         public async Task<ActionResult> Login()
         {

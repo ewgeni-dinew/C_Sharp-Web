@@ -10,6 +10,7 @@
         <div class="col-6 form-group">
             <label asp-for="Username">Username</label>
             <input type="text" asp-for="Username" class="form-control" placeholder="Username...">
+            <span asp-validation-for="Username"></span><br />
         </div>
         <div class="col-6 form-group">
             <label asp-for="Email">Email</label>
@@ -20,6 +21,7 @@
         <div class="col-6 form-group">
             <label asp-for="Password">Password</label>
             <input asp-for="Password" type="password" class="form-control" placeholder="Password...">
+            <span asp-validation-for="Password"></span><br />
         </div>
         <div class="col-6 form-group">
             <label asp-for="ConfirmPassword">Confirm Password</label>

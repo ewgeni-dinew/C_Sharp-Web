@@ -1,0 +1,46 @@
+﻿@model Eventures.ViewModels.AllEventsViewModel<Eventures.ViewModels.BaseAdministrationModel>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<div class="col-lg-offset-1 col-lg-10">
+    <h1 class="text-center">My Events</h1>
+    <hr class="hr-2 hr-turquoise" />
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">Username</th>
+                <th scope="col">Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            @{ var index = 1; }
+            @for (var i = 0; i < Model.Events.Count(); i++)
+            {
+                {
+                    var e = Model.Events.ToList()[i];
+            <tr>
+                <th scope="row">@index</th>
+                <td>@e.Username</td>
+                @if (e.Role.Equals("Admin"))
+                {
+                    <td>
+                        <a asp-controller="Administration" asp-action="Denote" asp-route-id=@e.Id  class="btn event-bg-color">Denote</a>
+                    </td>
+                }
+                else
+                {
+                    <td>
+                        <a asp-controller="Administration" asp-action="Promote" asp-route-id=@e.Id class="btn event-bg-color">Promote</a>
+                    </td>
+                }
+            </tr>
+                }
+                { index++; }
+            }
+        </tbody>
+    </table>
+    <hr class="hr-2 hr-turquoise" />
+</div>
