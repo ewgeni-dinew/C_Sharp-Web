@@ -34,6 +34,12 @@ namespace BabyBug.Data.Migrations
 
                     b.Property<bool>("EmailConfirmed");
 
+                    b.Property<string>("FirstName")
+                        .IsRequired();
+
+                    b.Property<string>("LastName")
+                        .IsRequired();
+
                     b.Property<bool>("LockoutEnabled");
 
                     b.Property<DateTimeOffset?>("LockoutEnd");
@@ -68,6 +74,73 @@ namespace BabyBug.Data.Migrations
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
 
                     b.ToTable("AspNetUsers");
+                });
+
+            modelBuilder.Entity("BabyBug.Data.Models.Garment", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("CategoryId");
+
+                    b.Property<DateTime>("CreatedOn");
+
+                    b.Property<string>("Description");
+
+                    b.Property<bool>("IsAvailable");
+
+                    b.Property<string>("Name");
+
+                    b.Property<decimal>("Price");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CategoryId");
+
+                    b.ToTable("Garments");
+                });
+
+            modelBuilder.Entity("BabyBug.Data.Models.GarmentCategory", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Name")
+                        .IsRequired();
+
+                    b.HasKey("Id");
+
+                    b.ToTable("GarmentCategories");
+                });
+
+            modelBuilder.Entity("BabyBug.Data.Models.GarmentSize", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Value");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("GarmentSizes");
+                });
+
+            modelBuilder.Entity("BabyBug.Data.Models.GarmentSpecification", b =>
+                {
+                    b.Property<int>("GarmentSizeId");
+
+                    b.Property<int>("GarmentId");
+
+                    b.Property<long>("Quantity");
+
+                    b.HasKey("GarmentSizeId", "GarmentId");
+
+                    b.HasIndex("GarmentId");
+
+                    b.ToTable("GarmentSpecifications");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -178,6 +251,27 @@ namespace BabyBug.Data.Migrations
                     b.HasKey("UserId", "LoginProvider", "Name");
 
                     b.ToTable("AspNetUserTokens");
+                });
+
+            modelBuilder.Entity("BabyBug.Data.Models.Garment", b =>
+                {
+                    b.HasOne("BabyBug.Data.Models.GarmentCategory", "Category")
+                        .WithMany("Garments")
+                        .HasForeignKey("CategoryId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("BabyBug.Data.Models.GarmentSpecification", b =>
+                {
+                    b.HasOne("BabyBug.Data.Models.Garment", "Garment")
+                        .WithMany("Specifications")
+                        .HasForeignKey("GarmentId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("BabyBug.Data.Models.GarmentSize", "Size")
+                        .WithMany("Specifications")
+                        .HasForeignKey("GarmentSizeId")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
