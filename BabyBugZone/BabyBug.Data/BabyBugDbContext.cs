@@ -28,7 +28,7 @@ namespace BabyBugZone.Data
             builder.Entity<GarmentSpecification>()
                 .HasKey(x => new { x.GarmentSizeId, x.GarmentId })
                 ;
-            
+
             base.OnModelCreating(builder);
         }
     }
