@@ -14,6 +14,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using BabyBugZone.Data;
 using BabyBug.Data.Models;
+using BabyBug.Web.Utilities;
 
 namespace BabyBug.Web
 {
@@ -39,9 +40,7 @@ namespace BabyBug.Web
             services.AddDbContext<BabyBugDbContext>
                 (options => options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
 
-            //services.AddIdentity()...
-
-            services.AddDefaultIdentity<BabyBugUser>(
+            services.AddIdentity<BabyBugUser, IdentityRole>(
                 options =>
                 {
                     options.Password.RequiredLength = 6;
@@ -51,7 +50,8 @@ namespace BabyBug.Web
                     options.Password.RequireDigit = false;
                 })
                 .AddDefaultUI(UIFramework.Bootstrap4)
-                .AddEntityFrameworkStores<BabyBugDbContext>();
+                .AddEntityFrameworkStores<BabyBugDbContext>()
+                .AddDefaultTokenProviders();
 
             services.AddAuthentication()
                 .AddFacebook(facebookOptions =>
@@ -77,10 +77,15 @@ namespace BabyBug.Web
                     options.LogoutPath = "/Identity/Account/Logout";
                     ////options.AccessDeniedPath = "/Identity/Account/AccessDenied";
                 });
+
+            ////services.Configure<RouteOptions>(options => options.LowercaseUrls = true);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public void Configure(
+            IApplicationBuilder app,
+            IHostingEnvironment env,
+            IServiceProvider provider)
         {
             if (env.IsDevelopment())
             {
@@ -94,6 +99,7 @@ namespace BabyBug.Web
                 app.UseHsts();
             }
 
+            RoleSeeder.CreateRoles(provider, this.Configuration).Wait();
             app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseCookiePolicy();
