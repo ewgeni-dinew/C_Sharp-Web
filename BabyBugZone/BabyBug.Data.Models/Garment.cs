@@ -19,6 +19,8 @@ namespace BabyBug.Data.Models
 
         public string Name { get; set; }
 
+        public char Gender { get; set; }
+
         public string Description { get; set; }
 
         public GarmentCategory Category { get; set; }

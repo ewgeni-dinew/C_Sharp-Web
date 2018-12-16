@@ -19,6 +19,7 @@
   <ItemGroup>
     <ProjectReference Include="..\BabyBug.Data.Models\BabyBug.Data.Models.csproj" />
     <ProjectReference Include="..\BabyBug.Data\BabyBug.Data.csproj" />
+    <ProjectReference Include="..\BabyBug.Services\BabyBug.Services.csproj" />
   </ItemGroup>
 
 </Project>

@@ -1,0 +1,13 @@
+﻿@model ICollection<BabyBug.Web.Models.Categories.BaseCategoryModel>
+@{
+    ViewData["Title"] = "All";
+}
+
+@foreach (var category in Model)
+{
+    <h1><a asp-controller="Products" asp-action="Details">@category.Name</a></h1>
+}
+
+<div class="row">
+    <a class="btn btn-outline-dark" asp-area="Administrator" asp-controller="Categories" asp-action="Create">Create</a>
+</div>

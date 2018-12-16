@@ -1,0 +1,12 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp2.2</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\BabyBug.Common\BabyBug.Common.csproj" />
+    <ProjectReference Include="..\BabyBug.Data\BabyBug.Data.csproj" />
+  </ItemGroup>
+
+</Project>

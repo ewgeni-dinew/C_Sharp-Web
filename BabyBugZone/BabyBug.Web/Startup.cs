@@ -15,6 +15,8 @@ using Microsoft.Extensions.DependencyInjection;
 using BabyBugZone.Data;
 using BabyBug.Data.Models;
 using BabyBug.Web.Utilities;
+using BabyBug.Services.Categories.Contracts;
+using BabyBug.Services;
 
 namespace BabyBug.Web
 {
@@ -59,6 +61,9 @@ namespace BabyBug.Web
                  facebookOptions.AppId = Configuration["Authentication:Facebook:AppId"];
                  facebookOptions.AppSecret = Configuration["Authentication:Facebook:AppSecret"];
              });
+
+            //Services
+            services.AddScoped<ICategoriesService, CategoriesService>();
 
             services
                 .AddMvc()
@@ -110,7 +115,7 @@ namespace BabyBug.Web
             {
                 routes.MapRoute(
                     name: "areas",
-                    template: "{area:exists}/{controller=Products}/{action=Index}/{id?}");
+                template: "{area:exists}/{controller=Home}/{action=Index}/{id?}");
 
                 routes.MapRoute(
                     name: "default",
