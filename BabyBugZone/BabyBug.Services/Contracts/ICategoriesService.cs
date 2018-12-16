@@ -15,5 +15,14 @@ namespace BabyBug.Services.Categories.Contracts
         ICollection<BaseCategoryModel> GetAllGarmentCategories();
 
         Task CreateCategoryAsync(CreateCategoryModel model);
+
+        EditCategoryModel GetEditCategoryModel();
+
+        EditCategoryModel GetDeleteCategoryModel();
+
+        Task EditCategoryAsync(EditCategoryModel model);
+
+        Task DeleteCategoryAsync(EditCategoryModel model);
+       
     }
 }

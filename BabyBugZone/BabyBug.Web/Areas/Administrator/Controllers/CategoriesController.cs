@@ -18,19 +18,7 @@ namespace BabyBug.Web.Areas.Administrator.Controllers
         {
             this.categoriesService = categoriesService;
         }
-
-        // GET: Categories
-        public ActionResult Index()
-        {
-            return View();
-        }
-
-        // GET: Categories/Details/5
-        public ActionResult Details(int id)
-        {
-            return View();
-        }
-
+        
         // GET: Categories/Create
         public ActionResult Create()
         {
@@ -53,49 +41,52 @@ namespace BabyBug.Web.Areas.Administrator.Controllers
         }
 
         // GET: Categories/Edit/5
-        public ActionResult Edit(int id)
+        public ActionResult Edit()
         {
-            return View();
+            var model = this.categoriesService
+                .GetEditCategoryModel();
+
+            return View(model);
         }
 
         // POST: Categories/Edit/5
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, IFormCollection collection)
+        //[ValidateAntiForgeryToken]
+        public async Task<ActionResult> Edit(EditCategoryModel model)
         {
-            try
+            if (!this.ModelState.IsValid)
             {
-                // TODO: Add update logic here
+                return this.View();
+            }
 
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
-            }
+            await this.categoriesService.EditCategoryAsync(model);
+
+            return RedirectToAction("All", "Categories", new { area = "" });
         }
 
         // GET: Categories/Delete/5
-        public ActionResult Delete(int id)
+        [HttpGet]
+        public ActionResult Delete()
         {
-            return View();
+            var model = this.categoriesService
+                .GetDeleteCategoryModel();
+
+            return View(model);
         }
 
         // POST: Categories/Delete/5
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Delete(int id, IFormCollection collection)
+        //[ValidateAntiForgeryToken]
+        public async Task<ActionResult> Delete(EditCategoryModel model)
         {
-            try
+            if (!this.ModelState.IsValid)
             {
-                // TODO: Add delete logic here
+                return this.View();
+            }
 
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
-            }
+            await this.categoriesService.DeleteCategoryAsync(model);
+
+            return RedirectToAction("All", "Categories", new { area = "" });
         }
     }
 }

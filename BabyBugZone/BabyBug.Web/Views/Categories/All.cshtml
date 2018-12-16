@@ -5,9 +5,11 @@
 
 @foreach (var category in Model)
 {
-    <h1><a asp-controller="Products" asp-action="Details">@category.Name</a></h1>
+    <h4><a asp-controller="Products" asp-action="Details">@category.Name</a></h4>
 }
 
 <div class="row">
-    <a class="btn btn-outline-dark" asp-area="Administrator" asp-controller="Categories" asp-action="Create">Create</a>
+    <a class="btn btn-primary" asp-area="Administrator" asp-controller="Categories" asp-action="Create">Create</a>
+    <a class="btn btn-primary" asp-area="Administrator" asp-controller="Categories" asp-action="Edit">Edit</a>
+    <a class="btn btn-primary" asp-area="Administrator" asp-controller="Categories" asp-action="Delete">Delete</a>
 </div>

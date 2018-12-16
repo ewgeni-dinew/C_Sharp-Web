@@ -3,6 +3,7 @@ using BabyBug.Data.Models;
 using BabyBug.Services.Categories.Contracts;
 using BabyBug.Web.Models.Categories;
 using BabyBugZone.Data;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace BabyBug.Services
 {
-    public class CategoriesService: ICategoriesService
+    public class CategoriesService : ICategoriesService
     {
         public CategoriesService(
             BabyBugDbContext DbContext
@@ -48,10 +49,69 @@ namespace BabyBug.Services
         {
             var category = new GarmentCategory
             {
-                Name=model.Name,
+                Name = model.Name,
             };
 
             await this.DbContext.GarmentCategories.AddAsync(category);
+            await this.DbContext.SaveChangesAsync();
+        }
+
+        public EditCategoryModel GetEditCategoryModel()
+        {
+            var categories = this.DbContext
+                .GarmentCategories
+                .Select(x => x.Name)
+                .ToHashSet();
+
+            var model = new EditCategoryModel
+            {
+                CategoryNames = categories,
+            };
+
+            return model;
+        }
+
+        public EditCategoryModel GetDeleteCategoryModel()
+        {
+            var categories = this.DbContext
+                .GarmentCategories
+                .Select(x => x.Name)
+                .ToHashSet();
+
+            var model = new EditCategoryModel
+            {
+                CategoryNames = categories,
+            };
+
+            return model;
+        }
+
+        public async Task EditCategoryAsync(EditCategoryModel model)
+        {
+            var category =await this.DbContext
+                .GarmentCategories
+                .FirstOrDefaultAsync(x=>x.Name.Equals(model.CategoryName));
+
+            category.Name = model.NewName;
+
+            //TODO validate picture
+
+            await this.DbContext.SaveChangesAsync();
+        }
+
+        public async Task DeleteCategoryAsync(EditCategoryModel model)
+        {
+            if (!model.Consent)
+            {
+                return;
+            }
+
+            var category = await this.DbContext
+                .GarmentCategories
+                .FirstOrDefaultAsync(x=>x.Name.Equals(model.CategoryName));
+
+            this.DbContext.GarmentCategories.Remove(category);
+
             await this.DbContext.SaveChangesAsync();
         }
     }
