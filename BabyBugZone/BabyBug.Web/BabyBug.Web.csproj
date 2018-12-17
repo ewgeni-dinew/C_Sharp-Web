@@ -22,4 +22,10 @@
     <ProjectReference Include="..\BabyBug.Services\BabyBug.Services.csproj" />
   </ItemGroup>
 
+
+  <ItemGroup>
+    <Folder Include="Areas\Products\Controllers\" />
+    <Folder Include="Areas\Products\Views\" />
+  </ItemGroup>
+
 </Project>

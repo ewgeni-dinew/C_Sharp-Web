@@ -4,12 +4,14 @@ using System.Linq;
 using System.Threading.Tasks;
 using BabyBug.Common.ViewModels.Categories;
 using BabyBug.Services.Categories.Contracts;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BabyBug.Web.Areas.Administrator.Controllers
 {
     [Area("Administrator")]
+    [Authorize(Roles = "Admin")]
     public class CategoriesController : Controller
     {
         private readonly ICategoriesService categoriesService;
@@ -18,7 +20,7 @@ namespace BabyBug.Web.Areas.Administrator.Controllers
         {
             this.categoriesService = categoriesService;
         }
-        
+
         // GET: Categories/Create
         public ActionResult Create()
         {
@@ -27,9 +29,9 @@ namespace BabyBug.Web.Areas.Administrator.Controllers
 
         // POST: Categories/Create
         [HttpPost]
-        //[ValidateAntiForgeryToken]
+        [AutoValidateAntiforgeryToken]
         public async Task<ActionResult> Create(CreateCategoryModel model)
-        {        
+        {
             if (!this.ModelState.IsValid)
             {
                 return this.View();
@@ -51,8 +53,8 @@ namespace BabyBug.Web.Areas.Administrator.Controllers
 
         // POST: Categories/Edit/5
         [HttpPost]
-        //[ValidateAntiForgeryToken]
-        public async Task<ActionResult> Edit(EditCategoryModel model)
+        [AutoValidateAntiforgeryToken]
+        public async Task<ActionResult> Edit(ModifyCategoryModel model)
         {
             if (!this.ModelState.IsValid)
             {
@@ -76,8 +78,8 @@ namespace BabyBug.Web.Areas.Administrator.Controllers
 
         // POST: Categories/Delete/5
         [HttpPost]
-        //[ValidateAntiForgeryToken]
-        public async Task<ActionResult> Delete(EditCategoryModel model)
+        [AutoValidateAntiforgeryToken]
+        public async Task<ActionResult> Delete(ModifyCategoryModel model)
         {
             if (!this.ModelState.IsValid)
             {

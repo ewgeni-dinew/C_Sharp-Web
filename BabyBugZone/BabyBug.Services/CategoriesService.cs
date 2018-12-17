@@ -56,14 +56,14 @@ namespace BabyBug.Services
             await this.DbContext.SaveChangesAsync();
         }
 
-        public EditCategoryModel GetEditCategoryModel()
+        public ModifyCategoryModel GetEditCategoryModel()
         {
             var categories = this.DbContext
                 .GarmentCategories
                 .Select(x => x.Name)
                 .ToHashSet();
 
-            var model = new EditCategoryModel
+            var model = new ModifyCategoryModel
             {
                 CategoryNames = categories,
             };
@@ -71,14 +71,14 @@ namespace BabyBug.Services
             return model;
         }
 
-        public EditCategoryModel GetDeleteCategoryModel()
+        public ModifyCategoryModel GetDeleteCategoryModel()
         {
             var categories = this.DbContext
                 .GarmentCategories
                 .Select(x => x.Name)
                 .ToHashSet();
 
-            var model = new EditCategoryModel
+            var model = new ModifyCategoryModel
             {
                 CategoryNames = categories,
             };
@@ -86,7 +86,7 @@ namespace BabyBug.Services
             return model;
         }
 
-        public async Task EditCategoryAsync(EditCategoryModel model)
+        public async Task EditCategoryAsync(ModifyCategoryModel model)
         {
             var category =await this.DbContext
                 .GarmentCategories
@@ -99,7 +99,7 @@ namespace BabyBug.Services
             await this.DbContext.SaveChangesAsync();
         }
 
-        public async Task DeleteCategoryAsync(EditCategoryModel model)
+        public async Task DeleteCategoryAsync(ModifyCategoryModel model)
         {
             if (!model.Consent)
             {

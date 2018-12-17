@@ -8,8 +8,17 @@
     <h4><a asp-controller="Products" asp-action="Details">@category.Name</a></h4>
 }
 
-<div class="row">
-    <a class="btn btn-primary" asp-area="Administrator" asp-controller="Categories" asp-action="Create">Create</a>
-    <a class="btn btn-primary" asp-area="Administrator" asp-controller="Categories" asp-action="Edit">Edit</a>
-    <a class="btn btn-primary" asp-area="Administrator" asp-controller="Categories" asp-action="Delete">Delete</a>
-</div>
+@if (User.IsInRole("Admin"))
+{
+    <div class="row">
+        <div class="col">
+            <a class="btn btn-primary" asp-area="Administrator" asp-controller="Categories" asp-action="Create">Create</a>
+        </div>
+        <div class="col">
+            <a class="btn btn-primary" asp-area="Administrator" asp-controller="Categories" asp-action="Edit">Edit</a>
+        </div>
+        <div class="col">
+            <a class="btn btn-primary" asp-area="Administrator" asp-controller="Categories" asp-action="Delete">Delete</a>
+        </div>
+    </div>
+}

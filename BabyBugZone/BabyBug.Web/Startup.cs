@@ -17,6 +17,7 @@ using BabyBug.Data.Models;
 using BabyBug.Web.Utilities;
 using BabyBug.Services.Categories.Contracts;
 using BabyBug.Services;
+using BabyBug.Services.Contracts;
 
 namespace BabyBug.Web
 {
@@ -64,9 +65,13 @@ namespace BabyBug.Web
 
             //Services
             services.AddScoped<ICategoriesService, CategoriesService>();
+            services.AddScoped<IGarmentsService, GarmentsService>();
 
             services
-                .AddMvc()
+                .AddMvc(options =>
+                {
+                    options.Filters.Add(new AutoValidateAntiforgeryTokenAttribute());
+                })
                 .SetCompatibilityVersion(CompatibilityVersion.Version_2_2)
                 .AddRazorPagesOptions(options =>
                 {

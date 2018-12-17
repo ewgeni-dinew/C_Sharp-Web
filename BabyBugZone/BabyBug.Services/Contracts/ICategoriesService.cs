@@ -16,13 +16,13 @@ namespace BabyBug.Services.Categories.Contracts
 
         Task CreateCategoryAsync(CreateCategoryModel model);
 
-        EditCategoryModel GetEditCategoryModel();
+        ModifyCategoryModel GetEditCategoryModel();
 
-        EditCategoryModel GetDeleteCategoryModel();
+        ModifyCategoryModel GetDeleteCategoryModel();
 
-        Task EditCategoryAsync(EditCategoryModel model);
+        Task EditCategoryAsync(ModifyCategoryModel model);
 
-        Task DeleteCategoryAsync(EditCategoryModel model);
+        Task DeleteCategoryAsync(ModifyCategoryModel model);
        
     }
 }
