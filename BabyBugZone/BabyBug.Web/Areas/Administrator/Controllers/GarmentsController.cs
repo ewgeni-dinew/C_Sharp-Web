@@ -28,7 +28,7 @@ namespace BabyBug.Web.Areas.Administrator.Controllers
         // GET: Garments/Details/5
         public async Task<ActionResult> Details(int id)
         {
-            var model= await this.garmentService.GetDetailsAsync(id);
+            var model= await this.garmentService.GetDetailsModelAsync(id);
 
             return View(model);
         }
@@ -80,26 +80,21 @@ namespace BabyBug.Web.Areas.Administrator.Controllers
         }
 
         // GET: Garments/Delete/5
-        public ActionResult Delete(int id)
+        public async Task<ActionResult> Delete(int id)
         {
-            return View();
+            var model = await this.garmentService.GetDeleteModelAsync(id);
+
+            return View(model);
         }
 
         // POST: Garments/Delete/5
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Delete(int id, IFormCollection collection)
+        [AutoValidateAntiforgeryToken]
+        public async Task<ActionResult> Delete(DeleteGarmentModel model)
         {
-            try
-            {
-                // TODO: Add delete logic here
+            await this.garmentService.DeleteGarmentAsync(model.Id);
 
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
-            }
+            return RedirectToAction("Index", "Home", new { area = "" });
         }
     }
 }

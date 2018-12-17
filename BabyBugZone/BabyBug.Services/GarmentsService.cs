@@ -5,13 +5,14 @@ using BabyBugZone.Data;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace BabyBug.Services
 {
-    public class GarmentsService: IGarmentsService
+    public class GarmentsService : IGarmentsService
     {
         public GarmentsService(BabyBugDbContext dbContext)
         {
@@ -55,7 +56,7 @@ namespace BabyBug.Services
             await this.DbContext.SaveChangesAsync();
         }
 
-        public async Task<GarmentDetailsModel> GetDetailsAsync(int id)
+        public async Task<GarmentDetailsModel> GetDetailsModelAsync(int id)
         {
             var garment = await this.DbContext
                 .Garments
@@ -63,6 +64,26 @@ namespace BabyBug.Services
 
             var model = new GarmentDetailsModel
             {
+                Id = garment.Id,
+                Name = garment.Name,
+                Description = garment.Description,
+                Price = garment.Price,
+                Gender = garment.Gender.ToString(),
+                CreatedOn = garment.CreatedOn.ToString("dd-MM-yyyy")
+            };
+
+            return model;
+        }
+
+        public async Task<DeleteGarmentModel> GetDeleteModelAsync(int id)
+        {
+            var garment = await this.DbContext
+                .Garments
+                .FirstOrDefaultAsync(x => x.Id.Equals(id));
+
+            var model = new DeleteGarmentModel
+            {
+                Id = garment.Id,
                 Name = garment.Name,
                 Description = garment.Description,
                 Price = garment.Price,
@@ -71,6 +92,19 @@ namespace BabyBug.Services
             };
 
             return model;
+        }
+
+        public async Task DeleteGarmentAsync(int id)
+        {
+            var garment = await this.DbContext
+                .Garments
+                .FirstOrDefaultAsync(x => x.Id.Equals(id));
+
+            this.DbContext
+                .Garments
+                .Remove(garment);
+
+            await this.DbContext.SaveChangesAsync();
         }
     }
 }

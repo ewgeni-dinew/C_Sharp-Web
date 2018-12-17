@@ -21,13 +21,16 @@ namespace BabyBugZone.Data
         protected override void OnModelCreating(ModelBuilder builder)
         {
             builder.Entity<Garment>()
+                .Property(x => x.Price)
+                .HasColumnType("decimal(18, 2)");
+
+            builder.Entity<Garment>()
                 .HasOne(x => x.Category)
                 .WithMany(c => c.Garments)
                 .HasForeignKey(x => x.CategoryId);
 
             builder.Entity<GarmentSpecification>()
-                .HasKey(x => new { x.GarmentSizeId, x.GarmentId })
-                ;
+                .HasKey(x => new { x.GarmentSizeId, x.GarmentId });         
 
             base.OnModelCreating(builder);
         }

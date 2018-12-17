@@ -18,6 +18,7 @@ using BabyBug.Web.Utilities;
 using BabyBug.Services.Categories.Contracts;
 using BabyBug.Services;
 using BabyBug.Services.Contracts;
+using System.Globalization;
 
 namespace BabyBug.Web
 {
@@ -108,6 +109,12 @@ namespace BabyBug.Web
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
+
+            var cultureInfo = new CultureInfo("en-US");
+            ////cultureInfo.NumberFormat.CurrencySymbol = "€";
+
+            CultureInfo.DefaultThreadCurrentCulture = cultureInfo;
+            CultureInfo.DefaultThreadCurrentUICulture = cultureInfo;
 
             RoleSeeder.CreateRoles(provider, this.Configuration).Wait();
             app.UseHttpsRedirection();

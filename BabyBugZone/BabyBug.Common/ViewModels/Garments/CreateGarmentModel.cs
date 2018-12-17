@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Globalization;
 using System.Text;
 
 namespace BabyBug.Common.ViewModels.Garments
@@ -31,7 +32,7 @@ namespace BabyBug.Common.ViewModels.Garments
 
         [Required]
         [Display(Name = "Price")]
-        [DataType(DataType.Currency)]
+        [DataType(DataType.Currency)]        
         public decimal Price { get; set; }
     }
 }

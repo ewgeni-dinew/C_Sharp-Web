@@ -13,8 +13,12 @@ namespace BabyBug.Services.Contracts
 
         CreateGarmentModel GetGarmentCreateModel();
 
+        Task<DeleteGarmentModel> GetDeleteModelAsync(int id);
+
         Task CreateGarmentAsync(CreateGarmentModel model);
 
-        Task<GarmentDetailsModel> GetDetailsAsync(int id);
+        Task DeleteGarmentAsync(int id);
+
+        Task<GarmentDetailsModel> GetDetailsModelAsync(int id);
     }
 }
