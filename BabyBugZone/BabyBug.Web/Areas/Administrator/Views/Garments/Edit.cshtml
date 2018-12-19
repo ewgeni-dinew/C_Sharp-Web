@@ -1,0 +1,62 @@
+﻿@model BabyBug.Common.ViewModels.Garments.GarmentDetailsModel
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+
+@{
+    ViewData["Title"] = "Edit";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Edit</h1>
+
+<h4>GarmentDetailsModel</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form method="post" asp-area="Administrator" asp-controller="Garments" asp-action="Edit">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="Name" class="control-label">Name</label>
+                <input asp-for="Name" type="text" class="form-control" placeholder=@Model.Name />
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <select asp-for=@Model.CategoryName title="Select category" class="selectpicker">
+                    @foreach (var c in Model.CategoryNames)
+                    {
+                        <option value=@c>@c</option>
+                    }
+                </select>
+            </div>
+            <div class="form-group">
+                @if (Model.Gender.Equals("M"))
+                {
+                    <label class="radio-inline"><input asp-for="Gender" type="radio" value="M" checked>M</label>
+                    <label class="radio-inline"><input asp-for="Gender" type="radio" value="F">F</label>
+                }
+                else
+                {
+                    <label class="radio-inline"><input asp-for="Gender" type="radio" value="M">M</label>
+                    <label class="radio-inline"><input asp-for="Gender" type="radio" value="F" checked>F</label>
+                }
+                <span asp-validation-for="Gender" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Description" class="control-label">Description</label>
+                <input asp-for="Description" type="text" class="form-control" placeholder=@Model.Description />
+                <span asp-validation-for="Description" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Price" class="control-label">Price</label>
+                <input asp-for="Price" type="number" class="form-control" placeholder=@Model.Price />
+                <span asp-validation-for="Price" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

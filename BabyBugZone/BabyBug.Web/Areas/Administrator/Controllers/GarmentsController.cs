@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace BabyBug.Web.Areas.Administrator.Controllers
 {
     [Area("Administrator")]
+    [Authorize(Roles ="Admin")]
     public class GarmentsController : Controller
     {
         private readonly IGarmentsService garmentService;
@@ -19,13 +20,13 @@ namespace BabyBug.Web.Areas.Administrator.Controllers
         {
             this.garmentService = garmentService;
         }
-        // GET: Garments
+
         public ActionResult Index()
         {
             return View();
         }
 
-        // GET: Garments/Details/5
+        //move Details to user controller
         public async Task<ActionResult> Details(int id)
         {
             var model= await this.garmentService.GetDetailsModelAsync(id);
@@ -33,15 +34,12 @@ namespace BabyBug.Web.Areas.Administrator.Controllers
             return View(model);
         }
 
-        // GET: Garments/Create
-        [Authorize(Roles ="Admin")]
         public ActionResult Create()
         {
             var model = this.garmentService.GetGarmentCreateModel();
             return View(model);
         }
 
-        // POST: Garments/Create
         [HttpPost]
         [AutoValidateAntiforgeryToken]
         public async Task<ActionResult> Create(CreateGarmentModel model)
@@ -56,30 +54,21 @@ namespace BabyBug.Web.Areas.Administrator.Controllers
             return RedirectToAction("Index", "Home", new { area = "" });
         }
 
-        // GET: Garments/Edit/5
-        public ActionResult Edit(int id)
+        public async Task<ActionResult> Edit(int id)
         {
-            return View();
+            var model = await this.garmentService.GetDetailsModelAsync(id);
+            return View(model);
         }
 
-        // POST: Garments/Edit/5
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, IFormCollection collection)
+        [AutoValidateAntiforgeryToken]
+        public async Task<ActionResult> Edit(GarmentDetailsModel model)
         {
-            try
-            {
-                // TODO: Add update logic here
+            await this.garmentService.EditGarmentAsync(model);
 
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
-            }
+            return RedirectToAction("Index", "Home", new { area = "" });
         }
 
-        // GET: Garments/Delete/5
         public async Task<ActionResult> Delete(int id)
         {
             var model = await this.garmentService.GetDeleteModelAsync(id);
@@ -87,7 +76,6 @@ namespace BabyBug.Web.Areas.Administrator.Controllers
             return View(model);
         }
 
-        // POST: Garments/Delete/5
         [HttpPost]
         [AutoValidateAntiforgeryToken]
         public async Task<ActionResult> Delete(DeleteGarmentModel model)

@@ -10,7 +10,7 @@ namespace BabyBug.Common.ViewModels.Garments
 
         public string Name { get; set; }
 
-        public string Gender { get; set; }
+        public char Gender { get; set; }
 
         public string Description { get; set; }
 
@@ -18,6 +18,9 @@ namespace BabyBug.Common.ViewModels.Garments
         
         public string CreatedOn { get; set; }
 
+        public HashSet<string> CategoryNames { get; set; }
+        
+        public string CategoryName { get; set; }
         //TODO:
         //add sizes dropdown
         //add quantity 

@@ -62,13 +62,19 @@ namespace BabyBug.Services
                 .Garments
                 .FirstOrDefaultAsync(x => x.Id.Equals(id));
 
+            var categoryNames = this.DbContext
+                .GarmentCategories
+                .Select(x => x.Name)
+                .ToHashSet();
+
             var model = new GarmentDetailsModel
             {
                 Id = garment.Id,
                 Name = garment.Name,
                 Description = garment.Description,
+                CategoryNames=categoryNames,
                 Price = garment.Price,
-                Gender = garment.Gender.ToString(),
+                Gender = garment.Gender,
                 CreatedOn = garment.CreatedOn.ToString("dd-MM-yyyy")
             };
 
@@ -103,6 +109,26 @@ namespace BabyBug.Services
             this.DbContext
                 .Garments
                 .Remove(garment);
+
+            await this.DbContext.SaveChangesAsync();
+        }
+
+        public async Task EditGarmentAsync(GarmentDetailsModel model)
+        {
+            var garment = await this.DbContext
+                .Garments
+                .FirstOrDefaultAsync(x => x.Id.Equals(model.Id));
+
+            var categoryId = this.DbContext
+                .GarmentCategories
+                .FirstOrDefaultAsync(x => x.Name.Equals(model.CategoryName))
+                .Id;
+
+            garment.Name = model.Name;
+            garment.CategoryId = categoryId;
+            garment.Description = model.Description;
+            garment.Gender = model.Gender;
+            garment.Price = model.Price;
 
             await this.DbContext.SaveChangesAsync();
         }
