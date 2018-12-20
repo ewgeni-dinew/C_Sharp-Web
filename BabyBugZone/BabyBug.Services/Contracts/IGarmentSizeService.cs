@@ -16,5 +16,11 @@ namespace BabyBug.Services.Contracts
         Task CreateSizeAsync(CreateGarmentSizeModel model);
 
         Task DeleteSizeAsync(int id);
+
+        Task<GarmentManageSizesModel> GetCurrentGarmentSizeDetails(int id);
+
+        Task AddQuantityToGarmentAsync(int id, GarmentManageSizesModel model);
+
+        Task RemoveQuantityFromGarmentAsync(int id, GarmentManageSizesModel model);
     }
 }

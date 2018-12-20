@@ -71,5 +71,100 @@ namespace BabyBug.Services
 
             await this.DbContext.SaveChangesAsync();
         }
+
+        public async Task<GarmentManageSizesModel> GetCurrentGarmentSizeDetails(int id)
+        {
+            //AllGarmentSizes
+            var allGarmentSizes = this.DbContext
+                .GarmentSizes
+                .Select(x => x.Value)
+                .ToHashSet();
+
+            var garmentSpecifications = this.DbContext
+                .GarmentSpecifications
+                .Where(x => x.GarmentId.Equals(id))
+                .ToList();
+
+            var dictionary = new Dictionary<string, uint>();
+
+            foreach (var kvp in garmentSpecifications)
+            {
+                var sizeName = await this.DbContext
+                    .GarmentSizes
+                    .FirstOrDefaultAsync(x => x.Id.Equals(kvp.GarmentSizeId));
+
+                var key = sizeName.Value;
+
+                var value = kvp.Quantity;
+
+                dictionary.Add(key, value);
+            }
+
+            var model = new GarmentManageSizesModel
+            {
+                GarmentId = id,
+                CurrentSizes = dictionary,
+                AllGarmentSizes = allGarmentSizes,
+            };
+
+            return model;
+        }
+
+        public async Task AddQuantityToGarmentAsync(int id, GarmentManageSizesModel model)
+        {
+            var garment = await this.DbContext
+                .Garments
+                .FirstOrDefaultAsync(x => x.Id.Equals(id));
+
+            var garmentSize = await this.DbContext
+                .GarmentSizes
+                .FirstOrDefaultAsync(x => x.Value.Equals(model.ChoosenSize));
+
+            var specification = await this.DbContext
+                .GarmentSpecifications
+                .FirstOrDefaultAsync(x => x.GarmentId.Equals(garment.Id)
+                    && x.GarmentSizeId.Equals(garmentSize.Id));
+
+            if (specification == null)
+            {
+                specification = new GarmentSpecification
+                {
+                    GarmentId = garment.Id,
+                    GarmentSizeId = garmentSize.Id,
+                    Quantity = model.InputQuantity
+                };
+
+                garment.Specifications.Add(specification);
+            }
+            else
+            {
+                specification.Quantity += model.InputQuantity;
+            }
+            await this.DbContext.SaveChangesAsync();
+        }
+
+        public async Task RemoveQuantityFromGarmentAsync(int id, GarmentManageSizesModel model)
+        {
+            var garment = await this.DbContext
+                .Garments
+                .FirstOrDefaultAsync(x => x.Id.Equals(id));
+
+            var garmentSize = await this.DbContext
+                .GarmentSizes
+                .FirstOrDefaultAsync(x => x.Value.Equals(model.ChoosenSize));
+
+            var specification = await this.DbContext
+                .GarmentSpecifications
+                .FirstOrDefaultAsync(x => x.GarmentId.Equals(garment.Id)
+                    && x.GarmentSizeId.Equals(garmentSize.Id));
+
+            if (specification != null 
+                && model.InputQuantity <= specification.Quantity)
+            {
+                specification.Quantity -= model.InputQuantity;
+
+                await this.DbContext.SaveChangesAsync();
+            }
+        }
     }
 }

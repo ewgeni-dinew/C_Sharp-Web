@@ -20,7 +20,7 @@ namespace BabyBug.Web.Areas.Administrator.Controllers
             this.garmentSizeService = garmentSizeService;
         }
 
-        public IActionResult All()
+        public ActionResult All()
         {
             var model = this.garmentSizeService.GetAllGarmentSizes();
 
@@ -53,6 +53,41 @@ namespace BabyBug.Web.Areas.Administrator.Controllers
             await this.garmentSizeService.DeleteSizeAsync(id);
 
             return this.RedirectToAction("All", "GarmentSize");
+        }
+
+        public async Task<ActionResult> ManageSizes(int id)
+        {
+            var model = await this.garmentSizeService.GetCurrentGarmentSizeDetails(id);
+
+            return this.View(model);
+        }
+
+        [HttpPost]
+        [AutoValidateAntiforgeryToken]
+        public async Task<ActionResult> AddSizes(int id, GarmentManageSizesModel model)
+        {
+            if (!this.ModelState.IsValid)
+            {
+                return this.View();
+            }
+
+            await this.garmentSizeService.AddQuantityToGarmentAsync(id, model);
+
+            return this.RedirectToAction("ManageSizes", "GarmentSize", new { id });
+        }
+
+        [HttpPost]
+        [AutoValidateAntiforgeryToken]
+        public async Task<ActionResult> RemoveSizes(int id, GarmentManageSizesModel model)
+        {
+            if (!this.ModelState.IsValid)
+            {
+                return this.View();
+            }
+
+            await this.garmentSizeService.RemoveQuantityFromGarmentAsync(id, model);
+
+            return this.RedirectToAction("ManageSizes", "GarmentSize", new { id });
         }
     }
 }
