@@ -17,6 +17,10 @@ namespace BabyBug.Data.Models
         [Required]
         public string Name { get; set; }
 
+        public string ImageUrl { get; set; }
+
+        public string ImageId { get; set; }
+
         public ICollection<Garment> Garments { get; set; }
     }
 }

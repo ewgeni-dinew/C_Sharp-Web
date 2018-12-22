@@ -19,6 +19,8 @@ using BabyBug.Services.Categories.Contracts;
 using BabyBug.Services;
 using BabyBug.Services.Contracts;
 using System.Globalization;
+using CloudinaryDotNet;
+using CloudinaryDotNet.Actions;
 
 namespace BabyBug.Web
 {
@@ -64,6 +66,7 @@ namespace BabyBug.Web
                  facebookOptions.AppSecret = Configuration["Authentication:Facebook:AppSecret"];
              });
 
+            
             //Services
             services.AddScoped<ICategoriesService, CategoriesService>();
             services.AddScoped<IGarmentsService, GarmentsService>();

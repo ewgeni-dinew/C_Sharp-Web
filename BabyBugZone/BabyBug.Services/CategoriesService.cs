@@ -3,6 +3,9 @@ using BabyBug.Data.Models;
 using BabyBug.Services.Categories.Contracts;
 using BabyBug.Web.Models.Categories;
 using BabyBugZone.Data;
+using CloudinaryDotNet;
+using CloudinaryDotNet.Actions;
+using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -12,17 +15,14 @@ using System.Threading.Tasks;
 
 namespace BabyBug.Services
 {
-    public class CategoriesService : ICategoriesService
+    public class CategoriesService : BaseService, ICategoriesService
     {
-        public CategoriesService(
-            BabyBugDbContext DbContext
-            //TODO add automapper
-            )
-        {
-            this.DbContext = DbContext;
-        }
+        private const string PATH = @"https://res.cloudinary.com/dm6qsz74d/image/upload/v1545506271/";
 
-        public BabyBugDbContext DbContext { get; set; }
+        public CategoriesService(BabyBugDbContext DbContext)
+            : base(DbContext)
+        {
+        }
 
         public ICollection<BaseCategoryModel> GetAllGarmentCategories()
         {
@@ -36,6 +36,7 @@ namespace BabyBug.Services
             {
                 var temp = new BaseCategoryModel
                 {
+                    Id = c.Id,
                     Name = c.Name
                 };
 
@@ -47,72 +48,114 @@ namespace BabyBug.Services
 
         public async Task CreateCategoryAsync(CreateCategoryModel model)
         {
+            var file = model.Picture;
+
+            //upload image to Cloudinary
+            var uploadResult = UploadImageToCloudinary(file);
+
+            //create category
             var category = new GarmentCategory
             {
                 Name = model.Name,
+                ImageUrl = PATH + uploadResult.PublicId,
+                ImageId = uploadResult.PublicId
             };
 
+            //insert category in Db
             await this.DbContext.GarmentCategories.AddAsync(category);
-            await this.DbContext.SaveChangesAsync();
-        }
-
-        public ModifyCategoryModel GetEditCategoryModel()
-        {
-            var categories = this.DbContext
-                .GarmentCategories
-                .Select(x => x.Name)
-                .ToHashSet();
-
-            var model = new ModifyCategoryModel
-            {
-                CategoryNames = categories,
-            };
-
-            return model;
-        }
-
-        public ModifyCategoryModel GetDeleteCategoryModel()
-        {
-            var categories = this.DbContext
-                .GarmentCategories
-                .Select(x => x.Name)
-                .ToHashSet();
-
-            var model = new ModifyCategoryModel
-            {
-                CategoryNames = categories,
-            };
-
-            return model;
-        }
-
-        public async Task EditCategoryAsync(ModifyCategoryModel model)
-        {
-            var category =await this.DbContext
-                .GarmentCategories
-                .FirstOrDefaultAsync(x=>x.Name.Equals(model.CategoryName));
-
-            category.Name = model.NewName;
-
-            //TODO validate picture
 
             await this.DbContext.SaveChangesAsync();
         }
 
-        public async Task DeleteCategoryAsync(ModifyCategoryModel model)
+        public async Task<EditCategoryModel> GetEditCategoryModelAsync(int id)
         {
-            if (!model.Consent)
-            {
-                return;
-            }
-
             var category = await this.DbContext
                 .GarmentCategories
-                .FirstOrDefaultAsync(x=>x.Name.Equals(model.CategoryName));
+                .FirstOrDefaultAsync(x => x.Id.Equals(id));
 
-            this.DbContext.GarmentCategories.Remove(category);
+            var model = new EditCategoryModel
+            {
+                Id = category.Id,
+                Name = category.Name,
+            };
+
+            return model;
+        }
+
+        public async Task<DeleteCategoryModel> GetDeleteCategoryModelAsync(int id)
+        {
+            var category = await this.DbContext
+                .GarmentCategories
+                .FirstOrDefaultAsync(x => x.Id.Equals(id));
+
+            var model = new DeleteCategoryModel
+            {
+                Name = category.Name,
+                Id = category.Id
+            };
+
+            return model;
+        }
+
+        public async Task EditCategoryAsync(int id, EditCategoryModel model)
+        {
+            var category = await this.DbContext
+                .GarmentCategories
+                .FirstOrDefaultAsync(x => x.Id.Equals(id));
+
+            if (model.Name != null)
+            {
+                category.Name = model.Name;
+            }
+            if (model.Picture != null)
+            {
+                //remove image from Cloudinary
+                RemoveImageFromCloudinary(category.ImageId);
+
+                var uploadResult=UploadImageToCloudinary(model.Picture);
+
+                category.ImageUrl = PATH + uploadResult.PublicId;
+                category.ImageId = uploadResult.PublicId;
+            }            
 
             await this.DbContext.SaveChangesAsync();
+        }
+
+        public async Task DeleteCategoryAsync(int id)
+        {
+            var category = await this.DbContext
+                .GarmentCategories
+                .FirstOrDefaultAsync(x => x.Id.Equals(id));
+
+            //remove image from Cloudinary
+            RemoveImageFromCloudinary(category.ImageId);
+
+            //remove category from Db
+            this.DbContext
+                .GarmentCategories
+                .Remove(category);
+
+            await this.DbContext.SaveChangesAsync();
+        }
+
+        private ImageUploadResult UploadImageToCloudinary(IFormFile file)
+        {            
+            var uploadParams = new ImageUploadParams()
+            {
+                File = new FileDescription(file.FileName, file.OpenReadStream()),
+                Folder = "Categories"
+            };
+
+            var uploadResult = this.Cloudinary.Upload(uploadParams);
+
+            return uploadResult;
+        }
+
+        private void RemoveImageFromCloudinary(string imageId)
+        {
+            var imageIdParams = new DeletionParams(imageId);
+
+            var deleteResult = this.Cloudinary.Destroy(imageIdParams);
         }
     }
 }

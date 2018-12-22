@@ -11,13 +11,11 @@ using System.Threading.Tasks;
 
 namespace BabyBug.Services
 {
-    public class GarmentSizeService : IGarmentSizeService
+    public class GarmentSizeService : BaseService, IGarmentSizeService
     {
-        public BabyBugDbContext DbContext { get; set; }
-
         public GarmentSizeService(BabyBugDbContext DbContext)
+            : base(DbContext)
         {
-            this.DbContext = DbContext;
         }
 
         public ICollection<BaseGarmentSizeModel> GetAllGarmentSizes()
@@ -158,7 +156,7 @@ namespace BabyBug.Services
                 .FirstOrDefaultAsync(x => x.GarmentId.Equals(garment.Id)
                     && x.GarmentSizeId.Equals(garmentSize.Id));
 
-            if (specification != null 
+            if (specification != null
                 && model.InputQuantity <= specification.Quantity)
             {
                 specification.Quantity -= model.InputQuantity;

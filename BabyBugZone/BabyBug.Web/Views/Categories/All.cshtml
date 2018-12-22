@@ -1,11 +1,38 @@
 ﻿@model ICollection<BabyBug.Web.Models.Categories.BaseCategoryModel>
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+
 @{
     ViewData["Title"] = "All";
 }
 
-@foreach (var category in Model)
+@if (Model.Any())
 {
-    <h4><a asp-controller="Products" asp-action="Details">@category.Name</a></h4>
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">Name</th>
+                <th scope="col">Action</th>
+                <th scope="col">Action</th>
+            </tr>
+        </thead>
+        @{ var index = 1; }
+        @foreach (var category in Model)
+        {
+            <tr>
+                <th scope="row">@index</th>
+                <td>@category.Name</td>
+                <td>
+                    <a class="btn btn-primary" asp-area="Administrator" asp-controller="Categories" asp-action="Edit" asp-route-id=@category.Id>Edit</a>
+                </td>
+                <td>
+                    <a class="btn btn-primary" asp-area="Administrator" asp-controller="Categories" asp-action="Delete" asp-route-id=@category.Id>Delete</a>
+                </td>
+            </tr>
+            index++;
+        }
+
+    </table>
 }
 
 @if (User.IsInRole("Admin"))
@@ -13,12 +40,6 @@
     <div class="row">
         <div class="col">
             <a class="btn btn-primary" asp-area="Administrator" asp-controller="Categories" asp-action="Create">Create</a>
-        </div>
-        <div class="col">
-            <a class="btn btn-primary" asp-area="Administrator" asp-controller="Categories" asp-action="Edit">Edit</a>
-        </div>
-        <div class="col">
-            <a class="btn btn-primary" asp-area="Administrator" asp-controller="Categories" asp-action="Delete">Delete</a>
         </div>
     </div>
 }

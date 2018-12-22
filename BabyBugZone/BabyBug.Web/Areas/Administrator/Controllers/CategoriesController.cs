@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using BabyBug.Common.ViewModels.Categories;
 using BabyBug.Services.Categories.Contracts;
+using BabyBug.Services.Contracts;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -16,18 +17,17 @@ namespace BabyBug.Web.Areas.Administrator.Controllers
     {
         private readonly ICategoriesService categoriesService;
 
-        public CategoriesController(ICategoriesService categoriesService)
+        public CategoriesController(
+            ICategoriesService categoriesService)
         {
             this.categoriesService = categoriesService;
         }
 
-        // GET: Categories/Create
         public ActionResult Create()
         {
             return View();
         }
 
-        // POST: Categories/Create
         [HttpPost]
         [AutoValidateAntiforgeryToken]
         public async Task<ActionResult> Create(CreateCategoryModel model)
@@ -42,51 +42,47 @@ namespace BabyBug.Web.Areas.Administrator.Controllers
             return RedirectToAction("All", "Categories", new { area = "" });
         }
 
-        // GET: Categories/Edit/5
-        public ActionResult Edit()
+        public async Task<ActionResult> Edit(int id)
         {
-            var model = this.categoriesService
-                .GetEditCategoryModel();
+            var model = await this.categoriesService
+                .GetEditCategoryModelAsync(id);
 
             return View(model);
         }
 
-        // POST: Categories/Edit/5
         [HttpPost]
         [AutoValidateAntiforgeryToken]
-        public async Task<ActionResult> Edit(ModifyCategoryModel model)
+        public async Task<ActionResult> Edit(int id, EditCategoryModel model)
         {
             if (!this.ModelState.IsValid)
             {
                 return this.View();
             }
 
-            await this.categoriesService.EditCategoryAsync(model);
+            await this.categoriesService.EditCategoryAsync(id, model);
 
             return RedirectToAction("All", "Categories", new { area = "" });
         }
 
-        // GET: Categories/Delete/5
         [HttpGet]
-        public ActionResult Delete()
+        public async Task<ActionResult> Delete(int id)
         {
-            var model = this.categoriesService
-                .GetDeleteCategoryModel();
+            var model = await this.categoriesService
+                .GetDeleteCategoryModelAsync(id);
 
             return View(model);
         }
 
-        // POST: Categories/Delete/5
         [HttpPost]
         [AutoValidateAntiforgeryToken]
-        public async Task<ActionResult> Delete(ModifyCategoryModel model)
+        public async Task<ActionResult> Delete(int id, DeleteCategoryModel model)
         {
             if (!this.ModelState.IsValid)
             {
                 return this.View();
             }
 
-            await this.categoriesService.DeleteCategoryAsync(model);
+            await this.categoriesService.DeleteCategoryAsync(id);
 
             return RedirectToAction("All", "Categories", new { area = "" });
         }

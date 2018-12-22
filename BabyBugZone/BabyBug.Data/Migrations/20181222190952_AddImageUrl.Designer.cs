@@ -4,14 +4,16 @@ using BabyBugZone.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace BabyBug.Data.Migrations
 {
     [DbContext(typeof(BabyBugDbContext))]
-    partial class BabyBugDbContextModelSnapshot : ModelSnapshot
+    [Migration("20181222190952_AddImageUrl")]
+    partial class AddImageUrl
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -92,8 +94,6 @@ namespace BabyBug.Data.Migrations
                         .IsRequired()
                         .HasConversion(new ValueConverter<string, string>(v => default(string), v => default(string), new ConverterMappingHints(size: 1)));
 
-                    b.Property<string>("ImageId");
-
                     b.Property<string>("ImageUrl");
 
                     b.Property<bool>("IsAvailable");
@@ -115,8 +115,6 @@ namespace BabyBug.Data.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("ImageId");
 
                     b.Property<string>("ImageUrl");
 

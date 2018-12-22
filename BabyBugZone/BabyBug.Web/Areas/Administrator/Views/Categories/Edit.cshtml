@@ -1,4 +1,4 @@
-﻿@model BabyBug.Common.ViewModels.Categories.ModifyCategoryModel
+﻿@model BabyBug.Common.ViewModels.Categories.EditCategoryModel
 @addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
 
 @{
@@ -12,28 +12,28 @@
 <hr />
 <div class="row">
     <div class="col-md-4">
-        <form asp-area="Administrator" asp-controller="Categories" asp-action="Edit">
+        <form method="post" asp-area="Administrator" asp-controller="Categories" asp-action="Edit" asp-route-id=@Model.Id>
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
-                <select asp-for=@Model.CategoryName title="Select category" class="selectpicker">
-                    @foreach (var c in Model.CategoryNames)
-                    {
-                        <option value=@c>@c</option>
-                    }
-                </select>
+                <label asp-for="Name" class="control-label"></label>
+                <input asp-for="Name" class="form-control" placeholder=@Model.Name/>
+                <span asp-validation-for="Name" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="NewName" class="control-label"></label>
-                <input asp-for="NewName" type="text" class="form-control"/>
-                <span asp-validation-for="NewName" class="text-danger"></span>
+                <p>Upload one or more files using this form:</p>
+                <input asp-for="Picture" type="file" accept="image/*" />
+                <span asp-validation-for="Picture" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <input type="submit" value="Edit" class="btn btn-primary" />
+                <input type="submit" value="Save" class="btn btn-primary" />
             </div>
         </form>
     </div>
 </div>
 
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}

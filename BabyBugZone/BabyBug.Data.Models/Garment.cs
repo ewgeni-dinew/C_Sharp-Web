@@ -36,6 +36,10 @@ namespace BabyBug.Data.Models
 
         public DateTime CreatedOn { get; set; }
 
+        public string ImageUrl { get; set; }
+
+        public string ImageId { get; set; }
+
         public ICollection<GarmentSpecification> Specifications { get; set; }
     }
 }

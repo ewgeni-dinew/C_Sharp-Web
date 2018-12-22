@@ -12,14 +12,12 @@ using System.Threading.Tasks;
 
 namespace BabyBug.Services
 {
-    public class GarmentsService : IGarmentsService
+    public class GarmentsService : BaseService, IGarmentsService
     {
-        public GarmentsService(BabyBugDbContext dbContext)
+        public GarmentsService(BabyBugDbContext DbContext)
+            : base(DbContext)
         {
-            this.DbContext = dbContext;
         }
-
-        public BabyBugDbContext DbContext { get; set; }
 
         public CreateGarmentModel GetGarmentCreateModel()
         {
@@ -72,7 +70,7 @@ namespace BabyBug.Services
                 Id = garment.Id,
                 Name = garment.Name,
                 Description = garment.Description,
-                CategoryNames=categoryNames,
+                CategoryNames = categoryNames,
                 Price = garment.Price,
                 Gender = garment.Gender,
                 CreatedOn = garment.CreatedOn.ToString("dd-MM-yyyy")
