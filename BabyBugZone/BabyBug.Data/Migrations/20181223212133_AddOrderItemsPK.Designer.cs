@@ -4,14 +4,16 @@ using BabyBugZone.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace BabyBug.Data.Migrations
 {
     [DbContext(typeof(BabyBugDbContext))]
-    partial class BabyBugDbContextModelSnapshot : ModelSnapshot
+    [Migration("20181223212133_AddOrderItemsPK")]
+    partial class AddOrderItemsPK
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -156,6 +158,26 @@ namespace BabyBug.Data.Migrations
                     b.ToTable("GarmentSpecifications");
                 });
 
+            modelBuilder.Entity("BabyBug.Data.Models.Item", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Name");
+
+                    b.Property<decimal>("Price")
+                        .HasColumnType("decimal(18, 2)");
+
+                    b.Property<long>("Quantity");
+
+                    b.Property<string>("Size");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Items");
+                });
+
             modelBuilder.Entity("BabyBug.Data.Models.Order", b =>
                 {
                     b.Property<int>("Id")
@@ -163,6 +185,9 @@ namespace BabyBug.Data.Migrations
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<int>("Status");
+
+                    b.Property<decimal>("TotalPrice")
+                        .HasColumnType("decimal(18, 2)");
 
                     b.Property<string>("UserId");
 
@@ -173,24 +198,17 @@ namespace BabyBug.Data.Migrations
                     b.ToTable("Orders");
                 });
 
-            modelBuilder.Entity("BabyBug.Data.Models.OrderGarments", b =>
+            modelBuilder.Entity("BabyBug.Data.Models.OrderItem", b =>
                 {
-                    b.Property<int>("GarmentId");
+                    b.Property<int>("ItemId");
 
                     b.Property<int>("OrderId");
 
-                    b.Property<decimal>("Price")
-                        .HasColumnType("decimal(18, 2)");
-
-                    b.Property<long>("Quantity");
-
-                    b.Property<string>("Size");
-
-                    b.HasKey("GarmentId", "OrderId");
+                    b.HasKey("ItemId", "OrderId");
 
                     b.HasIndex("OrderId");
 
-                    b.ToTable("OrderGarments");
+                    b.ToTable("OrderItems");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -331,15 +349,15 @@ namespace BabyBug.Data.Migrations
                         .HasForeignKey("UserId");
                 });
 
-            modelBuilder.Entity("BabyBug.Data.Models.OrderGarments", b =>
+            modelBuilder.Entity("BabyBug.Data.Models.OrderItem", b =>
                 {
-                    b.HasOne("BabyBug.Data.Models.Garment", "Garment")
-                        .WithMany("OrderGarments")
-                        .HasForeignKey("GarmentId")
+                    b.HasOne("BabyBug.Data.Models.Item", "Item")
+                        .WithMany("OrderItems")
+                        .HasForeignKey("ItemId")
                         .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("BabyBug.Data.Models.Order", "Order")
-                        .WithMany("OrderGarments")
+                        .WithMany("OrderItems")
                         .HasForeignKey("OrderId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });

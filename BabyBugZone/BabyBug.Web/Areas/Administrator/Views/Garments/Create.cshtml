@@ -12,7 +12,7 @@
 <hr />
 <div class="row">
     <div class="col-md-4">
-        <form method="post" asp-area="Administrator" asp-controller="Garments" asp-action="Create">
+        <form method="post" asp-area="Administrator" asp-controller="Garments" asp-action="Create" enctype="multipart/form-data">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
                 <label asp-for="Name" class="control-label"></label>
@@ -36,11 +36,16 @@
                         <option value=@c>@c</option>
                     }
                 </select>
-            </div>            
+            </div>
             <div class="form-group">
                 <label asp-for="Price" class="control-label"></label>
                 <input asp-for="Price" type="number" class="form-control" />
                 <span asp-validation-for="Price" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <p>Upload one or more files using this form:</p>
+                <input asp-for="Picture" type="file" accept="image/*" />
+                <span asp-validation-for="Picture" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-primary" />

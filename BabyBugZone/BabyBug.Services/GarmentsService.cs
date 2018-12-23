@@ -2,6 +2,9 @@
 using BabyBug.Data.Models;
 using BabyBug.Services.Contracts;
 using BabyBugZone.Data;
+using CloudinaryDotNet;
+using CloudinaryDotNet.Actions;
+using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -14,6 +17,8 @@ namespace BabyBug.Services
 {
     public class GarmentsService : BaseService, IGarmentsService
     {
+        private const string PATH = @"https://res.cloudinary.com/dm6qsz74d/image/upload/v1545506271/";
+
         public GarmentsService(BabyBugDbContext DbContext)
             : base(DbContext)
         {
@@ -36,10 +41,16 @@ namespace BabyBug.Services
 
         public async Task CreateGarmentAsync(CreateGarmentModel model)
         {
+            //get category id
             var categoryId = this.DbContext
                 .GarmentCategories
                 .FirstOrDefault(x => x.Name.Equals(model.CategoryName))
                 .Id;
+
+            var file = model.Picture;
+
+            //upload image to Cloudinary
+            var uploadResult = UploadImageToCloudinary(file);
 
             var garment = new Garment
             {
@@ -47,10 +58,14 @@ namespace BabyBug.Services
                 Description = model.Description,
                 Price = model.Price,
                 Gender = model.Gender,
-                CategoryId = categoryId
+                CategoryId = categoryId,
+                ImageId = uploadResult.PublicId,
+                ImageUrl = PATH + uploadResult.PublicId,
             };
 
+            //add garment to DB
             await this.DbContext.Garments.AddAsync(garment);
+
             await this.DbContext.SaveChangesAsync();
         }
 
@@ -60,17 +75,28 @@ namespace BabyBug.Services
                 .Garments
                 .FirstOrDefaultAsync(x => x.Id.Equals(id));
 
-            var categoryNames = this.DbContext
-                .GarmentCategories
-                .Select(x => x.Name)
-                .ToHashSet();
+            var garmentSizes = this.DbContext
+                .GarmentSpecifications
+                .Where(x => x.GarmentId.Equals(id))
+                .ToList();
+
+            var availableSizes = new HashSet<string>();
+
+            foreach (var size in garmentSizes)
+            {
+                var sizeName = await this.DbContext
+                    .GarmentSizes
+                    .FirstOrDefaultAsync(x => x.Id.Equals(size.GarmentSizeId));
+
+                availableSizes.Add(sizeName.Value);
+            }
 
             var model = new GarmentDetailsModel
             {
+                AvailableSizes = availableSizes,
                 Id = garment.Id,
                 Name = garment.Name,
                 Description = garment.Description,
-                CategoryNames = categoryNames,
                 Price = garment.Price,
                 Gender = garment.Gender,
                 CreatedOn = garment.CreatedOn.ToString("dd-MM-yyyy")
@@ -98,11 +124,39 @@ namespace BabyBug.Services
             return model;
         }
 
-        public async Task DeleteGarmentAsync(int id)
+        public async Task<EditGarmentModel> GetEditModelAsync(int id)
         {
             var garment = await this.DbContext
                 .Garments
                 .FirstOrDefaultAsync(x => x.Id.Equals(id));
+
+            var categories = this.DbContext
+                .GarmentCategories
+                .Select(x => x.Name)
+                .ToHashSet();
+
+            var model = new EditGarmentModel
+            {
+                Id = garment.Id,
+                Name = garment.Name,
+                Description = garment.Description,
+                Price = garment.Price,
+                Gender = garment.Gender,
+                CategoryNames = categories,
+            };
+
+            return model;
+        }
+
+        public async Task DeleteGarmentAsync(int id)
+        {
+            //get garment
+            var garment = await this.DbContext
+                .Garments
+                .FirstOrDefaultAsync(x => x.Id.Equals(id));
+
+            //remove image from Cloudinary
+            RemoveImageFromCloudinary(garment.ImageId);
 
             this.DbContext
                 .Garments
@@ -111,24 +165,70 @@ namespace BabyBug.Services
             await this.DbContext.SaveChangesAsync();
         }
 
-        public async Task EditGarmentAsync(GarmentDetailsModel model)
+        public async Task EditGarmentAsync(int id, EditGarmentModel model)
         {
             var garment = await this.DbContext
                 .Garments
-                .FirstOrDefaultAsync(x => x.Id.Equals(model.Id));
+                .FirstOrDefaultAsync(x => x.Id.Equals(id));
 
-            var categoryId = this.DbContext
+            if (model.Name != null)
+            {
+                garment.Name = model.Name;
+            }
+            if (model.CategoryName != null)
+            {
+                var categoryId = this.DbContext
                 .GarmentCategories
                 .FirstOrDefaultAsync(x => x.Name.Equals(model.CategoryName))
                 .Id;
 
-            garment.Name = model.Name;
-            garment.CategoryId = categoryId;
-            garment.Description = model.Description;
+                garment.CategoryId = categoryId;
+            }
+            if (model.Description != null)
+            {
+                garment.Description = model.Description;
+            }
+            if (model.Price > 0)
+            {
+                garment.Price = model.Price;
+            }
+            if (model.Picture != null)
+            {
+                //update picture
+
+                //remove old image from Cloudinary
+                RemoveImageFromCloudinary(garment.ImageId);
+
+                //upload new image
+                var uploadResult = UploadImageToCloudinary(model.Picture);
+
+                garment.ImageUrl = PATH + uploadResult.PublicId;
+                garment.ImageId = uploadResult.PublicId;
+            }
+
             garment.Gender = model.Gender;
-            garment.Price = model.Price;
 
             await this.DbContext.SaveChangesAsync();
+        }
+
+        private ImageUploadResult UploadImageToCloudinary(IFormFile file)
+        {
+            var uploadParams = new ImageUploadParams()
+            {
+                File = new FileDescription(file.FileName, file.OpenReadStream()),
+                Folder = "/Products/Garments"
+            };
+
+            var uploadResult = this.Cloudinary.Upload(uploadParams);
+
+            return uploadResult;
+        }
+
+        private void RemoveImageFromCloudinary(string imageId)
+        {
+            var imageIdParams = new DeletionParams(imageId);
+
+            var deleteResult = this.Cloudinary.Destroy(imageIdParams);
         }
     }
 }

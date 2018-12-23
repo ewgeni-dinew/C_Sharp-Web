@@ -12,6 +12,7 @@ namespace BabyBug.Data.Models
             : base()
         {
             this.Specifications = new HashSet<GarmentSpecification>();
+            this.OrderGarments = new HashSet<OrderGarments>();
             this.IsAvailable = true;
             this.CreatedOn = DateTime.UtcNow;
         }
@@ -41,5 +42,7 @@ namespace BabyBug.Data.Models
         public string ImageId { get; set; }
 
         public ICollection<GarmentSpecification> Specifications { get; set; }
+
+        public ICollection<OrderGarments> OrderGarments { get; set; }
     }
 }

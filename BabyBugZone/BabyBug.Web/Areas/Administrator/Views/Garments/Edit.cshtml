@@ -1,4 +1,4 @@
-﻿@model BabyBug.Common.ViewModels.Garments.GarmentDetailsModel
+﻿@model BabyBug.Common.ViewModels.Garments.EditGarmentModel
 @addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
 
 @{
@@ -12,7 +12,7 @@
 <hr />
 <div class="row">
     <div class="col-md-4">
-        <form method="post" asp-area="Administrator" asp-controller="Garments" asp-action="Edit">
+        <form method="post" asp-area="Administrator" asp-controller="Garments" asp-action="Edit" asp-route-id=@Model.Id enctype="multipart/form-data">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
                 <label asp-for="Name" class="control-label">Name</label>
@@ -20,7 +20,8 @@
                 <span asp-validation-for="Name" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <select asp-for=@Model.CategoryName title="Select category" class="selectpicker">
+                <select asp-for=@Model.CategoryName title="---Select category---" class="selectpicker">
+                    <option>--Select a category--</option>
                     @foreach (var c in Model.CategoryNames)
                     {
                         <option value=@c>@c</option>
@@ -49,6 +50,11 @@
                 <label asp-for="Price" class="control-label">Price</label>
                 <input asp-for="Price" type="number" class="form-control" placeholder=@Model.Price />
                 <span asp-validation-for="Price" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <p>Upload one or more files using this form:</p>
+                <input asp-for="Picture" type="file" accept="image/*" />
+                <span asp-validation-for="Picture" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <input type="submit" value="Save" class="btn btn-primary" />

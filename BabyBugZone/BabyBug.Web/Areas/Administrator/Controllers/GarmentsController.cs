@@ -24,15 +24,7 @@ namespace BabyBug.Web.Areas.Administrator.Controllers
         public ActionResult Index()
         {
             return View();
-        }
-
-        //move Details to user controller
-        public async Task<ActionResult> Details(int id)
-        {
-            var model= await this.garmentService.GetDetailsModelAsync(id);
-
-            return View(model);
-        }
+        }        
 
         public ActionResult Create()
         {
@@ -46,6 +38,7 @@ namespace BabyBug.Web.Areas.Administrator.Controllers
         {
             if (!this.ModelState.IsValid)
             {
+                //TODO implement better response
                 return this.View();
             }
 
@@ -56,15 +49,21 @@ namespace BabyBug.Web.Areas.Administrator.Controllers
 
         public async Task<ActionResult> Edit(int id)
         {
-            var model = await this.garmentService.GetDetailsModelAsync(id);
+            var model = await this.garmentService.GetEditModelAsync(id);
+
             return View(model);
         }
 
         [HttpPost]
         [AutoValidateAntiforgeryToken]
-        public async Task<ActionResult> Edit(GarmentDetailsModel model)
+        public async Task<ActionResult> Edit(int id, EditGarmentModel model)
         {
-            await this.garmentService.EditGarmentAsync(model);
+            if (!this.ModelState.IsValid)
+            {
+                return this.View();
+            }
+
+            await this.garmentService.EditGarmentAsync(id, model);
 
             return RedirectToAction("Index", "Home", new { area = "" });
         }
@@ -80,6 +79,11 @@ namespace BabyBug.Web.Areas.Administrator.Controllers
         [AutoValidateAntiforgeryToken]
         public async Task<ActionResult> Delete(DeleteGarmentModel model)
         {
+            if (!this.ModelState.IsValid)
+            {
+                return this.View();
+            }
+
             await this.garmentService.DeleteGarmentAsync(model.Id);
 
             return RedirectToAction("Index", "Home", new { area = "" });

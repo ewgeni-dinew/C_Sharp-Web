@@ -21,6 +21,8 @@ namespace BabyBug.Services.Contracts
 
         Task<GarmentDetailsModel> GetDetailsModelAsync(int id);
 
-        Task EditGarmentAsync(GarmentDetailsModel model);
+        Task<EditGarmentModel> GetEditModelAsync(int id);
+
+        Task EditGarmentAsync(int id, EditGarmentModel model);
     }
 }

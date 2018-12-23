@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Http;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Globalization;
@@ -34,5 +35,10 @@ namespace BabyBug.Common.ViewModels.Garments
         [Display(Name = "Price")]
         [DataType(DataType.Currency)]        
         public decimal Price { get; set; }
+
+        [Required]
+        [Display(Name = "Picture")]
+        [DataType(DataType.Upload)]
+        public IFormFile Picture { get; set; }
     }
 }

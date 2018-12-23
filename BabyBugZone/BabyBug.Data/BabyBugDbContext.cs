@@ -12,6 +12,8 @@ namespace BabyBugZone.Data
         public DbSet<Garment> Garments { get; set; }
         public DbSet<GarmentSize> GarmentSizes { get; set; }
         public DbSet<GarmentSpecification> GarmentSpecifications { get; set; }
+        public DbSet<Order> Orders { get; set; }
+        public DbSet<OrderGarments> OrderGarments { get; set; }
 
         public BabyBugDbContext(DbContextOptions<BabyBugDbContext> options)
             : base(options)
@@ -30,7 +32,14 @@ namespace BabyBugZone.Data
                 .HasForeignKey(x => x.CategoryId);
 
             builder.Entity<GarmentSpecification>()
-                .HasKey(x => new { x.GarmentSizeId, x.GarmentId });         
+                .HasKey(x => new { x.GarmentSizeId, x.GarmentId });
+
+            builder.Entity<OrderGarments>()
+                .HasKey(x => new { x.GarmentId, x.OrderId });            
+
+            builder.Entity<OrderGarments>()
+                .Property(x => x.Price)
+                .HasColumnType("decimal(18, 2)");
 
             base.OnModelCreating(builder);
         }

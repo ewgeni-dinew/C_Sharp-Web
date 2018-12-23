@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Text;
 
 namespace BabyBug.Common.ViewModels.Categories
@@ -11,6 +12,8 @@ namespace BabyBug.Common.ViewModels.Categories
 
         public string Name { get; set; }
 
+        [Display(Name = "Picture")]
+        [DataType(DataType.Upload)]
         public IFormFile Picture { get; set; }
     }
 }
