@@ -1,0 +1,32 @@
+﻿@model BabyBug.Common.ViewModels.GarmentSize.CreateGarmentSizeModel
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+
+@{
+    ViewData["Title"] = "Create";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Create</h1>
+
+<h4>CreateGarmentSizeModel</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form method="post" asp-area="Administrator" asp-controller="GarmentSize" asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="Values" class="control-label"></label>
+                <input asp-for="Values" class="form-control" />
+                <p>*input values should be separated by ; , (space)</p>
+                <span asp-validation-for="Values" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

@@ -1,0 +1,29 @@
+@using Microsoft.AspNetCore.Identity
+@inject SignInManager<BabyBug.Data.Models.BabyBugUser> SignInManager
+@inject UserManager<BabyBug.Data.Models.BabyBugUser> UserManager
+
+<li class="account">
+    <a href="#">
+        My Account<i class="fa fa-angle-down"></i>
+    </a>
+    <ul class="account_selection">
+        @if (SignInManager.IsSignedIn(User))
+        {
+            <li>
+                <form class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
+                    <button type="submit" class="nav-link btn btn-link text-dark"><i class="fa fa-sign-out" aria-hidden="true"></i>Logout</button>
+                </form>
+            </li>
+        }
+        else
+        {
+            <li>
+                <a asp-area="Identity" asp-page="/Account/Register"><i class="fa fa-sign-in" aria-hidden="true"></i>Register</a>
+            </li>
+            <li>
+                <a asp-area="Identity" asp-page="/Account/Login"><i class="fa fa-user-plus" aria-hidden="true"></i>Sign In</a>
+            </li>
+        }
+    </ul>
+</li>
+
