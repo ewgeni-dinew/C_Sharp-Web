@@ -7,6 +7,7 @@ namespace BabyBug.Common.ViewModels.Orders
     public class BaseOrderModel
     {
         public string UserName { get; set; }
-        public int Id { get; set; }
+
+        public string FullName { get; set; }
     }
 }

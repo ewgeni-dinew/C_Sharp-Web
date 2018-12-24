@@ -43,24 +43,31 @@ namespace BabyBug.Services
                     Quantity = model.Quantity,
                 };
 
-                order = new Order
+                order = await this.DbContext.Orders.FirstOrDefaultAsync(x => x.UserId.Equals(user.Id));
+
+                if (order == null)
                 {
-                    UserId = user.Id,
-                };
+                    order = new Order
+                    {
+                        UserId = user.Id,
+                    };
 
-                await this.DbContext.Orders.AddAsync(order);
+                    await this.DbContext.Orders.AddAsync(order);
 
-                await this.DbContext
+                    await this.DbContext
                     .SaveChangesAsync();
+                }
 
                 order.OrderGarments
                     .Add(orderGarment);
             }
             else
             {
-                order.OrderGarments
-                    .FirstOrDefault(x => x.GarmentId.Equals(id) && x.Size.Equals(model.Size))
-                    .Quantity += model.Quantity;
+                var temp = await this.DbContext
+                    .OrderGarments
+                    .FirstOrDefaultAsync(x => x.GarmentId.Equals(id) && x.Size.Equals(model.Size));
+
+                temp.Quantity += model.Quantity;
             }
             await this.DbContext
                     .SaveChangesAsync();
@@ -76,18 +83,57 @@ namespace BabyBug.Services
 
             foreach (var order in orders)
             {
-                var userName = this.DbContext
+                var user = this.DbContext
                     .Users
-                    .FirstOrDefault(x => x.Id.Equals(order.UserId))
-                    .UserName;
+                    .FirstOrDefault(x => x.Id.Equals(order.UserId));
 
                 var baseOrder = new BaseOrderModel
                 {
-                    UserName = userName,
-                    Id = order.Id,
+                    UserName = user.UserName,
+                    FullName = user.FirstName + " " + user.LastName
                 };
 
                 model.Add(baseOrder);
+            }
+
+            return model;
+        }
+
+        public ICollection<BaseOrderedProductModel> GetOrderedProducts(string username)
+        {
+            var userId = this.DbContext
+                .Users
+                .FirstOrDefault(x => x.UserName.Equals(username))
+                .Id;
+
+            var orderId = this.DbContext
+                .Orders
+                .FirstOrDefault(x => x.UserId.Equals(userId))
+                .Id;
+
+            var orderedProducts = this.DbContext
+                .OrderGarments
+                .Where(x => x.OrderId.Equals(orderId))
+                .ToList();
+
+            var model = new HashSet<BaseOrderedProductModel>();
+
+            foreach (var product in orderedProducts)
+            {
+                var garmentName = this.DbContext
+                    .Garments
+                    .FirstOrDefault(x => x.Id.Equals(product.GarmentId))
+                    .Name;
+
+                var temp = new BaseOrderedProductModel
+                {
+                    Price = product.Price,
+                    Size = product.Size,
+                    Quantity = product.Quantity,
+                    Name = garmentName
+                };
+
+                model.Add(temp);
             }
 
             return model;

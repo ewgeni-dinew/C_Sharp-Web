@@ -25,5 +25,12 @@ namespace BabyBug.Web.Areas.Administrator.Controllers
 
             return View(model);
         }
+
+        public ActionResult Details(string username)
+        {
+            var model = this.ordersService.GetOrderedProducts(username);
+
+            return this.View(model);
+        }
     }
 }

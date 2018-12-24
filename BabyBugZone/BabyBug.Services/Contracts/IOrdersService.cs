@@ -15,5 +15,7 @@ namespace BabyBug.Services.Contracts
         Task OrderGarment(int id, string userName, GarmentDetailsModel model);
 
         ICollection<BaseOrderModel> GetAllOrders();
+
+        ICollection<BaseOrderedProductModel> GetOrderedProducts(string username);
     }
 }

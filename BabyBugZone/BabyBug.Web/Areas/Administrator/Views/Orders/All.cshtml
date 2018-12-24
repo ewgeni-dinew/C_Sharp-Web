@@ -12,7 +12,7 @@
         <thead>
             <tr>
                 <th scope="col">#</th>
-                <th scope="col">UserName</th>
+                <th scope="col">Full Name</th>
                 <th scope="col">Action</th>
                 <th scope="col">Action</th>
             </tr>
@@ -22,12 +22,12 @@
         {
             <tr>
                 <th scope="row">@index</th>
-                <td>@order.UserName</td>
+                <td>@order.FullName</td>
                 <td>
-                    <a class="btn btn-primary" asp-area="Administrator" asp-controller="Orders" asp-action="Details" asp-route-id=@order.Id>Details</a>
+                    <a class="btn btn-primary" asp-area="Administrator" asp-controller="Orders" asp-action="Details" asp-route-username=@order.UserName>Details</a>
                 </td>
                 <td>
-                    <a class="btn btn-primary" asp-area="Administrator" asp-controller="Orders" asp-action="Deliver" asp-route-id=@order.Id>Deliver</a>
+                    <a class="btn btn-primary" asp-area="Administrator" asp-controller="Orders" asp-action="Deliver" asp-route-username=@order.UserName>Deliver</a>
                 </td>
             </tr>
             index++;
