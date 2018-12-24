@@ -118,18 +118,20 @@ namespace BabyBug.Services
 
             var model = new HashSet<BaseOrderedProductModel>();
 
-            foreach (var product in orderedProducts)
+            foreach (var orderProduct in orderedProducts)
             {
                 var garmentName = this.DbContext
                     .Garments
-                    .FirstOrDefault(x => x.Id.Equals(product.GarmentId))
+                    .FirstOrDefault(x => x.Id.Equals(orderProduct.GarmentId))
                     .Name;
 
                 var temp = new BaseOrderedProductModel
                 {
-                    Price = product.Price,
-                    Size = product.Size,
-                    Quantity = product.Quantity,
+                    OrderId = orderProduct.OrderId,
+                    ProductId = orderProduct.GarmentId,
+                    Price = orderProduct.Price,
+                    Size = orderProduct.Size,
+                    Quantity = orderProduct.Quantity,
                     Name = garmentName
                 };
 
@@ -137,6 +139,69 @@ namespace BabyBug.Services
             }
 
             return model;
+        }
+
+        public async Task RemoveProductFromOrder(int orderId, int productId, string size)
+        {
+            var orderGarment = await this.DbContext.OrderGarments
+                .FirstOrDefaultAsync(x => x.OrderId.Equals(orderId) &&
+                                    x.GarmentId.Equals(productId)
+                                    && x.Size.Equals(size));
+
+            if (orderGarment != null)
+            {
+                this.DbContext.OrderGarments.Remove(orderGarment);
+                await this.DbContext.SaveChangesAsync();
+            }
+        }
+
+        public async Task<UserDataModel> GetUserDataModel(string username)
+        {
+            var user = await this.DbContext
+                .Users
+                .FirstOrDefaultAsync(x => x.UserName.Equals(username));
+
+            var model = new UserDataModel
+            {
+                Username = user.UserName,
+                FirstName = user.FirstName,
+                LastName = user.LastName,
+                Telephone = user.PhoneNumber,
+                City = user.City,
+                Address = user.Address
+            };
+
+            return model;
+        }
+
+        public async Task UpdateUserInfo(UserDataModel model)
+        {
+            var user = await this.DbContext
+                .Users
+                .FirstOrDefaultAsync(x => x.UserName.Equals(model.Username));
+
+            if (model.FirstName != null)
+            {
+                user.FirstName = model.FirstName;
+            }
+            if (model.LastName != null)
+            {
+                user.LastName = model.LastName;
+            }
+            if (model.Telephone != null)
+            {
+                user.PhoneNumber = model.Telephone;
+            }
+            if (model.City != null)
+            {
+                user.City = model.City;
+            }
+            if (model.Address != null)
+            {
+                user.Address = model.Address;
+            }
+
+            await this.DbContext.SaveChangesAsync();
         }
     }
 }

@@ -32,5 +32,6 @@ namespace BabyBug.Web.Areas.Administrator.Controllers
 
             return this.View(model);
         }
+        
     }
 }

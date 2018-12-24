@@ -11,5 +11,9 @@ namespace BabyBug.Data.Models
 
         [Required]
         public string LastName { get; set; }
+
+        public string City { get; set; }
+
+        public string Address { get; set; }
     }
 }

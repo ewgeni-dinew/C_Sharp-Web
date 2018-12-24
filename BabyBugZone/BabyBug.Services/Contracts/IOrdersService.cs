@@ -17,5 +17,11 @@ namespace BabyBug.Services.Contracts
         ICollection<BaseOrderModel> GetAllOrders();
 
         ICollection<BaseOrderedProductModel> GetOrderedProducts(string username);
+
+        Task RemoveProductFromOrder(int orderId, int productId, string size);
+
+        Task<UserDataModel> GetUserDataModel(string username);
+
+        Task UpdateUserInfo(UserDataModel model);
     }
 }

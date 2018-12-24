@@ -16,7 +16,7 @@ namespace BabyBug.Web.Controllers
         {
             this.garmentService = garmentService;
         }
-        // GET: Garments
+
         public ActionResult Index()
         {
             return View();
