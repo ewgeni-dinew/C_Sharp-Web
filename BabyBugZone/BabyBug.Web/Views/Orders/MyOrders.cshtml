@@ -43,7 +43,7 @@
             <h4>Total Price: @Model.Sum(x => x.Price * x.Quantity)</h4>
         </div>
         <div class="col">
-            <a class="btn btn-primary" asp-controller="Orders" asp-action="ManageUser" asp-route-username=@User.Identity.Name>Finish Order</a>
+            <a class="btn btn-primary" asp-controller="Orders" asp-action="ManageDelivery" asp-route-username=@User.Identity.Name>Finish Order</a>
         </div>
     </div>
 }

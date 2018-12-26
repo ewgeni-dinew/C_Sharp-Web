@@ -1,4 +1,4 @@
-﻿@model ICollection<BabyBug.Common.ViewModels.Orders.BaseOrderedProductModel>
+﻿@model BabyBug.Common.ViewModels.Orders.AllOrderedProductsModel
 @addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
 
 @{
@@ -6,7 +6,7 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-@if (Model.Any())
+@if (Model.OrderedProducts.Any())
 {
     <table class="table table-striped">
         <thead>
@@ -19,7 +19,7 @@
             </tr>
         </thead>
         @{ var index = 1; }
-        @foreach (var product in Model)
+        @foreach (var product in Model.OrderedProducts)
         {
             <tr>
                 <th scope="row">@index</th>
@@ -33,6 +33,67 @@
 
     </table>
 }
+<hr />
 <div class="row">
-    <h4>Total Price: @Model.Sum(x => x.Price * x.Quantity)</h4>
+    <div class="col">
+        <dl class="row">
+            <dt class="col-sm-4">
+                @Html.DisplayNameFor(model => model.UserFullName)
+            </dt>
+            <dd class="col-sm-8">
+                @Html.DisplayFor(model => model.UserFullName)
+            </dd>
+            <dt class="col-sm-4">
+                @Html.DisplayNameFor(model => model.PhoneNumber)
+            </dt>
+            <dd class="col-sm-8">
+                @Html.DisplayFor(model => model.PhoneNumber)
+            </dd>
+            <dt class="col-sm-4">
+                @Html.DisplayNameFor(model => model.City)
+            </dt>
+            <dd class="col-sm-8">
+                @Html.DisplayFor(model => model.City)
+            </dd>
+            <dt class="col-sm-4">
+                @Html.DisplayNameFor(model => model.Address)
+            </dt>
+            <dd class="col-sm-8">
+                @Html.DisplayFor(model => model.Address)
+            </dd>
+        </dl>
+    </div>
+    <div class="col">
+        <dl class="row">
+            <dt class="col-sm-4">
+                @Html.DisplayNameFor(model => model.PaymentType)
+            </dt>
+            <dd class="col-sm-8">
+                @Html.DisplayFor(model => model.PaymentType)
+            </dd>
+            <dt class="col-sm-4">
+                @Html.DisplayNameFor(model => model.DeliveryType)
+            </dt>
+            <dd class="col-sm-8">
+                @Html.DisplayFor(model => model.DeliveryType)
+            </dd>
+            <dt class="col-sm-4">
+                @Html.DisplayNameFor(model => model.DeliveryAddress)
+            </dt>
+            <dd class="col-sm-8">
+                @Html.DisplayFor(model => model.DeliveryAddress)
+            </dd>
+            <dt class="col-sm-4">Total price:</dt>
+            <dd class="col-sm-8">@Model.OrderedProducts.Sum(x => x.Price * x.Quantity)</dd>
+        </dl>
+    </div>
+</div>
+<hr />
+<div class="row">
+    <div class="col">
+        <a class="btn btn-primary" asp-area="Administrator" asp-controller="Orders" asp-action="All">Back</a>
+    </div>
+    <div class="col">
+        <a class="btn btn-primary" asp-area="Administrator" asp-controller="Orders" asp-action="Approve" asp-route-id=@Model.OrderId>Back</a>
+    </div>
 </div>

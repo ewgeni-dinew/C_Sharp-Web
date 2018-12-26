@@ -9,6 +9,8 @@ namespace BabyBug.Common.ViewModels.Orders
     {
         public string Username { get; set; }
 
+        public int OrderId { get; set; }
+
         [Required]
         [Display(Name = "FirstName")]
         [StringLength(15, ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.", MinimumLength = 3)]
@@ -34,5 +36,11 @@ namespace BabyBug.Common.ViewModels.Orders
         [Display(Name = "Address")]
         [StringLength(30, ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.", MinimumLength = 8)]
         public string Address { get; set; }
+
+        public string PaymentType { get; set; }
+
+        public string DeliveryType { get; set; }
+
+        public string DeliveryDestination { get; set; }
     }
 }

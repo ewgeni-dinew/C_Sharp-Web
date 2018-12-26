@@ -19,19 +19,39 @@ namespace BabyBug.Web.Areas.Administrator.Controllers
             this.ordersService = ordersService;
         }
 
-        public ActionResult All()
+        public async Task<ActionResult> Awaiting()
         {
-            var model = this.ordersService.GetAllOrders();
+            var model = await this.ordersService.GetAwaitingOrdersAsync();
 
             return View(model);
         }
 
-        public ActionResult Details(string username)
+        public async Task<ActionResult> Approved()
         {
-            var model = this.ordersService.GetOrderedProducts(username);
+            var model = await this.ordersService.GetApprovedOrdersAsync();
 
-            return this.View(model);
+            return View(model);
         }
-        
+
+        public async Task<ActionResult> DetailsAwaiting(int id)
+        {
+            var model = await this.ordersService.GetAwaitingOrderedProductsAdminAsync(id);
+
+            return this.View("Details", model);
+        }
+
+        public async Task<ActionResult> DetailsApproved(int id)
+        {
+            var model = await this.ordersService.GetApprovedOrderedProductsAdminAsync(id);
+
+            return this.View("Details", model);
+        }
+
+        public async Task<ActionResult> Approve(int id)
+        {
+            await this.ordersService.ApproveOrderAsync(id);
+
+            return this.RedirectToAction("All", "Orders");
+        }
     }
 }

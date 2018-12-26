@@ -11,7 +11,7 @@ namespace BabyBug.Data.Models
         public Order()
         {
             this.OrderGarments = new HashSet<OrderGarments>();
-            Status = OrderStatus.Pending;
+            Status = OrderStatus.Created;
         }
 
         public int Id { get; set; }
@@ -21,6 +21,12 @@ namespace BabyBug.Data.Models
         public string UserId { get; set; }        
 
         public OrderStatus Status { get; set; }
+
+        public PaymentType PaymentType { get; set; }
+
+        public DeliveryType DeliveryType { get; set; }
+
+        public string DeliveryDestination { get; set; }
 
         public ICollection<OrderGarments> OrderGarments { get; set; }
     }

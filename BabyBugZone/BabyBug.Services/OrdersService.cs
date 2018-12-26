@@ -1,6 +1,7 @@
 ﻿using BabyBug.Common.ViewModels.Garments;
 using BabyBug.Common.ViewModels.Orders;
 using BabyBug.Data.Models;
+using BabyBug.Data.Models.Enums;
 using BabyBug.Services.Contracts;
 using BabyBugZone.Data;
 using Microsoft.EntityFrameworkCore;
@@ -18,7 +19,7 @@ namespace BabyBug.Services
         {
         }
 
-        public async Task OrderGarment(int id, string userName, GarmentDetailsModel model)
+        public async Task OrderGarmentAsync(int id, string userName, GarmentDetailsModel model)
         {
             var garment = await this.DbContext
                 .Garments
@@ -73,47 +74,56 @@ namespace BabyBug.Services
                     .SaveChangesAsync();
         }
 
-        public ICollection<BaseOrderModel> GetAllOrders()
+        public async Task<ICollection<OrderViewModel>> GetAwaitingOrdersAsync()
+        {
+            return await GetOrdersByStatusAsync(OrderStatus.Awaiting);
+        }
+
+        public async Task<ICollection<OrderViewModel>> GetApprovedOrdersAsync()
+        {
+            return await GetOrdersByStatusAsync(OrderStatus.Approved);
+        }
+
+        private async Task<ICollection<OrderViewModel>> GetOrdersByStatusAsync(OrderStatus orderStatus)
         {
             var orders = this.DbContext
-                .Orders
-                .ToList();
+                            .Orders
+                            .Where(x => x.Status.Equals(orderStatus))
+                            .ToList();
 
-            var model = new List<BaseOrderModel>();
+            var model = new List<OrderViewModel>();
 
             foreach (var order in orders)
             {
-                var user = this.DbContext
+                var user = await this.DbContext
                     .Users
-                    .FirstOrDefault(x => x.Id.Equals(order.UserId));
+                    .FirstOrDefaultAsync(x => x.Id.Equals(order.UserId));
 
-                var baseOrder = new BaseOrderModel
+                var baseModel = new OrderViewModel()
                 {
-                    UserName = user.UserName,
-                    FullName = user.FirstName + " " + user.LastName
+                    UserFullName = user.FirstName + " " + user.LastName,
+                    OrderId = order.Id
                 };
 
-                model.Add(baseOrder);
+                model.Add(baseModel);
             }
 
             return model;
         }
 
-        public ICollection<BaseOrderedProductModel> GetOrderedProducts(string username)
+        public async Task<ICollection<BaseOrderedProductModel>> GetOrderedProductsUserAsync(string username)
         {
-            var userId = this.DbContext
+            var user = await this.DbContext
                 .Users
-                .FirstOrDefault(x => x.UserName.Equals(username))
-                .Id;
+                .FirstOrDefaultAsync(x => x.UserName.Equals(username));
 
-            var orderId = this.DbContext
+            var order = await this.DbContext
                 .Orders
-                .FirstOrDefault(x => x.UserId.Equals(userId))
-                .Id;
+                .FirstOrDefaultAsync(x => x.UserId.Equals(user.Id) && x.Status.Equals(OrderStatus.Created));
 
             var orderedProducts = this.DbContext
                 .OrderGarments
-                .Where(x => x.OrderId.Equals(orderId))
+                .Where(x => x.OrderId.Equals(order.Id))
                 .ToList();
 
             var model = new HashSet<BaseOrderedProductModel>();
@@ -141,7 +151,69 @@ namespace BabyBug.Services
             return model;
         }
 
-        public async Task RemoveProductFromOrder(int orderId, int productId, string size)
+        public async Task<AllOrderedProductsModel> GetAwaitingOrderedProductsAdminAsync(int id)
+        {
+            return await GetOrderedProductsAdminByOrderStatusAsync(id, OrderStatus.Awaiting);
+        }
+
+        public async Task<AllOrderedProductsModel> GetApprovedOrderedProductsAdminAsync(int id)
+        {
+            return await GetOrderedProductsAdminByOrderStatusAsync(id, OrderStatus.Approved);
+        }
+
+        private async Task<AllOrderedProductsModel> GetOrderedProductsAdminByOrderStatusAsync(int id, OrderStatus orderStatus)
+        {
+            var order = await this.DbContext
+                .Orders
+                .FirstOrDefaultAsync(x => x.Id.Equals(id) && x.Status.Equals(orderStatus));
+
+            var user = await this.DbContext
+                .Users
+                .FirstOrDefaultAsync(x => x.Id.Equals(order.UserId));
+
+            var orderedProducts = this.DbContext
+                .OrderGarments
+                .Where(x => x.OrderId.Equals(order.Id))
+                .ToList();
+
+            var productsCollection = new HashSet<BaseOrderedProductModel>();
+
+            foreach (var orderProduct in orderedProducts)
+            {
+                var garment = await this.DbContext
+                    .Garments
+                    .FirstOrDefaultAsync(x => x.Id.Equals(orderProduct.GarmentId));
+
+                var temp = new BaseOrderedProductModel
+                {
+                    OrderId = orderProduct.OrderId,
+                    ProductId = orderProduct.GarmentId,
+                    Price = orderProduct.Price,
+                    Size = orderProduct.Size,
+                    Quantity = orderProduct.Quantity,
+                    Name = garment.Name
+                };
+
+                productsCollection.Add(temp);
+            }
+
+            var model = new AllOrderedProductsModel
+            {
+                OrderId = order.Id,
+                UserFullName = user.FirstName + " " + user.LastName,
+                OrderedProducts = productsCollection,
+                PhoneNumber = user.PhoneNumber,
+                Address = order.DeliveryDestination,
+                DeliveryType = order.DeliveryType.ToString(),
+                PaymentType = order.PaymentType.ToString(),
+                City = user.City,
+                DeliveryAddress = order.DeliveryDestination
+            };
+
+            return model;
+        }
+
+        public async Task RemoveProductFromOrderAsync(int orderId, int productId, string size)
         {
             var orderGarment = await this.DbContext.OrderGarments
                 .FirstOrDefaultAsync(x => x.OrderId.Equals(orderId) &&
@@ -155,11 +227,15 @@ namespace BabyBug.Services
             }
         }
 
-        public async Task<UserDataModel> GetUserDataModel(string username)
+        public async Task<UserDataModel> GetUserDataModelAsync(string username)
         {
             var user = await this.DbContext
                 .Users
                 .FirstOrDefaultAsync(x => x.UserName.Equals(username));
+
+            var order = await this.DbContext
+                .Orders
+                .FirstOrDefaultAsync(x => x.UserId.Equals(user.Id));
 
             var model = new UserDataModel
             {
@@ -168,18 +244,24 @@ namespace BabyBug.Services
                 LastName = user.LastName,
                 Telephone = user.PhoneNumber,
                 City = user.City,
-                Address = user.Address
+                Address = user.Address,
+                OrderId = order.Id
             };
 
             return model;
         }
 
-        public async Task UpdateUserInfo(UserDataModel model)
+        public async Task SetDeliveryInfoAsync(int orderId, UserDataModel model)
         {
             var user = await this.DbContext
                 .Users
                 .FirstOrDefaultAsync(x => x.UserName.Equals(model.Username));
 
+            var order = await this.DbContext
+                .Orders
+                .FirstOrDefaultAsync(x => x.UserId.Equals(user.Id));
+
+            //update user info
             if (model.FirstName != null)
             {
                 user.FirstName = model.FirstName;
@@ -200,6 +282,40 @@ namespace BabyBug.Services
             {
                 user.Address = model.Address;
             }
+            await this.DbContext.SaveChangesAsync();
+
+            //set payment type
+            var paymentType = Enum.Parse<PaymentType>(model.PaymentType);
+
+            order.PaymentType = paymentType;
+
+            //set delivery type
+            var deliveryType = Enum.Parse<DeliveryType>(model.DeliveryType);
+
+            order.DeliveryType = deliveryType;
+
+            if (deliveryType.Equals(DeliveryType.EcontToAddress) ||
+               deliveryType.Equals(DeliveryType.SpeedyToAddress))
+            {
+                order.DeliveryDestination = user.Address;
+            }
+            else
+            {
+                order.DeliveryDestination = model.DeliveryDestination;
+            }
+
+            order.Status = OrderStatus.Awaiting;
+
+            await this.DbContext.SaveChangesAsync();
+        }
+
+        public async Task ApproveOrderAsync(int id)
+        {
+            var order = await this.DbContext
+                .Orders
+                .FirstOrDefaultAsync(x => x.Id.Equals(id));
+
+            order.Status = OrderStatus.Approved;
 
             await this.DbContext.SaveChangesAsync();
         }

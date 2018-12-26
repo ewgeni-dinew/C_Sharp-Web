@@ -24,15 +24,15 @@ namespace BabyBug.Web.Controllers
         [AutoValidateAntiforgeryToken]
         public async Task<ActionResult> Order(int id, GarmentDetailsModel model)
         {
-            await this.ordersService.OrderGarment(id, this.User.Identity.Name, model);
+            await this.ordersService.OrderGarmentAsync(id, this.User.Identity.Name, model);
 
             return this.RedirectToAction("Index", "Home");
         }
 
         [Authorize()]
-        public ActionResult MyOrders()
+        public async Task<ActionResult> MyOrders()
         {
-            var model = this.ordersService.GetOrderedProducts(this.User.Identity.Name);
+            var model = await this.ordersService.GetOrderedProductsUserAsync(this.User.Identity.Name);
 
             return this.View(model);
         }
@@ -41,38 +41,36 @@ namespace BabyBug.Web.Controllers
         [AutoValidateAntiforgeryToken]
         public async Task<ActionResult> RemoveProduct(int orderId, int productId, string size)
         {
-            await this.ordersService.RemoveProductFromOrder(orderId, productId, size);
+            await this.ordersService.RemoveProductFromOrderAsync(orderId, productId, size);
 
             return this.RedirectToAction("MyOrders", "Orders");
         }
 
         [Authorize()]
-        public async Task<ActionResult> ManageUser(string username)
+        public async Task<ActionResult> ManageDelivery(string username)
         {
-            var model = await this.ordersService.GetUserDataModel(username);
+            var model = await this.ordersService.GetUserDataModelAsync(username);
 
             return this.View(model);
         }
 
         [HttpPost]
         [AutoValidateAntiforgeryToken]
-        public async Task<ActionResult> ManageUser(UserDataModel model)
+        public async Task<ActionResult> ManageDelivery(int id, UserDataModel model)
         {
             if (!ModelState.IsValid)
             {
-                return this.RedirectToAction("ManageUser", "Orders", new { username = this.User.Identity.Name });
+                return this.RedirectToAction("ManageDelivery", "Orders", new { username = this.User.Identity.Name });
             }
 
-            await this.ordersService.UpdateUserInfo(model);
+            await this.ordersService.SetDeliveryInfoAsync(id, model);
 
-            return this.RedirectToAction("ManageDelivery", "Orders", new { username = this.User.Identity.Name });
+            return this.RedirectToAction("FinishedOrder", "Orders", new { id });
         }
-
-        public async Task<ActionResult> ManageDelivery(string username)
+        
+        public ActionResult FinishedOrder(int id)
         {
-            //var model = await this.ordersService.GetDeliveryModel();
-
-            throw new NotImplementedException();
+            return this.View(id);
         }
     }
 }

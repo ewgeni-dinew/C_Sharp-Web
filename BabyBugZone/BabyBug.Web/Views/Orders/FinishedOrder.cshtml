@@ -1,0 +1,13 @@
+﻿@model int
+@{
+    ViewData["Title"] = "FinishedOrder";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2 class="mt-5">Thank you for your order!</h2>
+<hr />
+<h3>We will contact you as soon as possible.</h3>
+<h4>Your order number is: @Model. Please do not hesitate to contact us, if any questions arise.</h4>
+<hr />
+<a class="btn btn-primary" asp-controller="Home" asp-action="Index">Back to Home</a>
+
