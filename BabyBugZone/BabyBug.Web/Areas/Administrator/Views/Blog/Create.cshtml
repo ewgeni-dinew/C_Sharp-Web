@@ -1,0 +1,49 @@
+﻿@model BabyBug.Common.ViewModels.Blog.CreatePageModel
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+
+@{
+    ViewData["Title"] = "Create";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container" style="margin-top:150px;">
+    <h4 class="pt-3">Create Page</h4>
+    <hr />
+    <div class="row">
+        <div class="col-lg-10">
+            <form method="post" asp-area="Administrator" asp-controller="Blog" asp-action="Create" enctype="multipart/form-data">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <div class="form-group">
+                    <label asp-for="Author" class="control-label"></label>
+                    <input asp-for="Author" type="text" class="form-control" />
+                    <span asp-validation-for="Author" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Header" class="control-label"></label>
+                    <input asp-for="Header" type="text" class="form-control" />
+                    <span asp-validation-for="Header" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Content" class="control-label"></label>
+                    <textarea asp-for="Content" col="5" class="form-control"></textarea>
+                    <span asp-validation-for="Content" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <p>Upload one or more files using this form:</p>
+                    <input asp-for="Picture" type="file" accept="image/*" />
+                    <span asp-validation-for="Picture" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <input type="submit" value="Create" class="btn btn-primary" />
+                </div>
+            </form>
+        </div>
+    </div>
+
+</div>
+
+
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

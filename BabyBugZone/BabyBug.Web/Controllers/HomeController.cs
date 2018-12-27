@@ -5,14 +5,23 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using BabyBug.Web.Models;
+using BabyBug.Services.Contracts;
 
 namespace BabyBug.Web.Controllers
 {
     public class HomeController : Controller
     {
-        public IActionResult Index()
+        private readonly IHomeService homeService;
+
+        public HomeController(IHomeService homeService)
         {
-            return View();
+            this.homeService = homeService;
+        }
+
+        public async Task<ActionResult> Index()
+        {
+            var model = await this.homeService.GetIndexModelAsync();
+            return View(model);
         }
 
         public IActionResult Privacy()

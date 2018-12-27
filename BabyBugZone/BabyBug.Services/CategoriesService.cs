@@ -15,9 +15,9 @@ using System.Threading.Tasks;
 
 namespace BabyBug.Services
 {
-    public class CategoriesService : BaseService, ICategoriesService
+    public class CategoriesService : BaseCloudinaryService, ICategoriesService
     {
-        private const string PATH = @"https://res.cloudinary.com/dm6qsz74d/image/upload/v1545506271/";
+        private const string IMAGE_PATH = @"Categories";
 
         public CategoriesService(BabyBugDbContext DbContext)
             : base(DbContext)
@@ -51,13 +51,13 @@ namespace BabyBug.Services
             var file = model.Picture;
 
             //upload image to Cloudinary
-            var uploadResult = UploadImageToCloudinary(file);
+            var uploadResult = this.UploadImageToCloudinary(file, IMAGE_PATH);
 
             //create category
             var category = new GarmentCategory
             {
                 Name = model.Name,
-                ImageUrl = PATH + uploadResult.PublicId,
+                ImageUrl = BASE_PATH + uploadResult.PublicId,
                 ImageId = uploadResult.PublicId
             };
 
@@ -110,13 +110,13 @@ namespace BabyBug.Services
             if (model.Picture != null)
             {
                 //remove image from Cloudinary
-                RemoveImageFromCloudinary(category.ImageId);
+                this.RemoveImageFromCloudinary(category.ImageId);
 
-                var uploadResult=UploadImageToCloudinary(model.Picture);
+                var uploadResult = this.UploadImageToCloudinary(model.Picture, IMAGE_PATH);
 
-                category.ImageUrl = PATH + uploadResult.PublicId;
+                category.ImageUrl = BASE_PATH + uploadResult.PublicId;
                 category.ImageId = uploadResult.PublicId;
-            }            
+            }
 
             await this.DbContext.SaveChangesAsync();
         }
@@ -128,7 +128,7 @@ namespace BabyBug.Services
                 .FirstOrDefaultAsync(x => x.Id.Equals(id));
 
             //remove image from Cloudinary
-            RemoveImageFromCloudinary(category.ImageId);
+            this.RemoveImageFromCloudinary(category.ImageId);
 
             //remove category from Db
             this.DbContext
@@ -136,26 +136,6 @@ namespace BabyBug.Services
                 .Remove(category);
 
             await this.DbContext.SaveChangesAsync();
-        }
-
-        private ImageUploadResult UploadImageToCloudinary(IFormFile file)
-        {            
-            var uploadParams = new ImageUploadParams()
-            {
-                File = new FileDescription(file.FileName, file.OpenReadStream()),
-                Folder = "Categories"
-            };
-
-            var uploadResult = this.Cloudinary.Upload(uploadParams);
-
-            return uploadResult;
-        }
-
-        private void RemoveImageFromCloudinary(string imageId)
-        {
-            var imageIdParams = new DeletionParams(imageId);
-
-            var deleteResult = this.Cloudinary.Destroy(imageIdParams);
         }
     }
 }

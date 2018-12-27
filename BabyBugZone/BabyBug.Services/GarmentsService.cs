@@ -15,9 +15,9 @@ using System.Threading.Tasks;
 
 namespace BabyBug.Services
 {
-    public class GarmentsService : BaseService, IGarmentsService
+    public class GarmentsService : BaseCloudinaryService, IGarmentsService
     {
-        private const string PATH = @"https://res.cloudinary.com/dm6qsz74d/image/upload/v1545506271/";
+        private const string IMAGE_PATH = @"/Products/Garments";
 
         public GarmentsService(BabyBugDbContext DbContext)
             : base(DbContext)
@@ -50,7 +50,7 @@ namespace BabyBug.Services
             var file = model.Picture;
 
             //upload image to Cloudinary
-            var uploadResult = UploadImageToCloudinary(file);
+            var uploadResult = this.UploadImageToCloudinary(file, IMAGE_PATH);
 
             var garment = new Garment
             {
@@ -60,7 +60,7 @@ namespace BabyBug.Services
                 Gender = model.Gender,
                 CategoryId = categoryId,
                 ImageId = uploadResult.PublicId,
-                ImageUrl = PATH + uploadResult.PublicId,
+                ImageUrl = BASE_PATH + uploadResult.PublicId,
             };
 
             //add garment to DB
@@ -156,7 +156,7 @@ namespace BabyBug.Services
                 .FirstOrDefaultAsync(x => x.Id.Equals(id));
 
             //remove image from Cloudinary
-            RemoveImageFromCloudinary(garment.ImageId);
+            this.RemoveImageFromCloudinary(garment.ImageId);
 
             this.DbContext
                 .Garments
@@ -197,38 +197,18 @@ namespace BabyBug.Services
                 //update picture
 
                 //remove old image from Cloudinary
-                RemoveImageFromCloudinary(garment.ImageId);
+                this.RemoveImageFromCloudinary(garment.ImageId);
 
                 //upload new image
-                var uploadResult = UploadImageToCloudinary(model.Picture);
+                var uploadResult = this.UploadImageToCloudinary(model.Picture, IMAGE_PATH);
 
-                garment.ImageUrl = PATH + uploadResult.PublicId;
+                garment.ImageUrl = BASE_PATH + uploadResult.PublicId;
                 garment.ImageId = uploadResult.PublicId;
             }
 
             garment.Gender = model.Gender;
 
             await this.DbContext.SaveChangesAsync();
-        }
-
-        private ImageUploadResult UploadImageToCloudinary(IFormFile file)
-        {
-            var uploadParams = new ImageUploadParams()
-            {
-                File = new FileDescription(file.FileName, file.OpenReadStream()),
-                Folder = "/Products/Garments"
-            };
-
-            var uploadResult = this.Cloudinary.Upload(uploadParams);
-
-            return uploadResult;
-        }
-
-        private void RemoveImageFromCloudinary(string imageId)
-        {
-            var imageIdParams = new DeletionParams(imageId);
-
-            var deleteResult = this.Cloudinary.Destroy(imageIdParams);
-        }
+        }        
     }
 }

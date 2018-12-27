@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace BabyBug.Services
 {
-    public class OrdersService : BaseService, IOrdersService
+    public class OrdersService : BaseCloudinaryService, IOrdersService
     {
         public OrdersService(BabyBugDbContext DbContext)
             : base(DbContext)

@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace BabyBug.Services
 {
-    public class GarmentSizeService : BaseService, IGarmentSizeService
+    public class GarmentSizeService : BaseCloudinaryService, IGarmentSizeService
     {
         public GarmentSizeService(BabyBugDbContext DbContext)
             : base(DbContext)

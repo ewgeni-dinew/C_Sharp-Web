@@ -14,6 +14,7 @@ namespace BabyBugZone.Data
         public DbSet<GarmentSpecification> GarmentSpecifications { get; set; }
         public DbSet<Order> Orders { get; set; }
         public DbSet<OrderGarments> OrderGarments { get; set; }
+        public DbSet<BlogPage> BlogPages { get; set; }
 
         public BabyBugDbContext(DbContextOptions<BabyBugDbContext> options)
             : base(options)
