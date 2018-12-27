@@ -1,4 +1,4 @@
-@charset "utf-8";
+﻿@charset "utf-8";
 /* CSS Document */
 
 /******************************
@@ -843,7 +843,7 @@ section
 	font-weight: 400;
 	line-height: 1;
 }
-.red_button
+.red_button index_home
 {
 	display: -webkit-inline-box;
 	display: -moz-inline-box;
@@ -1067,17 +1067,17 @@ section
 {
 	color: #b5aec4;
 }
-.discount .product_info .product_price
+.discount .product_info .product_price_home
 {
 	font-size: 14px;
 }
-.product_price
+.product_price_home
 {
 	font-size: 16px;
 	color: #fe4c50;
 	font-weight: 600;
 }
-.product_price span
+.product_price_home span
 {
 	font-size: 12px;
 	margin-left: 10px;
@@ -1146,7 +1146,7 @@ section
 {
 	right: 15px;
 }
-.add_to_cart_button
+.add_to_cart_button_home
 {
 	width: 100%;
 	visibility: hidden;
@@ -1157,12 +1157,12 @@ section
 	-o-transition: all 0.3s ease;
 	transition: all 0.3s ease;
 }
-.add_to_cart_button a
+.add_to_cart_button_home a
 {
 	font-size: 12px;
 	font-weight: 600;
 }
-.product-item:hover .add_to_cart_button
+.product-item:hover .add_to_cart_button_home
 {
 	visibility: visible;
 	opacity: 1;

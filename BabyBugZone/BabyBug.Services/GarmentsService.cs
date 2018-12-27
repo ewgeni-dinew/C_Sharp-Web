@@ -99,7 +99,8 @@ namespace BabyBug.Services
                 Description = garment.Description,
                 Price = garment.Price,
                 Gender = garment.Gender,
-                CreatedOn = garment.CreatedOn.ToString("dd-MM-yyyy")
+                CreatedOn = garment.CreatedOn.ToString("dd-MM-yyyy"),
+                ImageUrl=garment.ImageUrl
             };
 
             return model;

@@ -6,81 +6,243 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1>Details</h1>
+<div class="container single_product_container">
+    <div class="row">
+        <div class="col">
 
-<h4>GarmentDetailsModel</h4>
-<hr />
-<dl class="row">
-    <dt class="col-sm-2">
-        @Html.DisplayNameFor(model => model.Name)
-    </dt>
-    <dd class="col-sm-10">
-        @Html.DisplayFor(model => model.Name)
-    </dd>
-    <dt class="col-sm-2">
-        @Html.DisplayNameFor(model => model.Gender)
-    </dt>
-    <dd class="col-sm-10">
-        @Html.DisplayFor(model => model.Gender)
-    </dd>
-    <dt class="col-sm-2">
-        @Html.DisplayNameFor(model => model.Description)
-    </dt>
-    <dd class="col-sm-10">
-        @Html.DisplayFor(model => model.Description)
-    </dd>
-    <dt class="col-sm-2">
-        @Html.DisplayNameFor(model => model.Price)
-    </dt>
-    <dd class="col-sm-10">
-        @Html.DisplayFor(model => model.Price)
-    </dd>
-    @if (User.IsInRole("Admin"))
-        {
-    <dt class="col-sm-2">
-        @Html.DisplayNameFor(model => model.CreatedOn)
-    </dt>
-    <dd class="col-sm-10">
-        @Html.DisplayFor(model => model.CreatedOn)
-    </dd>
-        }
-</dl>
-<div class="row">
-    <div class="col-md-4">
-        <form method="post" asp-controller="Orders" asp-action="Order" asp-route-id=@Model.Id>
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="Quantity" class="control-label"></label>
-                <input type="number" asp-for="Quantity" class="form-control" value="1" />
-                <span asp-validation-for="Quantity" class="text-danger"></span>
+            <!-- Breadcrumbs -->
+
+            <div class="breadcrumbs d-flex flex-row align-items-center">
+                <ul>
+                    <li><a asp-controller="Home" asp-action="Index">Home</a></li>
+                    <li><a asp-controller="Categories" asp-action="All"><i class="fa fa-angle-right" aria-hidden="true"></i>Categories</a></li>
+                    <li class="active"><a asp-controller="Categories" asp-action="All"><i class="fa fa-angle-right" aria-hidden="true"></i>{CategoryName}</a></li>
+                </ul>
             </div>
-            <div class="form-group">
-                <select asp-for=@Model.Size class="selectpicker">
-                    <option>--Select a size--</option>
-                    @foreach (var size in Model.AvailableSizes)
-                    {
-                    <option value=@size>@size</option>
-                    }
-                </select>
+
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-lg-7">
+            <div class="single_product_pics">
+                <div class="row">
+                    @*<div class="col-lg-3 thumbnails_col order-lg-1 order-2">
+                            <div class="single_product_thumbnails">
+                                <ul>
+                                    <li><img src="images/single_1_thumb.jpg" alt="" data-image="images/single_1.jpg"></li>
+                                    <li class="active"><img src="images/single_2_thumb.jpg" alt="" data-image="images/single_2.jpg"></li>
+                                    <li><img src="images/single_3_thumb.jpg" alt="" data-image="images/single_3.jpg"></li>
+                                </ul>
+                            </div>
+                        </div>*@
+                    <div class="col-lg-9 image_col order-lg-2 order-1">
+                        <div class="single_product_image">
+                            <div class="single_product_image_background" style="background-image:url(@Model.ImageUrl)"></div>
+                        </div>
+                    </div>
+                </div>
             </div>
-            <div class="form-group">
-                <input type="submit" value="Order" class="btn btn-danger" />
+        </div>
+        <div class="col-lg-5">
+            <div class="product_details">
+                <div class="product_details_title">
+                    <h2>@Model.Name</h2>
+                    <p>@Model.Description</p>
+                </div>
+                <div class="free_delivery d-flex flex-row align-items-center justify-content-center">
+                    <span class="ti-truck"></span><span>safe delivery</span>
+                </div>
+                <div class="original_price">$629.99</div>
+                <div class="product_price"><span style="color:black">Price: </span> @Model.Price</div>
+                <ul class="star_rating">
+                    <li><i class="fa fa-star" aria-hidden="true"></i></li>
+                    <li><i class="fa fa-star" aria-hidden="true"></i></li>
+                    <li><i class="fa fa-star" aria-hidden="true"></i></li>
+                    <li><i class="fa fa-star" aria-hidden="true"></i></li>
+                    <li><i class="fa fa-star-o" aria-hidden="true"></i></li>
+                </ul>
+
+                <form id="orderForm" method="post" asp-controller="Orders" asp-action="Order" asp-route-id=@Model.Id>
+                    <div class="quantity d-flex flex-column flex-sm-row align-items-sm-center">
+                        <span>Quantity:</span>
+                        <div class="quantity_selector">
+                            <div class="center">
+                                <div class="input-group">
+                                    <span class="input-group-btn">
+                                        <button type="button" class="btn btn-number" disabled="disabled" data-type="minus" data-field="quant[1]">
+                                            <span class="glyphicon glyphicon-minus">-</span>
+                                        </button>
+                                    </span>
+                                    <input asp-for="@Model.Quantity" type="text" id="quant[1]" class="form-control input-number" value="1" />
+                                    <span class="input-group-btn">
+                                        <button type="button" class="btn btn-default btn-number" data-type="plus" data-field="quant[1]">
+                                            <span class="glyphicon glyphicon-plus">+</span>
+                                        </button>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="product_favorite d-flex flex-column align-items-center justify-content-center"></div>
+                    </div>
+                    <div class="quantity d-flex flex-column flex-sm-row align-items-sm-center">
+                        <span>Size:</span>
+                        <div class="quantity_selector">
+                            <select asp-for=@Model.Size class="form-control" id="exampleFormControlSelect1">
+                                @foreach (var size in Model.AvailableSizes)
+                                {
+                                    <option value=@size>@size</option>
+                                }
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="quantity d-flex flex-column flex-sm-row align-items-sm-center">
+                        <div class="red_button add_to_cart_button"><a href="javascript:{}" onclick="document.getElementById('orderForm').submit();">add to cart</a></div>
+
+                    </div>
+                </form>
+                @if (User.IsInRole("Admin"))
+                {
+                    <div class="quantity d-flex flex-row align-items-center justify-content-center">
+                        <div class="col">
+                            <a class="btn btn-primary" asp-area="Administrator" asp-controller="Garments" asp-action="Edit" asp-route-id=@Model.Id>Edit</a>
+                        </div>
+                        <div class="col">
+                            <a class="btn btn-primary" asp-area="Administrator" asp-controller="GarmentSize" asp-action="ManageSizes" asp-route-id=@Model.Id>Manage sizes</a>
+                        </div>
+                        <div class="col">
+                            <a class="btn btn-primary" asp-area="Administrator" asp-controller="Garments" asp-action="Delete" asp-route-id=@Model.Id>Delete</a>
+                        </div>
+                    </div>
+                }
             </div>
-        </form>
+        </div>
+    </div>
+
+</div>
+
+<!-- Tabs -->
+
+<div class="tabs_section_container">
+
+    <div class="container">
+        <div class="row">
+            <div class="col">
+                <div class="tabs_container">
+                    <ul class="tabs d-flex flex-sm-row flex-column align-items-left align-items-md-center justify-content-center">
+                        <li class="tab active" data-active-tab="tab_1"><span>Description</span></li>
+                        <li class="tab" data-active-tab="tab_2"><span>Additional Information</span></li>
+                        <li class="tab" data-active-tab="tab_3"><span>Reviews (2)</span></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col">
+
+                <!-- Tab Reviews -->
+
+                <div id="tab_3" class="tab_container">
+                    <div class="row">
+
+                        <!-- User Reviews -->
+
+                        <div class="col-lg-6 reviews_col">
+                            <div class="tab_title reviews_title">
+                                <h4>Reviews (2)</h4>
+                            </div>
+
+                            <!-- User Review -->
+
+                            <div class="user_review_container d-flex flex-column flex-sm-row">
+                                <div class="user">
+                                    <div class="user_pic"></div>
+                                    <div class="user_rating">
+                                        <ul class="star_rating">
+                                            <li><i class="fa fa-star" aria-hidden="true"></i></li>
+                                            <li><i class="fa fa-star" aria-hidden="true"></i></li>
+                                            <li><i class="fa fa-star" aria-hidden="true"></i></li>
+                                            <li><i class="fa fa-star" aria-hidden="true"></i></li>
+                                            <li><i class="fa fa-star-o" aria-hidden="true"></i></li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <div class="review">
+                                    <div class="review_date">27 Aug 2016</div>
+                                    <div class="user_name">Brandon William</div>
+                                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+                                </div>
+                            </div>
+
+                            <!-- User Review -->
+
+                            <div class="user_review_container d-flex flex-column flex-sm-row">
+                                <div class="user">
+                                    <div class="user_pic"></div>
+                                    <div class="user_rating">
+                                        <ul class="star_rating">
+                                            <li><i class="fa fa-star" aria-hidden="true"></i></li>
+                                            <li><i class="fa fa-star" aria-hidden="true"></i></li>
+                                            <li><i class="fa fa-star" aria-hidden="true"></i></li>
+                                            <li><i class="fa fa-star" aria-hidden="true"></i></li>
+                                            <li><i class="fa fa-star-o" aria-hidden="true"></i></li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <div class="review">
+                                    <div class="review_date">27 Aug 2016</div>
+                                    <div class="user_name">Brandon William</div>
+                                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Add Review -->
+
+                        <div class="col-lg-6 add_review_col">
+
+                            <div class="add_review">
+                                <form id="review_form" action="post">
+                                    <div>
+                                        <h1>Add Review</h1>
+                                        <input id="review_name" class="form_input input_name" type="text" name="name" placeholder="Name*" required="required" data-error="Name is required.">
+                                        <input id="review_email" class="form_input input_email" type="email" name="email" placeholder="Email*" required="required" data-error="Valid email is required.">
+                                    </div>
+                                    <div>
+                                        <h1>Your Rating:</h1>
+                                        <ul class="user_star_rating">
+                                            <li><i class="fa fa-star" aria-hidden="true"></i></li>
+                                            <li><i class="fa fa-star" aria-hidden="true"></i></li>
+                                            <li><i class="fa fa-star" aria-hidden="true"></i></li>
+                                            <li><i class="fa fa-star" aria-hidden="true"></i></li>
+                                            <li><i class="fa fa-star-o" aria-hidden="true"></i></li>
+                                        </ul>
+                                        <textarea id="review_message" class="input_review" name="message" placeholder="Your Review" rows="4" required data-error="Please, leave us a review."></textarea>
+                                    </div>
+                                    <div class="text-left text-sm-right">
+                                        <button id="review_submit" type="submit" class="red_button review_submit_btn trans_300" value="Submit">submit</button>
+                                    </div>
+                                </form>
+                            </div>
+
+                        </div>
+
+                    </div>
+                </div>
+
+            </div>
+        </div>
     </div>
 </div>
-@if (User.IsInRole("Admin"))
-    {
-<div class="row">
-    <div class="col">
-        <a class="btn btn-primary" asp-area="Administrator" asp-controller="Garments" asp-action="Edit" asp-route-id=@Model.Id>Edit</a>
-    </div>
-    <div class="col">
-        <a class="btn btn-primary" asp-area="Administrator" asp-controller="GarmentSize" asp-action="ManageSizes" asp-route-id=@Model.Id>Manage sizes</a>
-    </div>
-    <div class="col">
-        <a class="btn btn-primary" asp-area="Administrator" asp-controller="Garments" asp-action="Delete" asp-route-id=@Model.Id>Delete</a>
-    </div>
-</div>
-    }
+
+@section Scripts {
+    <script src="~/plugins/jquery-ui-1.12.1.custom/jquery-ui.js" asp-append-version="true"></script>
+
+    <script src="~/js/single_custom.js" asp-append-version="true"></script>
+
+    <script src="~/js/inputQuantity.js" asp-append-version="true"></script>
+
+    <script src="~/js/select-size.js" asp-append-version="true"></script>
+}
 
