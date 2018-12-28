@@ -6,66 +6,95 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h3>ManageSizes</h3>
-@if (Model.CurrentSizes.Any())
-{
-    <table class="table table-striped">
-        <thead>
-            <tr>
-                <th scope="col">#</th>
-                <th scope="col">Size</th>
-                <th scope="col">Quantity</th>
-            </tr>
-        </thead>
-        @{ var index = 1; }
-        @foreach (var kvp in Model.CurrentSizes)
-        {
-            if (kvp.Value == 0)
-            {
-                continue;
-            }
-            <tr>
-                <th scope="row">@index</th>
-                <td>@kvp.Key</td>
-                <td>@kvp.Value</td>
-            </tr>
-            index++;
-        }
+<div class="container single_product_container">
+    <div class="row">
+        <div class="col">
 
-    </table>
-}
-<h4>Add/Remove Garment Size and Quantity</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form method="post">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <select asp-for=@Model.ChoosenSize title="Select category" class="selectpicker">
-                    @foreach (var c in Model.AllGarmentSizes)
-                    {
-                        <option value=@c>@c</option>
-                    }
-                </select>
-                <span asp-validation-for="ChoosenSize" class="text-danger"></span>
+            <!-- Breadcrumbs -->
+
+            <div class="breadcrumbs d-flex flex-row align-items-center">
+                <ul>
+                    <li><a asp-controller="Home" asp-action="Index">Home</a></li>
+                    <li><a><i class="fa fa-angle-right" aria-hidden="true"></i>Garment Size</a></li>
+                    <li class="active"><a asp-area="Administrator" asp-controller="GarmentSize" asp-action="ManageSizes" asp-route-id="@Model.GarmentId"><i class="fa fa-angle-right" aria-hidden="true"></i>Manage</a></li>
+                </ul>
             </div>
-            <div class="form-group">
-                <label asp-for="InputQuantity" class="control-label">Quantity</label>
-                <input asp-for="InputQuantity" type="number" class="form-control" />
-                <span asp-validation-for="InputQuantity" class="text-danger"></span>
+
+        </div>
+    </div>
+
+    <h4>Manage Sizes</h4>
+    @if (Model.CurrentSizes.Any())
+    {
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Size</th>
+                    <th scope="col">Quantity</th>
+                </tr>
+            </thead>
+            @{ var index = 1; }
+            @foreach (var kvp in Model.CurrentSizes)
+            {
+                if (kvp.Value == 0)
+                {
+                    continue;
+                }
+                <tr>
+                    <th scope="row">@index</th>
+                    <td>@kvp.Key</td>
+                    <td>@kvp.Value</td>
+                </tr>
+                index++;
+            }
+
+        </table>
+    }
+
+    <div class="pt-5">
+        <h4>Add/Remove Garment Size and Quantity</h4>
+        <hr />
+        <div class="row">
+            <div class="col-md-4">
+                <form method="post">
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    <div class="form-group">
+                        <select asp-for=@Model.ChoosenSize class="form-control">
+                            @foreach (var c in Model.AllGarmentSizes)
+                            {
+                                <option value=@c>@c</option>
+                            }
+                        </select>
+                        <span asp-validation-for="ChoosenSize" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="InputQuantity" class="control-label">Quantity</label>
+                        <input asp-for="InputQuantity" type="number" class="form-control" />
+                        <span asp-validation-for="InputQuantity" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <div class="row">
+                            <div class="col">
+                                <input asp-area="Administrator" asp-controller="GarmentSize" asp-action="AddSizes" asp-route-id=@Model.GarmentId type="submit" value="Add" class="btn btn-primary" />
+                            </div>
+                            <div class=" col">
+                                <input asp-area="Administrator" asp-controller="GarmentSize" asp-action="RemoveSizes" asp-route-id=@Model.GarmentId type="submit" value="Remove" class="btn btn-danger" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                    </div>
+                </form>
             </div>
-            <div class="form-group">
-                <input asp-area="Administrator" asp-controller="GarmentSize" asp-action="AddSizes" asp-route-id=@Model.GarmentId type="submit" value="Add" class="btn btn-primary" />
-            </div>
-            <div class="form-group">
-                <input asp-area="Administrator" asp-controller="GarmentSize" asp-action="RemoveSizes" asp-route-id=@Model.GarmentId type="submit" value="Remove" class="btn btn-primary" />
-            </div>
-        </form>
+        </div>
     </div>
 </div>
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+
+    <script src="~/js/select-size.js" asp-append-version="true"></script>
 }
 
 

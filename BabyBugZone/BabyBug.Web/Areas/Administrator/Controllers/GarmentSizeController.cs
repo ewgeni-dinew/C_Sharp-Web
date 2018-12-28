@@ -62,6 +62,22 @@ namespace BabyBug.Web.Areas.Administrator.Controllers
             return this.View(model);
         }
 
+        public async Task<ActionResult> Edit(int id)
+        {
+            var model = await this.garmentSizeService.GetBaseSizeModelAsync(id);
+
+            return this.View(model);
+        }
+
+        [HttpPost]
+        [AutoValidateAntiforgeryToken]
+        public async Task<ActionResult> Edit(BaseGarmentSizeModel model)
+        {
+            await this.garmentSizeService.EditSizeAsync(model);
+
+            return this.RedirectToAction("All", "GarmentSize");
+        }
+
         [HttpPost]
         [AutoValidateAntiforgeryToken]
         public async Task<ActionResult> AddSizes(int id, GarmentManageSizesModel model)

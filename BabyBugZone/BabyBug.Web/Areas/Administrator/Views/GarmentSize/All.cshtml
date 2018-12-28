@@ -6,31 +6,58 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h2>All Garment Sizes</h2>
+<div class="container single_product_container">
+    <div class="row">
+        <div class="col">
 
-<ul>
-    @foreach (var size in Model)
-    {
-        <li>
-            <div class="row">
-                <div class="col">
-                    <h5 class="text-center">@size.Name</h5>
-                </div>
-                <div class="col">
-                    <form method="post" asp-area="Administrator" asp-controller="GarmentSize" asp-action="Delete" asp-route-id=@size.Id>
-                        <div class="form-group">
-                            <input type="submit" value="Delete" class="btn btn-primary" />
-                        </div>
-                    </form>
-                </div>
-                
+            <!-- Breadcrumbs -->
+
+            <div class="breadcrumbs d-flex flex-row align-items-center">
+                <ul>
+                    <li><a asp-controller="Home" asp-action="Index">Home</a></li>
+                    <li><a><i class="fa fa-angle-right" aria-hidden="true"></i>Garment Size</a></li>
+                    <li class="active"><a asp-area="Administrator" asp-controller="GarmentSize" asp-action="All"><i class="fa fa-angle-right" aria-hidden="true"></i>All</a></li>
+                </ul>
             </div>
 
-        </li>
-    }
-</ul>
+        </div>
+    </div>
 
-<div>
-    <a class="btn btn-primary" asp-area="Administrator" asp-controller="GarmentSize" asp-action="Create">Create</a>
+    <!-- Breadcrumbs -->
+    <h4>All Garment Sizes</h4>
+
+    @if (Model.Any())
+    {
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Value</th>
+                    <th scope="col">Action</th>
+                    <th scope="col">Action</th>
+                </tr>
+            </thead>
+            @{ var index = 1; }
+            @foreach (var size in Model)
+            {
+                <tr>
+                    <th scope="row">@index</th>
+                    <td>@size.Name</td>
+                    <td>
+                        <a class="btn btn-success" asp-area="Administrator" asp-controller="GarmentSize" asp-action="Edit" asp-route-id=@size.Id>Edit</a>
+                    </td>
+                    <td>
+                        <a class="btn btn-outline-danger" asp-area="Administrator" asp-controller="GarmentSize" asp-action="Delete" asp-route-id=@size.Id>Delete</a>
+                    </td>
+                </tr>
+                index++;
+            }
+
+        </table>
+    }
+    <div>
+        <a class="btn btn-primary" asp-area="Administrator" asp-controller="GarmentSize" asp-action="Create">Create</a>
+    </div>
 </div>
+
 

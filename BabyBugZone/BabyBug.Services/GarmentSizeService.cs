@@ -70,6 +70,32 @@ namespace BabyBug.Services
             await this.DbContext.SaveChangesAsync();
         }
 
+        public async Task EditSizeAsync(BaseGarmentSizeModel model)
+        {
+            if (model.Name != null)
+            {
+                var size = await this.DbContext
+                .GarmentSizes
+                .FirstOrDefaultAsync(x => x.Id.Equals(model.Id));
+
+                size.Value = model.Name;
+
+                await this.DbContext.SaveChangesAsync();
+            }
+        }
+
+        public async Task<BaseGarmentSizeModel> GetBaseSizeModelAsync(int id)
+        {
+            return await this.DbContext
+                .GarmentSizes
+                .Select(x => new BaseGarmentSizeModel
+                {
+                    Id = x.Id,
+                    Name = x.Value
+                })
+                .FirstOrDefaultAsync(x => x.Id.Equals(id));
+        }
+
         public async Task<GarmentManageSizesModel> GetCurrentGarmentSizeDetails(int id)
         {
             //AllGarmentSizes
