@@ -6,21 +6,40 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<div class="container" style="margin-top:150px;">
+<div class="container single_product_container">
+    <div class="row">
+        <div class="col">
+
+            <!-- Breadcrumbs -->
+
+            <div class="breadcrumbs d-flex flex-row align-items-center">
+                <ul>
+                    <li><a asp-controller="Home" asp-action="Index">Home</a></li>
+                    <li class="active"><a asp-controller="Blog" asp-action="AllPages"><i class="fa fa-angle-right" aria-hidden="true"></i>All Pages</a></li>
+                </ul>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Blog details -->
 
     <h2>@Model.Header</h2>
     <h4>By: @Model.Author</h4>
     <h6>@Model.CreatedOn</h6>
     <p>@Model.Contect</p>
 
-    <div class="row">
-        <div class="col">
-            <a class="btn btn-primary" asp-area="Administrator" asp-controller="Blog" asp-action="Edit" asp-route-id=@Model.Id>Edit page</a>
+    @if (User.IsInRole("Admin"))
+    {
+        <div class="row">
+            <div class="col-md-3">
+                <a class="btn btn-primary" asp-area="Administrator" asp-controller="Blog" asp-action="Edit" asp-route-id=@Model.Id>Edit page</a>
+            </div>
+            <div class="col-md-3">
+                <form method="post" asp-area="Administrator" asp-controller="Blog" asp-action="Delete" asp-route-id=@Model.Id>
+                    <input type="submit" value="Delete" class="btn btn-primary" />
+                </form>
+            </div>
         </div>
-        <div class="col">
-            <form method="post" asp-area="Administrator" asp-controller="Blog" asp-action="Delete" asp-route-id=@Model.Id>
-                <input type="submit" value="Delete" class="btn btn-primary" />
-            </form>
-        </div>
-    </div>
+    }
 </div>

@@ -51,7 +51,7 @@ namespace BabyBug.Services
                 Id = page.Id,
                 Author = page.Author,
                 Header = page.Header,
-                Content = page.Content,
+                PageContent = page.Content,
             };
 
             return model;
@@ -67,9 +67,9 @@ namespace BabyBug.Services
             {
                 page.Author = model.Author;
             }
-            if (model.Content != null)
+            if (model.PageContent != null)
             {
-                page.Content = model.Content;
+                page.Content = model.PageContent;
             }
             if (model.Header != null)
             {

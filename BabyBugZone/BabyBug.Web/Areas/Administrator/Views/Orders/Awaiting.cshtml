@@ -6,34 +6,57 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-@if (Model.Any())
-{
-    <table class="table table-striped">
-        <thead>
-            <tr>
-                <th scope="col">#</th>
-                <th scope="col">Full Name</th>
-                <th scope="col">Action</th>
-                <th scope="col">Action</th>
-            </tr>
-        </thead>
-        @{ var index = 1; }
-        @foreach (var order in Model)
-        {
-            <tr>
-                <th scope="row">@index</th>
-                <td>@order.UserFullName</td>
-                <td>
-                    <a class="btn btn-primary" asp-area="Administrator" asp-controller="Orders" asp-action="DetailsAwaiting" asp-route-id=@order.OrderId>Details</a>
-                </td>
-                <td>
-                    <a class="btn btn-success" asp-area="Administrator" asp-controller="Orders" asp-action="Approve" asp-route-id=@order.OrderId>Deliver</a>
-                </td>
-            </tr>
-            index++;
-        }
+<div class="container single_product_container">
+    <div class="row">
+        <div class="col">
 
-    </table>
-}
+            <!-- Breadcrumbs -->
+
+            <div class="breadcrumbs d-flex flex-row align-items-center">
+                <ul>
+                    <li><a asp-controller="Home" asp-action="Index">Home</a></li>
+                    <li><a><i class="fa fa-angle-right" aria-hidden="true"></i>Orders</a></li>
+                    <li class="active"><a asp-area="Administrator" asp-controller="Orders" asp-action="Awaiting"><i class="fa fa-angle-right" aria-hidden="true"></i>Awaiting</a></li>
+                </ul>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Table -->
+
+    @if (Model.Any())
+    {
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Full Name</th>
+                    <th scope="col">Action</th>
+                    <th scope="col">Action</th>
+                </tr>
+            </thead>
+            @{ var index = 1; }
+            @foreach (var order in Model)
+            {
+                <tr>
+                    <th scope="row">@index</th>
+                    <td>@order.UserFullName</td>
+                    <td>
+                        <a class="btn btn-primary" asp-area="Administrator" asp-controller="Orders" asp-action="DetailsAwaiting" asp-route-id=@order.OrderId>Details</a>
+                    </td>
+                    <td>
+                        <form method="post" asp-area="Administrator" asp-controller="Orders" asp-action="Approve" asp-route-id=@order.OrderId>
+                            <input type="submit" class="btn btn-success" value="Deliver" />
+                        </form>
+                    </td>
+                </tr>
+                index++;
+            }
+
+        </table>
+    }
+</div>
+
 
 

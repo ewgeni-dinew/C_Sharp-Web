@@ -6,6 +6,8 @@ namespace BabyBug.Data.Models
 {
     public class OrderGarments
     {
+        //public int Id { get; set; }
+
         public Order Order { get; set; }
 
         public int OrderId { get; set; }

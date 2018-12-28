@@ -47,6 +47,8 @@ namespace BabyBug.Web.Areas.Administrator.Controllers
             return this.View("Details", model);
         }
 
+        [HttpPost]
+        [AutoValidateAntiforgeryToken]
         public async Task<ActionResult> Approve(int id)
         {
             await this.ordersService.ApproveOrderAsync(id);

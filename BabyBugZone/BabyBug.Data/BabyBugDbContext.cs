@@ -36,7 +36,7 @@ namespace BabyBugZone.Data
                 .HasKey(x => new { x.GarmentSizeId, x.GarmentId });
 
             builder.Entity<OrderGarments>()
-                .HasKey(x => new { x.GarmentId, x.OrderId });            
+                .HasKey(x => new { x.GarmentId, x.OrderId });
 
             builder.Entity<OrderGarments>()
                 .Property(x => x.Price)

@@ -6,26 +6,45 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h4>Create Category</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form method="post" asp-area="Administrator" asp-controller="Categories" asp-action="Create" enctype="multipart/form-data">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="Name" class="control-label"></label>
-                <input type="text" asp-for="Name" class="form-control" />
-                <span asp-validation-for="Name" class="text-danger"></span>
+<div class="container single_product_container">
+    <div class="row">
+        <div class="col">
+
+            <!-- Breadcrumbs -->
+
+            <div class="breadcrumbs d-flex flex-row align-items-center">
+                <ul>
+                    <li><a asp-controller="Home" asp-action="Index">Home</a></li>
+                    <li><a asp-controller="Categories" asp-action="All"><i class="fa fa-angle-right" aria-hidden="true"></i>Categories</a></li>
+                    <li class="active"><a asp-area="Administrator" asp-controller="Categories" asp-action="Create"><i class="fa fa-angle-right" aria-hidden="true"></i>Create</a></li>
+                </ul>
             </div>
-            <div class="form-group">
-                <p>Upload one or more files using this form:</p>
-                <input asp-for="Picture" type="file"  accept="image/*" />
-                <span asp-validation-for="Picture" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
-            </div>
-        </form>
+
+        </div>
+    </div>
+
+    <!-- Create category -->
+    <h4>Create Category</h4>
+    <hr />
+    <div class="row">
+        <div class="col-md-4">
+            <form method="post" asp-area="Administrator" asp-controller="Categories" asp-action="Create" enctype="multipart/form-data">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <div class="form-group">
+                    <label asp-for="Name" class="control-label"></label>
+                    <input type="text" asp-for="Name" class="form-control" />
+                    <span asp-validation-for="Name" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <p>Upload one or more files using this form:</p>
+                    <input asp-for="Picture" type="file" accept="image/*" />
+                    <span asp-validation-for="Picture" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <input type="submit" value="Create" class="btn btn-primary" />
+                </div>
+            </form>
+        </div>
     </div>
 </div>
 

@@ -24,9 +24,13 @@ namespace BabyBug.Web.Controllers
         [AutoValidateAntiforgeryToken]
         public async Task<ActionResult> Order(int id, GarmentDetailsModel model)
         {
+            if (!ModelState.IsValid)
+            {
+                throw new NotImplementedException("Order not made. Invalid Model State!");
+            }
             await this.ordersService.OrderGarmentAsync(id, this.User.Identity.Name, model);
 
-            return this.RedirectToAction("Index", "Home");
+            return this.RedirectToAction("MyOrders", "Orders");
         }
 
         [Authorize()]
@@ -67,7 +71,7 @@ namespace BabyBug.Web.Controllers
 
             return this.RedirectToAction("FinishedOrder", "Orders", new { id });
         }
-        
+
         public ActionResult FinishedOrder(int id)
         {
             return this.View(id);

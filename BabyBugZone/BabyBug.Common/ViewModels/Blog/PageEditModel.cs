@@ -18,9 +18,9 @@ namespace BabyBug.Common.ViewModels.Blog
         [StringLength(30, ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.", MinimumLength = 5)]
         public string Header { get; set; }
 
-        [Display(Name = "Content")]
+        [Display(Name = "PageContent")]
         [StringLength(5000, ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.", MinimumLength = 10)]
-        public string Content { get; set; }
+        public string PageContent { get; set; }
 
         [Display(Name = "Picture")]
         [DataType(DataType.Upload)]

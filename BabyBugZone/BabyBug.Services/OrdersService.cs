@@ -29,22 +29,19 @@ namespace BabyBug.Services
                 .Users
                 .FirstOrDefaultAsync(x => x.UserName.Equals(userName));
 
-            var order = await this.DbContext.Orders
+            var order = await this.DbContext
+                .Orders
                 .FirstOrDefaultAsync(x => x.UserId.Equals(user.Id)
+                                    && x.Status.Equals(OrderStatus.Created)
                                     && x.OrderGarments.Any(g => g.GarmentId.Equals(id)
                                                         && g.Size.Equals(model.Size)));
 
             if (order == null)
             {
-                var orderGarment = new OrderGarments
-                {
-                    GarmentId = id,
-                    Price = garment.Price,
-                    Size = model.Size,
-                    Quantity = model.Quantity,
-                };
-
-                order = await this.DbContext.Orders.FirstOrDefaultAsync(x => x.UserId.Equals(user.Id));
+                order = await this.DbContext
+                    .Orders
+                    .FirstOrDefaultAsync(x => x.UserId.Equals(user.Id)
+                                        && x.Status.Equals(OrderStatus.Created));
 
                 if (order == null)
                 {
@@ -53,12 +50,22 @@ namespace BabyBug.Services
                         UserId = user.Id,
                     };
 
-                    await this.DbContext.Orders.AddAsync(order);
+                    await this.DbContext
+                        .Orders
+                        .AddAsync(order);
 
                     await this.DbContext
                     .SaveChangesAsync();
                 }
 
+                var orderGarment = new OrderGarments
+                {
+                    GarmentId = id,
+                    Price = garment.Price,
+                    Size = model.Size,
+                    Quantity = model.Quantity,
+                };
+                
                 order.OrderGarments
                     .Add(orderGarment);
             }
@@ -66,10 +73,13 @@ namespace BabyBug.Services
             {
                 var temp = await this.DbContext
                     .OrderGarments
-                    .FirstOrDefaultAsync(x => x.GarmentId.Equals(id) && x.Size.Equals(model.Size));
+                    .FirstOrDefaultAsync(x => x.GarmentId.Equals(id) 
+                                        && x.Size.Equals(model.Size)
+                                        && x.OrderId.Equals(order.Id));
 
                 temp.Quantity += model.Quantity;
             }
+
             await this.DbContext
                     .SaveChangesAsync();
         }
@@ -191,7 +201,7 @@ namespace BabyBug.Services
                     Price = orderProduct.Price,
                     Size = orderProduct.Size,
                     Quantity = orderProduct.Quantity,
-                    Name = garment.Name
+                    Name = garment.Name,
                 };
 
                 productsCollection.Add(temp);
@@ -207,7 +217,8 @@ namespace BabyBug.Services
                 DeliveryType = order.DeliveryType.ToString(),
                 PaymentType = order.PaymentType.ToString(),
                 City = user.City,
-                DeliveryAddress = order.DeliveryDestination
+                DeliveryAddress = order.DeliveryDestination,
+                OrderStatus = orderStatus.ToString()
             };
 
             return model;

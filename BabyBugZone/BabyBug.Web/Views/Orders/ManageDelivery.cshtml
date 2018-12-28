@@ -5,83 +5,103 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h4 class="mt-5">Confirm delivery information for <span>@Model.Username</span>:</h4>
-<hr />
-<div class="row">
-    <div class="col-lg-6">
-        <form method="post" asp-controller="Orders" asp-action="ManageDelivery" asp-route-id=@Model.OrderId>
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input asp-for="Username" type="hidden" placeholder=@Model.Username />
-            <div class="col">
-                <div class="row">
-                    <div class="col form-group">
-                        <label asp-for="FirstName" class="control-label"></label>
-                        <input asp-for="FirstName" class="form-control" placeholder=@Model.FirstName />
-                        <span asp-validation-for="FirstName" class="text-danger"></span>
-                    </div>
-                    <div class="col form-group">
-                        <label asp-for="LastName" class="control-label"></label>
-                        <input asp-for="LastName" class="form-control" placeholder=@Model.LastName />
-                        <span asp-validation-for="LastName" class="text-danger"></span>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label asp-for="Telephone" class="control-label"></label>
-                    <input asp-for="Telephone" class="form-control" placeholder=@Model.Telephone />
-                    <span asp-validation-for="Telephone" class="text-danger"></span>
-                </div>
-                <div class="form-group">
-                    <label asp-for="City" class="control-label"></label>
-                    <input asp-for="City" class="form-control" placeholder=@Model.City />
-                    <span asp-validation-for="City" class="text-danger"></span>
-                </div>
-                <div class="form-group">
-                    <label asp-for="Address" class="control-label"></label>
-                    <input asp-for="Address" class="form-control" placeholder=@Model.Address />
-                    <span asp-validation-for="Address" class="text-danger"></span>
-                </div>
-            </div>
-            <hr class="mt-5" />
-            <div class="col">
-                <div class="funkyradio">
-                    <h5>Choose payment type:</h5>
-                    <div class="funkyradio-danger">
-                        <input asp-for="PaymentType" type="radio" value="OnDelivery" id="radio1" />
-                        <label asp-for="PaymentType" for="radio1">On Delivery</label>
-                    </div>
-                </div>
-                <div class="funkyradio">
-                    <h5>Choose delivery type:</h5>
-                    <div class="funkyradio-danger">
-                        <input asp-for="DeliveryType" type="radio" value="SpeedyToAddress" id="radio2" onclick="javascript:deliveryOfficeCheck();"/>
-                        <label asp-for="DeliveryType" for="radio2">To address with Speedy</label>
-                    </div>
-                    <div class="funkyradio-danger">
-                        <input asp-for="DeliveryType" type="radio" value="EcontToAddress" id="radio3" onclick="javascript:deliveryOfficeCheck();"/>
-                        <label asp-for="DeliveryType" for="radio3">To address with Econt</label>
-                    </div>
-                    <div class="funkyradio-danger">
-                        <input asp-for="DeliveryType" type="radio" value="SpeedyToOffice" id="radio4" onclick="javascript:deliveryOfficeCheck();" />
-                        <label asp-for="DeliveryType" for="radio4">To Speedy office</label>
-                    </div>
-                    <div class="funkyradio-danger">
-                        <input asp-for="DeliveryType" type="radio" value="EcontToOffice" id="radio5" onclick="javascript:deliveryOfficeCheck();" />
-                        <label asp-for="DeliveryType" for="radio5">To Econt office</label>
-                    </div>
-                </div>
-                <div class="form-group" id="officeName" style="display:none">
-                    <label asp-for="DeliveryDestination" class="control-label">Input office name:</label>
-                    <input asp-for="DeliveryDestination" class="form-control" />
-                </div>
+<div class="container single_product_container">
+    <div class="row">
+        <div class="col">
+
+            <!-- Breadcrumbs -->
+
+            <div class="breadcrumbs d-flex flex-row align-items-center">
+                <ul>
+                    <li><a asp-controller="Home" asp-action="Index">Home</a></li>
+                    <li><a><i class="fa fa-angle-right" aria-hidden="true"></i>Orders</a></li>
+                    <li><a asp-controller="Orders" asp-action="MyOrders"><i class="fa fa-angle-right" aria-hidden="true"></i>My Orders</a></li>
+                    <li class="active"><a asp-controller="Orders" asp-action="ManageDelivery" asp-route-username=@Model.Username><i class="fa fa-angle-right" aria-hidden="true"></i>Manage Delivery</a></li>
+                </ul>
             </div>
 
-            <hr />
-            <div class="form-group">
-                <input type="submit" value="Finish" class="btn btn-primary" />
-            </div>
-        </form>
+        </div>
+    </div>
+    <h4 class="pt-5">Confirm delivery information for <span>@Model.Username</span>:</h4>
+    <hr />
+    <div class="row">
+        <div class="col-lg-6">
+            <form method="post" asp-controller="Orders" asp-action="ManageDelivery" asp-route-id=@Model.OrderId>
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <input asp-for="Username" type="hidden" placeholder=@Model.Username />
+                <div class="col">
+                    <div class="row">
+                        <div class="col form-group">
+                            <label asp-for="FirstName" class="control-label"></label>
+                            <input asp-for="FirstName" class="form-control" placeholder=@Model.FirstName />
+                            <span asp-validation-for="FirstName" class="text-danger"></span>
+                        </div>
+                        <div class="col form-group">
+                            <label asp-for="LastName" class="control-label"></label>
+                            <input asp-for="LastName" class="form-control" placeholder=@Model.LastName />
+                            <span asp-validation-for="LastName" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Telephone" class="control-label"></label>
+                        <input asp-for="Telephone" class="form-control" placeholder=@Model.Telephone />
+                        <span asp-validation-for="Telephone" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="City" class="control-label"></label>
+                        <input asp-for="City" class="form-control" placeholder=@Model.City />
+                        <span asp-validation-for="City" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Address" class="control-label"></label>
+                        <input asp-for="Address" class="form-control" placeholder=@Model.Address />
+                        <span asp-validation-for="Address" class="text-danger"></span>
+                    </div>
+                </div>
+                <hr class="mt-5" />
+                <div class="col">
+                    <div class="funkyradio">
+                        <h5>Choose payment type:</h5>
+                        <div class="funkyradio-danger">
+                            <input asp-for="PaymentType" type="radio" value="OnDelivery" id="radio1" />
+                            <label asp-for="PaymentType" for="radio1">On Delivery</label>
+                        </div>
+                    </div>
+                    <div class="funkyradio">
+                        <h5>Choose delivery type:</h5>
+                        <div class="funkyradio-danger">
+                            <input asp-for="DeliveryType" type="radio" value="SpeedyToAddress" id="radio2" onclick="javascript:deliveryOfficeCheck();" />
+                            <label asp-for="DeliveryType" for="radio2">To address with Speedy</label>
+                        </div>
+                        <div class="funkyradio-danger">
+                            <input asp-for="DeliveryType" type="radio" value="EcontToAddress" id="radio3" onclick="javascript:deliveryOfficeCheck();" />
+                            <label asp-for="DeliveryType" for="radio3">To address with Econt</label>
+                        </div>
+                        <div class="funkyradio-danger">
+                            <input asp-for="DeliveryType" type="radio" value="SpeedyToOffice" id="radio4" onclick="javascript:deliveryOfficeCheck();" />
+                            <label asp-for="DeliveryType" for="radio4">To Speedy office</label>
+                        </div>
+                        <div class="funkyradio-danger">
+                            <input asp-for="DeliveryType" type="radio" value="EcontToOffice" id="radio5" onclick="javascript:deliveryOfficeCheck();" />
+                            <label asp-for="DeliveryType" for="radio5">To Econt office</label>
+                        </div>
+                    </div>
+                    <div class="form-group" id="officeName" style="display:none">
+                        <label asp-for="DeliveryDestination" class="control-label">Input office name:</label>
+                        <input asp-for="DeliveryDestination" class="form-control" />
+                    </div>
+                </div>
+
+                <hr />
+                <div class="form-group">
+                    <input type="submit" value="Finish" class="btn btn-primary" />
+                </div>
+            </form>
+        </div>
     </div>
 </div>
+
+
 
 <div>
     <a asp-action="Index">Back to List</a>

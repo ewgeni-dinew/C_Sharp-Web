@@ -32,5 +32,7 @@ namespace BabyBug.Common.ViewModels.Orders
         [Display(Name = "Delivery/Office address")]
         public string DeliveryAddress { get; set; }
 
+        public string OrderStatus { get; set; }
+
     }
 }
