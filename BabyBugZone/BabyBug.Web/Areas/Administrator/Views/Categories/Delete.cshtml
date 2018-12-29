@@ -15,7 +15,7 @@
             <div class="breadcrumbs d-flex flex-row align-items-center">
                 <ul>
                     <li><a asp-controller="Home" asp-action="Index">Home</a></li>
-                    <li><a asp-controller="Categories" asp-action="All"><i class="fa fa-angle-right" aria-hidden="true"></i>Categories</a></li>
+                    <li><a asp-controller="Categories" asp-action="Index"><i class="fa fa-angle-right" aria-hidden="true"></i>Categories</a></li>
                     <li class="active"><a asp-area="Administrator" asp-controller="Categories" asp-action="Delete" asp-route-id="@Model.Id"><i class="fa fa-angle-right" aria-hidden="true"></i>Delete</a></li>
                 </ul>
             </div>
@@ -27,6 +27,8 @@
 
     <h3>Are you sure you want to delete this category?</h3>
     <hr />
+    <h4 class="bg-danger col-md-9">All products in this category will be automatically deleted!!!</h4>
+
     <dl class="row">
         <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.Name)
@@ -37,6 +39,6 @@
     </dl>
 
     <form method="post" asp-area="Administrator" asp-controller="Categories" asp-action="Delete" asp-route-id=@Model.Id>
-        <input type="submit" value="Delete" class="btn btn-danger" /> 
+        <input type="submit" value="Delete" class="btn btn-outline-danger" />
     </form>
 </div>

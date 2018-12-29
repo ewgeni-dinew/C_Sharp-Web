@@ -23,10 +23,11 @@ namespace BabyBug.Services
             //to be removed
             var blog = await this.DbContext
                 .BlogPages
-                .FirstOrDefaultAsync(x => x.Id.Equals(1));
+                .FirstOrDefaultAsync();
 
             var blogPages = this.DbContext
                 .BlogPages
+                .Where(x=>x.IsDeleted==false)
                 .Select(x => new HomePageBlogModel
                 {
                     Author = x.Author,

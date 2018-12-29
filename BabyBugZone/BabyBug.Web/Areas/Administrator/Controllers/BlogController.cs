@@ -19,12 +19,7 @@ namespace BabyBug.Web.Areas.Administrator.Controllers
         public BlogController(IBlogService blogService)
         {
             this.blogService = blogService;
-        }
-       
-        public ActionResult Index()
-        {
-            return View();
-        }
+        }       
 
         public ActionResult Create()
         {
@@ -70,7 +65,8 @@ namespace BabyBug.Web.Areas.Administrator.Controllers
         [AutoValidateAntiforgeryToken]
         public async Task<ActionResult> Delete(int id)
         {
-            await this.blogService.DeleteBlogAsync(id);
+            await this.blogService
+                .DeleteBlogAsync(id);
 
             return this.RedirectToAction("Index", "Home");
         }

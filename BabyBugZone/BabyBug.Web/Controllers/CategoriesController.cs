@@ -16,7 +16,7 @@ namespace BabyBug.Web.Controllers
             this.categoryService = categoryService;
         }
 
-        public IActionResult All()
+        public ActionResult Index()
         {
             var categories = this.categoryService
                 .GetAllGarmentCategories();

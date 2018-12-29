@@ -1,7 +1,6 @@
 ﻿using BabyBug.Common.ViewModels.Categories;
 using BabyBug.Data.Models;
 using BabyBug.Services.Categories.Contracts;
-using BabyBug.Web.Models.Categories;
 using BabyBugZone.Data;
 using CloudinaryDotNet;
 using CloudinaryDotNet.Actions;
@@ -26,22 +25,15 @@ namespace BabyBug.Services
 
         public ICollection<BaseCategoryModel> GetAllGarmentCategories()
         {
-            var collection = this.DbContext
+            var categoryList = this.DbContext
                 .GarmentCategories
-                .ToList();
-
-            var categoryList = new List<BaseCategoryModel>();
-
-            foreach (var c in collection)
-            {
-                var temp = new BaseCategoryModel
+                .Select(x => new BaseCategoryModel
                 {
-                    Id = c.Id,
-                    Name = c.Name
-                };
-
-                categoryList.Add(temp);
-            }
+                    Id = x.Id,
+                    Name = x.Name,
+                    ImageUrl = x.ImageUrl
+                })
+                .ToList();            
 
             return categoryList;
         }

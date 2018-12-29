@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace BabyBug.Web.Models.Categories
+namespace BabyBug.Common.ViewModels.Categories
 {
     public class BaseCategoryModel
     {
@@ -13,5 +13,7 @@ namespace BabyBug.Web.Models.Categories
         public string Name { get; set; }
 
         public IFormFile Picture { get; set; }
+
+        public string ImageUrl { get; set; }
     }
 }

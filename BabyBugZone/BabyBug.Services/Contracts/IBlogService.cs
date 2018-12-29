@@ -17,5 +17,7 @@ namespace BabyBug.Services.Contracts
         Task DeleteBlogAsync(int id);
 
         Task<PageDetailsModel> GetBlogDetailsAsync(int id);
+
+        ICollection<HomePageBlogModel> GetBasePageModelCollection();
     }
 }

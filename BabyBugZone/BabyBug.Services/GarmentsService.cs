@@ -136,6 +136,10 @@ namespace BabyBug.Services
                 .Select(x => x.Name)
                 .ToHashSet();
 
+            var garmentCategory = await this.DbContext
+                .GarmentCategories
+                .FirstOrDefaultAsync(x => x.Id.Equals(garment.CategoryId));
+
             var model = new EditGarmentModel
             {
                 Id = garment.Id,
@@ -144,6 +148,7 @@ namespace BabyBug.Services
                 Price = garment.Price,
                 Gender = garment.Gender,
                 CategoryNames = categories,
+                CategoryName=garmentCategory.Name
             };
 
             return model;
@@ -178,12 +183,11 @@ namespace BabyBug.Services
             }
             if (model.CategoryName != null)
             {
-                var categoryId = this.DbContext
+                var category = await this.DbContext
                 .GarmentCategories
-                .FirstOrDefaultAsync(x => x.Name.Equals(model.CategoryName))
-                .Id;
+                .FirstOrDefaultAsync(x => x.Name.Equals(model.CategoryName));
 
-                garment.CategoryId = categoryId;
+                garment.CategoryId = category.Id;
             }
             if (model.Description != null)
             {

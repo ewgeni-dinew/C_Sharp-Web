@@ -16,9 +16,18 @@ namespace BabyBug.Web.Controllers
             this.blogService = blogService;
         }
 
+        public ActionResult Index()
+        {
+            var model = this.blogService
+                .GetBasePageModelCollection();
+
+            return this.View(model); 
+        }
+
         public async Task<ActionResult> Details(int id)
         {
-            var model = await this.blogService.GetBlogDetailsAsync(id);
+            var model = await this.blogService
+                .GetBlogDetailsAsync(id);
 
             return View(model);
         }

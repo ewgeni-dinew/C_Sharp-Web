@@ -11,7 +11,7 @@ namespace BabyBug.Common.ViewModels.Categories
     {
         [Required]
         [Display(Name = "Name")]
-        [StringLength(30, ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.", MinimumLength = 6)]
+        [StringLength(30, ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.", MinimumLength = 5)]
         public string Name { get; set; }
 
         [Required]

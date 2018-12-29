@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using BabyBug.Common.ViewModels.Blog;
@@ -120,6 +121,24 @@ namespace BabyBug.Services
             };
 
             return model;
+        }
+
+        public ICollection<HomePageBlogModel> GetBasePageModelCollection()
+        {
+            var pages = this.DbContext
+                .BlogPages
+                .Where(x => x.IsDeleted == false)
+                .Select(x => new HomePageBlogModel
+                {
+                    PageId = x.Id,
+                    Author = x.Author,
+                    Heading = x.Header,
+                    ImageUrl = x.ImageUrl,
+                    CreatedOn = x.CreatedOn.ToString("dd/MM/yyyy"),
+                })
+                .ToList();
+
+            return pages;
         }
     }
 }
