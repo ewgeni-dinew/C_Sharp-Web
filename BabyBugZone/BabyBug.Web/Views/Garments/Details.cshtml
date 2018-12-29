@@ -104,6 +104,7 @@
                 </form>
                 @if (User.IsInRole("Admin"))
                 {
+                    <hr />
                     <div class="quantity d-flex flex-row align-items-center justify-content-center">
                         <div class="col">
                             <a class="btn btn-success" asp-area="Administrator" asp-controller="Garments" asp-action="Edit" asp-route-id=@Model.Id>Edit</a>

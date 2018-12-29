@@ -1,4 +1,12 @@
-﻿.btn-select {
+﻿.nav_item_red {
+    background-color: red;
+}
+
+    .nav_item_red a {
+        color: black
+    }
+
+.btn-select {
     position: relative;
     padding: 0;
     min-width: 236px;

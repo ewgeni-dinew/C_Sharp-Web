@@ -16,6 +16,8 @@ namespace BabyBug.Data.Models
 
         public int Id { get; set; }
 
+        public DateTime MadeOn_Date { get; set; }
+
         public BabyBugUser User { get; set; }
 
         public string UserId { get; set; }        

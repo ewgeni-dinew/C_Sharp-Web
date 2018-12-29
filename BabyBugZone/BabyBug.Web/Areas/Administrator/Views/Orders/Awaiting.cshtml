@@ -32,6 +32,7 @@
                 <tr>
                     <th scope="col">#</th>
                     <th scope="col">Full Name</th>
+                    <th scope="col">Made On</th>
                     <th scope="col">Action</th>
                     <th scope="col">Action</th>
                 </tr>
@@ -42,6 +43,7 @@
                 <tr>
                     <th scope="row">@index</th>
                     <td>@order.UserFullName</td>
+                    <td>@order.MadeOn</td>
                     <td>
                         <a class="btn btn-primary" asp-area="Administrator" asp-controller="Orders" asp-action="DetailsAwaiting" asp-route-id=@order.OrderId>Details</a>
                     </td>

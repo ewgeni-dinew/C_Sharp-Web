@@ -9,5 +9,7 @@ namespace BabyBug.Common.ViewModels.Orders
         public string UserFullName { get; set; }
 
         public int OrderId { get; set; }
+
+        public string MadeOn { get; set; }
     }
 }

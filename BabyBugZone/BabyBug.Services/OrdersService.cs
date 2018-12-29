@@ -112,7 +112,8 @@ namespace BabyBug.Services
                 var baseModel = new OrderViewModel()
                 {
                     UserFullName = user.FirstName + " " + user.LastName,
-                    OrderId = order.Id
+                    OrderId = order.Id,
+                    MadeOn = order.MadeOn_Date.ToString("dd/MM/yyyy HH:mm"),
                 };
 
                 model.Add(baseModel);
@@ -329,6 +330,18 @@ namespace BabyBug.Services
             order.Status = OrderStatus.Approved;
 
             await this.DbContext.SaveChangesAsync();
+        }
+
+        public async Task SetOrderDate(int id)
+        {
+            var order = await this.DbContext
+                .Orders
+                .FirstOrDefaultAsync(x => x.Id.Equals(id));
+
+            order.MadeOn_Date = DateTime.UtcNow;
+
+            await this.DbContext
+                .SaveChangesAsync();
         }
     }
 }

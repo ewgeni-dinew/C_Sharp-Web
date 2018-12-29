@@ -122,6 +122,12 @@ namespace BabyBug.Services
             //remove image from Cloudinary
             this.RemoveImageFromCloudinary(category.ImageId);
 
+            //remove product images from Cloudinary
+            foreach (var product in category.Garments)
+            {
+                this.RemoveImageFromCloudinary(product.ImageId);
+            }
+
             //remove category from Db
             this.DbContext
                 .GarmentCategories

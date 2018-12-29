@@ -72,8 +72,10 @@ namespace BabyBug.Web.Controllers
             return this.RedirectToAction("FinishedOrder", "Orders", new { id });
         }
 
-        public ActionResult FinishedOrder(int id)
+        public async Task<ActionResult> FinishedOrder(int id)
         {
+            await this.ordersService.SetOrderDate(id);
+
             return this.View(id);
         }
     }

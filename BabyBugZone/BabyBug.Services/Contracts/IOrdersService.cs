@@ -31,5 +31,7 @@ namespace BabyBug.Services.Contracts
         Task SetDeliveryInfoAsync(int orderId, UserDataModel model);
 
         Task ApproveOrderAsync(int id);
+
+        Task SetOrderDate(int id);
     }
 }

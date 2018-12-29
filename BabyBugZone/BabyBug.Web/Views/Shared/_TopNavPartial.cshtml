@@ -27,7 +27,23 @@
                                 <li><a href="#">Bulgarian</a></li>
                             </ul>
                         </li>
-                        <partial name="_LoginPartial">
+                        <li class="account pr-3">
+                            <partial name="_LoginPartial" />
+                        </li>
+
+                        @if (User.IsInRole("Admin"))
+                        {
+                            <li class="account pr-3 nav_item_red">
+                                <a href="#">
+                                    Orders
+                                    <i class="fa fa-angle-down"></i>
+                                </a>
+                                <ul class="account_selection">
+                                    <li><a asp-area="Administrator" asp-controller="Orders" asp-action="Awaiting">Awaiting</a></li>
+                                    <li><a asp-area="Administrator" asp-controller="Orders" asp-action="Approved">Approved</a></li>
+                                </ul>
+                            </li>
+                        }
                     </ul>
                 </div>
             </div>
