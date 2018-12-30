@@ -4,14 +4,16 @@ using BabyBugZone.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace BabyBug.Data.Migrations
 {
     [DbContext(typeof(BabyBugDbContext))]
-    partial class BabyBugDbContextModelSnapshot : ModelSnapshot
+    [Migration("20181230173000_Update3")]
+    partial class Update3
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -111,8 +113,6 @@ namespace BabyBug.Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int>("CategoryType");
-
                     b.Property<string>("ImageId");
 
                     b.Property<string>("ImageUrl");
@@ -131,8 +131,6 @@ namespace BabyBug.Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int>("CategoryType");
-
                     b.Property<string>("ImageId");
 
                     b.Property<string>("ImageUrl");
@@ -150,8 +148,6 @@ namespace BabyBug.Data.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<int>("CategoryType");
 
                     b.Property<string>("ImageId");
 
@@ -196,6 +192,8 @@ namespace BabyBug.Data.Migrations
 
                     b.Property<int>("OrderId");
 
+                    b.Property<int?>("AccessoryId");
+
                     b.Property<decimal>("Price")
                         .HasColumnType("decimal(18, 2)");
 
@@ -204,6 +202,8 @@ namespace BabyBug.Data.Migrations
                     b.Property<string>("Size");
 
                     b.HasKey("ProductId", "OrderId");
+
+                    b.HasIndex("AccessoryId");
 
                     b.HasIndex("OrderId");
 
@@ -216,6 +216,8 @@ namespace BabyBug.Data.Migrations
 
                     b.Property<int>("OrderId");
 
+                    b.Property<int?>("GarmentId");
+
                     b.Property<decimal>("Price")
                         .HasColumnType("decimal(18, 2)");
 
@@ -224,6 +226,8 @@ namespace BabyBug.Data.Migrations
                     b.Property<string>("Size");
 
                     b.HasKey("ProductId", "OrderId");
+
+                    b.HasIndex("GarmentId");
 
                     b.HasIndex("OrderId");
 
@@ -241,11 +245,15 @@ namespace BabyBug.Data.Migrations
 
                     b.Property<long>("Quantity");
 
+                    b.Property<int?>("ShoeId");
+
                     b.Property<string>("Size");
 
                     b.HasKey("ProductId", "OrderId");
 
                     b.HasIndex("OrderId");
+
+                    b.HasIndex("ShoeId");
 
                     b.ToTable("OrderShoes");
                 });
@@ -267,13 +275,13 @@ namespace BabyBug.Data.Migrations
                 {
                     b.Property<int>("ProductSizeId");
 
-                    b.Property<int>("ProductId");
+                    b.Property<int>("AccessoryId");
 
                     b.Property<long>("Quantity");
 
-                    b.HasKey("ProductSizeId", "ProductId");
+                    b.HasKey("ProductSizeId", "AccessoryId");
 
-                    b.HasIndex("ProductId");
+                    b.HasIndex("AccessoryId");
 
                     b.ToTable("AccessorySpecifications");
                 });
@@ -282,13 +290,13 @@ namespace BabyBug.Data.Migrations
                 {
                     b.Property<int>("ProductSizeId");
 
-                    b.Property<int>("ProductId");
+                    b.Property<int>("GarmentId");
 
                     b.Property<long>("Quantity");
 
-                    b.HasKey("ProductSizeId", "ProductId");
+                    b.HasKey("ProductSizeId", "GarmentId");
 
-                    b.HasIndex("ProductId");
+                    b.HasIndex("GarmentId");
 
                     b.ToTable("GarmentSpecifications");
                 });
@@ -297,13 +305,13 @@ namespace BabyBug.Data.Migrations
                 {
                     b.Property<int>("ProductSizeId");
 
-                    b.Property<int>("ProductId");
+                    b.Property<int>("ShoeId");
 
                     b.Property<long>("Quantity");
 
-                    b.HasKey("ProductSizeId", "ProductId");
+                    b.HasKey("ProductSizeId", "ShoeId");
 
-                    b.HasIndex("ProductId");
+                    b.HasIndex("ShoeId");
 
                     b.ToTable("ShoeSpecifications");
                 });
@@ -529,27 +537,25 @@ namespace BabyBug.Data.Migrations
 
             modelBuilder.Entity("BabyBug.Data.Models.OrderProducts.OrderAccessories", b =>
                 {
+                    b.HasOne("BabyBug.Data.Models.Products.Accessory", "Accessory")
+                        .WithMany("OrderAccessories")
+                        .HasForeignKey("AccessoryId");
+
                     b.HasOne("BabyBug.Data.Models.Order", "Order")
                         .WithMany("OrderAccessories")
                         .HasForeignKey("OrderId")
-                        .OnDelete(DeleteBehavior.Cascade);
-
-                    b.HasOne("BabyBug.Data.Models.Products.Accessory", "Product")
-                        .WithMany("OrderAccessories")
-                        .HasForeignKey("ProductId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("BabyBug.Data.Models.OrderProducts.OrderGarments", b =>
                 {
+                    b.HasOne("BabyBug.Data.Models.Products.Garment", "Garment")
+                        .WithMany("OrderGarments")
+                        .HasForeignKey("GarmentId");
+
                     b.HasOne("BabyBug.Data.Models.Order", "Order")
                         .WithMany("OrderGarments")
                         .HasForeignKey("OrderId")
-                        .OnDelete(DeleteBehavior.Cascade);
-
-                    b.HasOne("BabyBug.Data.Models.Products.Garment", "Product")
-                        .WithMany("OrderGarments")
-                        .HasForeignKey("ProductId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
@@ -560,17 +566,16 @@ namespace BabyBug.Data.Migrations
                         .HasForeignKey("OrderId")
                         .OnDelete(DeleteBehavior.Cascade);
 
-                    b.HasOne("BabyBug.Data.Models.Products.Shoe", "Product")
+                    b.HasOne("BabyBug.Data.Models.Products.Shoe", "Shoe")
                         .WithMany("OrderShoes")
-                        .HasForeignKey("ProductId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .HasForeignKey("ShoeId");
                 });
 
             modelBuilder.Entity("BabyBug.Data.Models.ProductSpecifications.AccessorySpecification", b =>
                 {
-                    b.HasOne("BabyBug.Data.Models.Products.Accessory", "Product")
+                    b.HasOne("BabyBug.Data.Models.Products.Accessory", "Accessory")
                         .WithMany("Specifications")
-                        .HasForeignKey("ProductId")
+                        .HasForeignKey("AccessoryId")
                         .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("BabyBug.Data.Models.ProductSize", "ProductSize")
@@ -581,9 +586,9 @@ namespace BabyBug.Data.Migrations
 
             modelBuilder.Entity("BabyBug.Data.Models.ProductSpecifications.GarmentSpecification", b =>
                 {
-                    b.HasOne("BabyBug.Data.Models.Products.Garment", "Product")
+                    b.HasOne("BabyBug.Data.Models.Products.Garment", "Garment")
                         .WithMany("Specifications")
-                        .HasForeignKey("ProductId")
+                        .HasForeignKey("GarmentId")
                         .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("BabyBug.Data.Models.ProductSize", "ProductSize")
@@ -594,14 +599,14 @@ namespace BabyBug.Data.Migrations
 
             modelBuilder.Entity("BabyBug.Data.Models.ProductSpecifications.ShoeSpecification", b =>
                 {
-                    b.HasOne("BabyBug.Data.Models.Products.Shoe", "Product")
-                        .WithMany("Specifications")
-                        .HasForeignKey("ProductId")
-                        .OnDelete(DeleteBehavior.Cascade);
-
                     b.HasOne("BabyBug.Data.Models.ProductSize", "ProductSize")
                         .WithMany("ShoeSpecifications")
                         .HasForeignKey("ProductSizeId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("BabyBug.Data.Models.Products.Shoe", "Shoe")
+                        .WithMany("Specifications")
+                        .HasForeignKey("ShoeId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 

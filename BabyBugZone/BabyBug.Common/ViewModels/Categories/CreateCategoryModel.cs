@@ -17,6 +17,8 @@ namespace BabyBug.Common.ViewModels.Categories
         [Required]
         [Display(Name = "Picture")]
         [DataType(DataType.Upload)]
-        public IFormFile Picture { get; set; }      
+        public IFormFile Picture { get; set; }
+
+        public string CategoryType { get; set; }
     }
 }

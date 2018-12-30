@@ -40,6 +40,22 @@
                     <input asp-for="Picture" type="file" accept="image/*" />
                     <span asp-validation-for="Picture" class="text-danger"></span>
                 </div>
+                <div class="funkyradio">
+                    <h5>Choose delivery type:</h5>
+                    <div class="funkyradio-danger">
+                        <input asp-for="CategoryType" type="radio" value="Garment" id="radio2" />
+                        <label asp-for="CategoryType" for="radio2">Garment</label>
+                    </div>
+                    <div class="funkyradio-danger">
+                        <input asp-for="CategoryType" type="radio" value="Shoe" id="radio3" />
+                        <label asp-for="CategoryType" for="radio3">Shoe</label>
+                    </div>
+                    <div class="funkyradio-danger">
+                        <input asp-for="CategoryType" type="radio" value="Accessory" id="radio4" />
+                        <label asp-for="CategoryType" for="radio4">Accessory</label>
+                    </div>
+                </div>
+
                 <div class="form-group">
                     <input type="submit" value="Create" class="btn btn-primary" />
                 </div>

@@ -33,5 +33,6 @@ namespace BabyBug.Services.Contracts
         Task ApproveOrderAsync(int id);
 
         Task SetOrderDate(int id);
+        Task RemoveOrderAsync(int id);
     }
 }

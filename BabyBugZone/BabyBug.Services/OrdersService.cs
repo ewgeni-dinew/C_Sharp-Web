@@ -2,6 +2,7 @@
 using BabyBug.Common.ViewModels.Orders;
 using BabyBug.Data.Models;
 using BabyBug.Data.Models.Enums;
+using BabyBug.Data.Models.OrderProducts;
 using BabyBug.Services.Contracts;
 using BabyBugZone.Data;
 using Microsoft.EntityFrameworkCore;
@@ -33,7 +34,7 @@ namespace BabyBug.Services
                 .Orders
                 .FirstOrDefaultAsync(x => x.UserId.Equals(user.Id)
                                     && x.Status.Equals(OrderStatus.Created)
-                                    && x.OrderGarments.Any(g => g.GarmentId.Equals(id)
+                                    && x.OrderGarments.Any(g => g.ProductId.Equals(id)
                                                         && g.Size.Equals(model.Size)));
 
             if (order == null)
@@ -60,12 +61,12 @@ namespace BabyBug.Services
 
                 var orderGarment = new OrderGarments
                 {
-                    GarmentId = id,
+                    ProductId = id,
                     Price = garment.Price,
                     Size = model.Size,
                     Quantity = model.Quantity,
                 };
-                
+
                 order.OrderGarments
                     .Add(orderGarment);
             }
@@ -73,7 +74,7 @@ namespace BabyBug.Services
             {
                 var temp = await this.DbContext
                     .OrderGarments
-                    .FirstOrDefaultAsync(x => x.GarmentId.Equals(id) 
+                    .FirstOrDefaultAsync(x => x.ProductId.Equals(id)
                                         && x.Size.Equals(model.Size)
                                         && x.OrderId.Equals(order.Id));
 
@@ -143,13 +144,13 @@ namespace BabyBug.Services
             {
                 var garmentName = this.DbContext
                     .Garments
-                    .FirstOrDefault(x => x.Id.Equals(orderProduct.GarmentId))
+                    .FirstOrDefault(x => x.Id.Equals(orderProduct.ProductId))
                     .Name;
 
                 var temp = new BaseOrderedProductModel
                 {
                     OrderId = orderProduct.OrderId,
-                    ProductId = orderProduct.GarmentId,
+                    ProductId = orderProduct.ProductId,
                     Price = orderProduct.Price,
                     Size = orderProduct.Size,
                     Quantity = orderProduct.Quantity,
@@ -193,12 +194,12 @@ namespace BabyBug.Services
             {
                 var garment = await this.DbContext
                     .Garments
-                    .FirstOrDefaultAsync(x => x.Id.Equals(orderProduct.GarmentId));
+                    .FirstOrDefaultAsync(x => x.Id.Equals(orderProduct.ProductId));
 
                 var temp = new BaseOrderedProductModel
                 {
                     OrderId = orderProduct.OrderId,
-                    ProductId = orderProduct.GarmentId,
+                    ProductId = orderProduct.ProductId,
                     Price = orderProduct.Price,
                     Size = orderProduct.Size,
                     Quantity = orderProduct.Quantity,
@@ -229,7 +230,7 @@ namespace BabyBug.Services
         {
             var orderGarment = await this.DbContext.OrderGarments
                 .FirstOrDefaultAsync(x => x.OrderId.Equals(orderId) &&
-                                    x.GarmentId.Equals(productId)
+                                    x.ProductId.Equals(productId)
                                     && x.Size.Equals(size));
 
             if (orderGarment != null)
@@ -247,7 +248,8 @@ namespace BabyBug.Services
 
             var order = await this.DbContext
                 .Orders
-                .FirstOrDefaultAsync(x => x.UserId.Equals(user.Id));
+                .FirstOrDefaultAsync(x => x.UserId.Equals(user.Id)
+                                    && x.Status.Equals(OrderStatus.Created));
 
             var model = new UserDataModel
             {
@@ -271,7 +273,8 @@ namespace BabyBug.Services
 
             var order = await this.DbContext
                 .Orders
-                .FirstOrDefaultAsync(x => x.UserId.Equals(user.Id));
+                .FirstOrDefaultAsync(x => x.UserId.Equals(user.Id)
+                                    && x.Status.Equals(OrderStatus.Created));
 
             //update user info
             if (model.FirstName != null)
@@ -336,12 +339,27 @@ namespace BabyBug.Services
         {
             var order = await this.DbContext
                 .Orders
-                .FirstOrDefaultAsync(x => x.Id.Equals(id));
+                .FirstOrDefaultAsync(x => x.Id.Equals(id)
+                                     && x.Status.Equals(OrderStatus.Awaiting));
 
             order.MadeOn_Date = DateTime.UtcNow;
 
             await this.DbContext
                 .SaveChangesAsync();
+        }
+
+        public async Task RemoveOrderAsync(int id)
+        {
+            var order = await this.DbContext
+                .Orders
+                .FirstOrDefaultAsync(x => x.Id.Equals(id)
+                                     && x.Status.Equals(OrderStatus.Awaiting));
+
+            this.DbContext
+                .Orders
+                .Remove(order);
+
+            await this.DbContext.SaveChangesAsync();
         }
     }
 }

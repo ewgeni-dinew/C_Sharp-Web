@@ -39,52 +39,142 @@ namespace BabyBug.Web.Areas.Administrator.Controllers
 
             await this.categoriesService.CreateCategoryAsync(model);
 
-            return RedirectToAction("All", "Categories", new { area = "" });
+            return RedirectToAction("Index", "Categories", new { area = "" });
         }
 
-        public async Task<ActionResult> Edit(int id)
+        public async Task<ActionResult> EditGarment(int id)
         {
             var model = await this.categoriesService
-                .GetEditCategoryModelAsync(id);
+                .GetEditGarmentCatModelAsync(id);
 
-            return View(model);
+            return View("Edit", model);
         }
 
         [HttpPost]
         [AutoValidateAntiforgeryToken]
-        public async Task<ActionResult> Edit(int id, EditCategoryModel model)
+        public async Task<ActionResult> EditGarment(int id, EditCategoryModel model)
         {
             if (!this.ModelState.IsValid)
             {
-                return this.View();
+                return this.RedirectToAction("EditGarment", new { id });
             }
 
-            await this.categoriesService.EditCategoryAsync(id, model);
+            await this.categoriesService.EditGarmentCategoryAsync(id, model);
 
-            return RedirectToAction("All", "Categories", new { area = "" });
+            return RedirectToAction("Index", "Categories", new { area = "" });
+        }
+
+        public async Task<ActionResult> EditShoe(int id)
+        {
+            var model = await this.categoriesService
+                .GetEditShoeCatModelAsync(id);
+
+            return View("Edit", model);
+        }
+
+        [HttpPost]
+        [AutoValidateAntiforgeryToken]
+        public async Task<ActionResult> EditShoe(int id, EditCategoryModel model)
+        {
+            if (!this.ModelState.IsValid)
+            {
+                return this.RedirectToAction("EditShoe", new { id });
+            }
+
+            await this.categoriesService.EditShoeCategoryAsync(id, model);
+
+            return RedirectToAction("Index", "Categories", new { area = "" });
+        }
+
+        public async Task<ActionResult> EditAccessory(int id)
+        {
+            var model = await this.categoriesService
+                .GetEditAccessoryCatModelAsync(id);
+
+            return View("Edit", model);
+        }
+
+        [HttpPost]
+        [AutoValidateAntiforgeryToken]
+        public async Task<ActionResult> EditAccessory(int id, EditCategoryModel model)
+        {
+            if (!this.ModelState.IsValid)
+            {
+                return this.RedirectToAction("EditAccessory", new { id });
+            }
+
+            await this.categoriesService.EditAccessoryCategoryAsync(id, model);
+
+            return RedirectToAction("Index", "Categories", new { area = "" });
         }
 
         [HttpGet]
-        public async Task<ActionResult> Delete(int id)
+        public async Task<ActionResult> DeleteGarment(int id)
         {
             var model = await this.categoriesService
-                .GetDeleteCategoryModelAsync(id);
+                .GetEditGarmentCatModelAsync(id);
 
-            return View(model);
+            return View("Delete", model);
         }
 
         [HttpPost]
         [AutoValidateAntiforgeryToken]
-        public async Task<ActionResult> Delete(int id, DeleteCategoryModel model)
+        public async Task<ActionResult> DeleteGarment(int id, DeleteCategoryModel model)
         {
             if (!this.ModelState.IsValid)
             {
-                return this.View();
+                return this.RedirectToAction("DeleteGarment", new { id });
             }
 
-            await this.categoriesService.DeleteCategoryAsync(id);
+            await this.categoriesService.DeleteGarmentCategoryAsync(id);
 
-            return RedirectToAction("All", "Categories", new { area = "" });
+            return RedirectToAction("Index", "Categories", new { area = "" });
+        }
+
+        [HttpGet]
+        public async Task<ActionResult> DeleteShoe(int id)
+        {
+            var model = await this.categoriesService
+                .GetEditShoeCatModelAsync(id);
+
+            return View("Delete", model);
+        }
+
+        [HttpPost]
+        [AutoValidateAntiforgeryToken]
+        public async Task<ActionResult> DeleteShoe(int id, EditCategoryModel model)
+        {
+            if (!this.ModelState.IsValid)
+            {
+                return this.RedirectToAction("DeleteShoe", new { id });
+            }
+
+            await this.categoriesService.DeleteGarmentCategoryAsync(id);
+
+            return RedirectToAction("Index", "Categories", new { area = "" });
+        }
+
+        [HttpGet]
+        public async Task<ActionResult> DeleteAccessory(int id)
+        {
+            var model = await this.categoriesService
+                .GetEditAccessoryCatModelAsync(id);
+
+            return View("Delete", model);
+        }
+
+        [HttpPost]
+        [AutoValidateAntiforgeryToken]
+        public async Task<ActionResult> DeleteAccessory(int id, EditCategoryModel model)
+        {
+            if (!this.ModelState.IsValid)
+            {
+                return this.RedirectToAction("DeleteAccessory", new { id});
+            }
+
+            await this.categoriesService.DeleteAccessoryCategoryAsync(id);
+
+            return RedirectToAction("Index", "Categories", new { area = "" });
         }
     }
 }

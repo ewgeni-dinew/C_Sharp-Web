@@ -106,15 +106,28 @@
     </div>
     <hr />
     <div class="row">
-        <div class="col-sm-3">
-            <a class="btn btn-primary" asp-area="Administrator" asp-controller="Orders" asp-action="All">Back</a>
-        </div>
+
         @if (Model.OrderStatus.Equals("Awaiting"))
         {
+            <div class="col-sm-3">
+                <a class="btn btn-primary" asp-area="Administrator" asp-controller="Orders" asp-action="Awaiting">Back</a>
+            </div>
             <div class="col-sm-3 ">
                 <a class="btn btn-success" asp-area="Administrator" asp-controller="Orders" asp-action="Approve" asp-route-id=@Model.OrderId>Approve</a>
             </div>
         }
+        else
+        {
+            <div class="col-sm-3">
+                <a class="btn btn-primary" asp-area="Administrator" asp-controller="Orders" asp-action="Approved">Back</a>
+            </div>
+        }
+        <div class="col-sm-3">
+            <form method="post" asp-area="Administrator" asp-controller="Orders" asp-action="RemoveOrder" asp-route-id=@Model.OrderId>
+                <input type="submit" class="btn btn-outline-danger" value="Remove" />
+            </form>
+        </div>
+
     </div>
 
 </div>

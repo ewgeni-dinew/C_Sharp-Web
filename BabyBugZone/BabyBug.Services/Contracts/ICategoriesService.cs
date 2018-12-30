@@ -11,17 +11,26 @@ namespace BabyBug.Services.Categories.Contracts
     {
         BabyBugDbContext DbContext { get; set; }
 
-        ICollection<BaseCategoryModel> GetAllGarmentCategories();
+        AllCategoriesModel GetAllGarmentCategories();
 
         Task CreateCategoryAsync(CreateCategoryModel model);
+        
+        Task<EditCategoryModel> GetEditGarmentCatModelAsync(int id);
 
-        Task<EditCategoryModel> GetEditCategoryModelAsync(int id);
+        Task<EditCategoryModel> GetEditShoeCatModelAsync(int id);
 
-        Task<DeleteCategoryModel> GetDeleteCategoryModelAsync(int id);
+        Task<EditCategoryModel> GetEditAccessoryCatModelAsync(int id);
 
-        Task EditCategoryAsync(int id, EditCategoryModel model);
+        Task EditGarmentCategoryAsync(int id, EditCategoryModel model);
 
-        Task DeleteCategoryAsync(int id);
-       
+        Task EditShoeCategoryAsync(int id, EditCategoryModel model);
+
+        Task EditAccessoryCategoryAsync(int id, EditCategoryModel model);
+
+        Task DeleteGarmentCategoryAsync(int id);
+
+        Task DeleteShoeCategoryAsync(int id);
+
+        Task DeleteAccessoryCategoryAsync(int id);
     }
 }

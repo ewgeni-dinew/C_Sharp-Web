@@ -1,5 +1,6 @@
 ﻿using BabyBug.Common.ViewModels.Garments;
 using BabyBug.Data.Models;
+using BabyBug.Data.Models.Products;
 using BabyBug.Services.Contracts;
 using BabyBugZone.Data;
 using CloudinaryDotNet;
@@ -77,7 +78,7 @@ namespace BabyBug.Services
 
             var garmentSizes = this.DbContext
                 .GarmentSpecifications
-                .Where(x => x.GarmentId.Equals(id))
+                .Where(x => x.ProductId.Equals(id))
                 .ToList();
 
             var availableSizes = new HashSet<string>();
@@ -85,8 +86,8 @@ namespace BabyBug.Services
             foreach (var size in garmentSizes)
             {
                 var sizeName = await this.DbContext
-                    .GarmentSizes
-                    .FirstOrDefaultAsync(x => x.Id.Equals(size.GarmentSizeId));
+                    .ProductSizes
+                    .FirstOrDefaultAsync(x => x.Id.Equals(size.ProductSizeId));
 
                 availableSizes.Add(sizeName.Value);
             }
@@ -100,7 +101,7 @@ namespace BabyBug.Services
                 Price = garment.Price,
                 Gender = garment.Gender,
                 CreatedOn = garment.CreatedOn.ToString("dd-MM-yyyy"),
-                ImageUrl=garment.ImageUrl
+                ImageUrl = garment.ImageUrl
             };
 
             return model;
@@ -148,7 +149,7 @@ namespace BabyBug.Services
                 Price = garment.Price,
                 Gender = garment.Gender,
                 CategoryNames = categories,
-                CategoryName=garmentCategory.Name
+                CategoryName = garmentCategory.Name
             };
 
             return model;
@@ -214,6 +215,6 @@ namespace BabyBug.Services
             garment.Gender = model.Gender;
 
             await this.DbContext.SaveChangesAsync();
-        }        
+        }
     }
 }

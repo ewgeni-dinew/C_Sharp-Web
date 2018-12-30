@@ -53,7 +53,16 @@ namespace BabyBug.Web.Areas.Administrator.Controllers
         {
             await this.ordersService.ApproveOrderAsync(id);
 
-            return this.RedirectToAction("All", "Orders");
+            return this.RedirectToAction("Awaiting", "Orders");
+        }
+
+        [HttpPost]
+        [AutoValidateAntiforgeryToken]
+        public async Task<ActionResult> RemoveOrder(int id)
+        {
+            await this.ordersService.RemoveOrderAsync(id);
+
+            return this.RedirectToAction("Awaiting", "Orders");
         }
     }
 }

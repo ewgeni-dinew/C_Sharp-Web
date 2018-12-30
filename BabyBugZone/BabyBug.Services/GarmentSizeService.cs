@@ -1,5 +1,6 @@
 ﻿using BabyBug.Common.ViewModels.GarmentSize;
 using BabyBug.Data.Models;
+using BabyBug.Data.Models.ProductSpecifications;
 using BabyBug.Services.Contracts;
 using BabyBugZone.Data;
 using Microsoft.EntityFrameworkCore;
@@ -21,7 +22,7 @@ namespace BabyBug.Services
         public ICollection<BaseGarmentSizeModel> GetAllGarmentSizes()
         {
             var garmentsSizes = this.DbContext
-                .GarmentSizes
+                .ProductSizes
                 .ToHashSet();
 
             var collection = new HashSet<BaseGarmentSizeModel>();
@@ -48,12 +49,12 @@ namespace BabyBug.Services
 
             foreach (var value in values)
             {
-                var size = new GarmentSize
+                var size = new ProductSize
                 {
                     Value = value
                 };
 
-                await this.DbContext.GarmentSizes.AddAsync(size);
+                await this.DbContext.ProductSizes.AddAsync(size);
 
                 await this.DbContext.SaveChangesAsync();
             }
@@ -62,10 +63,10 @@ namespace BabyBug.Services
         public async Task DeleteSizeAsync(int id)
         {
             var size = await this.DbContext
-                .GarmentSizes
+                .ProductSizes
                 .FirstOrDefaultAsync(x => x.Id.Equals(id));
 
-            this.DbContext.GarmentSizes.Remove(size);
+            this.DbContext.ProductSizes.Remove(size);
 
             await this.DbContext.SaveChangesAsync();
         }
@@ -75,7 +76,7 @@ namespace BabyBug.Services
             if (model.Name != null)
             {
                 var size = await this.DbContext
-                .GarmentSizes
+                .ProductSizes
                 .FirstOrDefaultAsync(x => x.Id.Equals(model.Id));
 
                 size.Value = model.Name;
@@ -87,7 +88,7 @@ namespace BabyBug.Services
         public async Task<BaseGarmentSizeModel> GetBaseSizeModelAsync(int id)
         {
             return await this.DbContext
-                .GarmentSizes
+                .ProductSizes
                 .Select(x => new BaseGarmentSizeModel
                 {
                     Id = x.Id,
@@ -100,13 +101,13 @@ namespace BabyBug.Services
         {
             //AllGarmentSizes
             var allGarmentSizes = this.DbContext
-                .GarmentSizes
+                .ProductSizes
                 .Select(x => x.Value)
                 .ToHashSet();
 
             var garmentSpecifications = this.DbContext
                 .GarmentSpecifications
-                .Where(x => x.GarmentId.Equals(id))
+                .Where(x => x.ProductId.Equals(id))
                 .ToList();
 
             var dictionary = new Dictionary<string, uint>();
@@ -114,8 +115,8 @@ namespace BabyBug.Services
             foreach (var kvp in garmentSpecifications)
             {
                 var sizeName = await this.DbContext
-                    .GarmentSizes
-                    .FirstOrDefaultAsync(x => x.Id.Equals(kvp.GarmentSizeId));
+                    .ProductSizes
+                    .FirstOrDefaultAsync(x => x.Id.Equals(kvp.ProductSizeId));
 
                 var key = sizeName.Value;
 
@@ -141,20 +142,20 @@ namespace BabyBug.Services
                 .FirstOrDefaultAsync(x => x.Id.Equals(id));
 
             var garmentSize = await this.DbContext
-                .GarmentSizes
+                .ProductSizes
                 .FirstOrDefaultAsync(x => x.Value.Equals(model.ChoosenSize));
 
             var specification = await this.DbContext
                 .GarmentSpecifications
-                .FirstOrDefaultAsync(x => x.GarmentId.Equals(garment.Id)
-                    && x.GarmentSizeId.Equals(garmentSize.Id));
+                .FirstOrDefaultAsync(x => x.ProductId.Equals(garment.Id)
+                    && x.ProductSizeId.Equals(garmentSize.Id));
 
             if (specification == null)
             {
                 specification = new GarmentSpecification
                 {
-                    GarmentId = garment.Id,
-                    GarmentSizeId = garmentSize.Id,
+                    ProductId = garment.Id,
+                    ProductSizeId = garmentSize.Id,
                     Quantity = model.InputQuantity
                 };
 
@@ -174,13 +175,13 @@ namespace BabyBug.Services
                 .FirstOrDefaultAsync(x => x.Id.Equals(id));
 
             var garmentSize = await this.DbContext
-                .GarmentSizes
+                .ProductSizes
                 .FirstOrDefaultAsync(x => x.Value.Equals(model.ChoosenSize));
 
             var specification = await this.DbContext
                 .GarmentSpecifications
-                .FirstOrDefaultAsync(x => x.GarmentId.Equals(garment.Id)
-                    && x.GarmentSizeId.Equals(garmentSize.Id));
+                .FirstOrDefaultAsync(x => x.ProductId.Equals(garment.Id)
+                    && x.ProductSizeId.Equals(garmentSize.Id));
 
             if (specification != null
                 && model.InputQuantity <= specification.Quantity)

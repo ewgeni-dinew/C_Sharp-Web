@@ -1,4 +1,4 @@
-﻿@model ICollection<BabyBug.Common.ViewModels.Categories.BaseCategoryModel>
+﻿@model BabyBug.Common.ViewModels.Categories.AllCategoriesModel
 @addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
 
 @{
@@ -22,38 +22,88 @@
         </div>
     </div>
 
-    @if (Model.Any())
-    {
-        <!-- Banner -->
-        <div class="banner">
-            <div class="container">
-                <div class="row">
-                    @foreach (var category in Model)
-                    {
-                        <div class="col-md-4 col-sm-6 mb-5">
-                            <div class="banner_item align-items-center" style="background-image:url(@category.ImageUrl)">
-                                <div class="banner_category">
-                                    <a href="categories.html">@category.Name</a>
+    <!-- Banner -->
+    <div class="banner">
+        <div class="container">
+            <h5>Garments</h5>
+            <hr />
+            <div class="row">
+                @foreach (var category in Model.GarmentCategories)
+                {
+                    <div class="col-md-4 col-sm-6 mb-5">
+                        <div class="banner_item align-items-center" style="background-image:url(@category.ImageUrl)">
+                            <div class="banner_category">
+                                <a href="categories.html">@category.Name</a>
+                            </div>
+                        </div>
+                        @if (User.IsInRole("Admin"))
+                        {
+                            <div class="row">
+                                <div class="col">
+                                    <a class="btn btn-success" asp-area="Administrator" asp-controller="Categories" asp-action="EditGarment" asp-route-id=@category.Id>Edit</a>
+                                </div>
+                                <div class="col">
+                                    <a class="btn btn-outline-danger" asp-area="Administrator" asp-controller="Categories" asp-action="DeleteGarment" asp-route-id=@category.Id>Delete</a>
                                 </div>
                             </div>
-                            @if (User.IsInRole("Admin"))
-                            {
-                                <div class="row">
-                                        <div class="col">
-                                            <a class="btn btn-success" asp-area="Administrator" asp-controller="Categories" asp-action="Edit" asp-route-id=@category.Id>Edit</a>
-                                        </div>
-                                        <div class="col">
-                                            <a class="btn btn-outline-danger" asp-area="Administrator" asp-controller="Categories" asp-action="Delete" asp-route-id=@category.Id>Delete</a>
-                                        </div>
-                                    </div>
-                            }
+                        }
+                    </div>
+                }
+            </div>
+            <h5>Shoes</h5>
+            <hr />
+            <div class="row">
+                @foreach (var category in Model.ShoeCategories)
+                {
+
+                    <div class="col-md-4 col-sm-6 mb-5">
+                        <div class="banner_item align-items-center" style="background-image:url(@category.ImageUrl)">
+                            <div class="banner_category">
+                                <a href="categories.html">@category.Name</a>
+                            </div>
                         </div>
-                    }
-                </div>
+                        @if (User.IsInRole("Admin"))
+                        {
+                            <div class="row">
+                                <div class="col">
+                                    <a class="btn btn-success" asp-area="Administrator" asp-controller="Categories" asp-action="EditShoe" asp-route-id=@category.Id>Edit</a>
+                                </div>
+                                <div class="col">
+                                    <a class="btn btn-outline-danger" asp-area="Administrator" asp-controller="Categories" asp-action="DeleteShoe" asp-route-id=@category.Id>Delete</a>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                }
+            </div>
+            <h5>Accessories</h5>
+            <hr />
+            <div class="row">
+                @foreach (var category in Model.AccessoryCategories)
+                {
+
+                    <div class="col-md-4 col-sm-6 mb-5">
+                        <div class="banner_item align-items-center" style="background-image:url(@category.ImageUrl)">
+                            <div class="banner_category">
+                                <a href="categories.html">@category.Name</a>
+                            </div>
+                        </div>
+                        @if (User.IsInRole("Admin"))
+                        {
+                            <div class="row">
+                                <div class="col">
+                                    <a class="btn btn-success" asp-area="Administrator" asp-controller="Categories" asp-action="EditAccessory" asp-route-id=@category.Id>Edit</a>
+                                </div>
+                                <div class="col">
+                                    <a class="btn btn-outline-danger" asp-area="Administrator" asp-controller="Categories" asp-action="DeleteAccessory" asp-route-id=@category.Id>Delete</a>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                }
             </div>
         </div>
-
-    }
+    </div>
 
     @if (User.IsInRole("Admin"))
     {

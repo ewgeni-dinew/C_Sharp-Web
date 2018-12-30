@@ -1,4 +1,5 @@
 ﻿using BabyBug.Data.Models.Enums;
+using BabyBug.Data.Models.OrderProducts;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,6 +12,11 @@ namespace BabyBug.Data.Models
         public Order()
         {
             this.OrderGarments = new HashSet<OrderGarments>();
+
+            this.OrderShoes = new HashSet<OrderShoes>();
+
+            this.OrderAccessories = new HashSet<OrderAccessories>();
+
             Status = OrderStatus.Created;
         }
 
@@ -31,5 +37,9 @@ namespace BabyBug.Data.Models
         public string DeliveryDestination { get; set; }
 
         public ICollection<OrderGarments> OrderGarments { get; set; }
+
+        public ICollection<OrderShoes> OrderShoes { get; set; }
+
+        public ICollection<OrderAccessories> OrderAccessories { get; set; }
     }
 }
