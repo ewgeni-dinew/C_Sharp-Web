@@ -1,0 +1,52 @@
+﻿@model BabyBug.Common.ViewModels.ProductSize.BaseProductSizeModel
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+
+@{
+    ViewData["Title"] = "Edit";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container single_product_container">
+    <div class="row">
+        <div class="col">
+
+            <!-- Breadcrumbs -->
+
+            <div class="breadcrumbs d-flex flex-row align-items-center">
+                <ul>
+                    <li><a asp-controller="Home" asp-action="Index">Home</a></li>
+                    <li><a asp-area="Administrator" asp-controller="ProductSize" asp-action="All"><i class="fa fa-angle-right" aria-hidden="true"></i>Product Sizes</a></li>
+                    <li class="active"><a asp-area="Administrator" asp-controller="ProductSize" asp-action="Edit" asp-route-id="@Model.Id"><i class="fa fa-angle-right" aria-hidden="true"></i>Edit</a></li>
+                </ul>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Edit sizes -->
+    <h4>Edit Garment Size</h4>
+    <hr />
+    <div class="row">
+        <div class="col-md-4">
+            <form method="post" asp-area="Administrator" asp-controller="ProductSize" asp-action="Edit">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <div class="form-group">
+                    <input type="hidden" asp-for="Id" value="@Model.Id"/>
+                    <label asp-for="Name" class="control-label"></label>
+                    <input asp-for="Name" class="form-control" />
+                    <p>*input values should be separated by ; , (space)</p>
+                    <span asp-validation-for="Name" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <input type="submit" value="Save" class="btn btn-primary" />
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
+
+

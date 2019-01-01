@@ -12,20 +12,25 @@ namespace BabyBugZone.Data
     public class BabyBugDbContext : IdentityDbContext<BabyBugUser>
     {
         public DbSet<BabyBugUser> BabyBugUsers { get; set; }
-        public DbSet<GarmentCategory> GarmentCategories { get; set; }
-        public DbSet<ShoeCategory> ShoeCategories { get; set; }
-        public DbSet<AccessoryCategory> AccessoryCategories { get; set; }
-        public DbSet<Garment> Garments { get; set; }
-        public DbSet<Shoe> Shoes { get; set; }
-        public DbSet<Accessory> Accessories { get; set; }
+
+        public DbSet<ProductType> ProductTypes { get; set; }
+
+        public DbSet<DeliveryType> DeliveryTypes { get; set; }
+
+        public DbSet<PaymentType> PaymentTypes { get; set; }
+
+        public DbSet<ProductCategory> ProductCategories { get; set; }
+
+        public DbSet<Product> Products { get; set; }
+
         public DbSet<ProductSize> ProductSizes { get; set; }
-        public DbSet<GarmentSpecification> GarmentSpecifications { get; set; }
-        public DbSet<ShoeSpecification> ShoeSpecifications { get; set; }
-        public DbSet<AccessorySpecification> AccessorySpecifications { get; set; }
+
+        public DbSet<ProductSpecification> ProductSpecifications { get; set; }
+
         public DbSet<Order> Orders { get; set; }
-        public DbSet<OrderGarments> OrderGarments { get; set; }
-        public DbSet<OrderShoes> OrderShoes { get; set; }
-        public DbSet<OrderAccessories> OrderAccessories { get; set; }
+
+        public DbSet<OrderProduct> OrderProducts { get; set; }
+
         public DbSet<BlogPage> BlogPages { get; set; }
 
         public BabyBugDbContext(DbContextOptions<BabyBugDbContext> options)
@@ -35,75 +40,47 @@ namespace BabyBugZone.Data
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
-            builder.Entity<Garment>()
+            builder.Entity<ProductType>()
+                .HasMany(x => x.Categories)
+                .WithOne(c => c.ProductType)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            builder.Entity<ProductCategory>()
+                .HasOne(x => x.ProductType)
+                .WithMany(c => c.Categories)
+                .HasForeignKey(x => x.ProductTypeId);
+
+            builder.Entity<ProductSize>()
+                .HasOne(x => x.ProductType)
+                .WithMany(c => c.Sizes)
+                .HasForeignKey(x => x.ProductTypeId);
+
+            builder.Entity<Product>()
                 .Property(x => x.Price)
                 .HasColumnType("decimal(18, 2)");
 
-            builder.Entity<Shoe>()
-                .Property(x => x.Price)
-                .HasColumnType("decimal(18, 2)");
-
-            builder.Entity<Accessory>()
-                .Property(x => x.Price)
-                .HasColumnType("decimal(18, 2)");
-
-            builder.Entity<Garment>()
+            builder.Entity<Product>()
                 .HasOne(x => x.Category)
-                .WithMany(c => c.Garments)
+                .WithMany(c => c.Products)
                 .HasForeignKey(x => x.CategoryId);
 
-            builder.Entity<Shoe>()
-                .HasOne(x => x.Category)
-                .WithMany(c => c.Shoes)
-                .HasForeignKey(x => x.CategoryId);
-
-            builder.Entity<Accessory>()
-                .HasOne(x => x.Category)
-                .WithMany(c => c.Accessories)
-                .HasForeignKey(x => x.CategoryId);
-
-            //builder.Entity<GarmentSpecification>()
-            //    .HasOne(x => x.ProductSize)
-            //    .WithMany(g => g.GarmentSpecifications)
-            //    .HasForeignKey(x => x.ProductSizeId);
-
-            //builder.Entity<ShoeSpecification>()
-            //    .HasOne(x => x.ProductSize)
-            //    .WithMany(g => g.ShoeSpecifications)
-            //    .HasForeignKey(x => x.ProductSizeId);
-
-            //builder.Entity<AccessorySpecification>()
-            //    .HasOne(x => x.ProductSize)
-            //    .WithMany(g => g.AccessorySpecifications)
-            //    .HasForeignKey(x => x.ProductSizeId);
-
-            builder.Entity<GarmentSpecification>()
+            builder.Entity<ProductSpecification>()
                 .HasKey(x => new { x.ProductSizeId, x.ProductId });
 
-            builder.Entity<ShoeSpecification>()
-                .HasKey(x => new { x.ProductSizeId, x.ProductId });
+            builder.Entity<Order>()
+                .HasOne(x => x.DeliveryType)
+                .WithMany(c => c.Orders)
+                .HasForeignKey(x => x.DeliveryTypeId);
 
-            builder.Entity<AccessorySpecification>()
-                .HasKey(x => new { x.ProductSizeId, x.ProductId });
+            builder.Entity<Order>()
+                .HasOne(x => x.PaymentType)
+                .WithMany(c => c.Orders)
+                .HasForeignKey(x => x.PaymentTypeId);
 
-            builder.Entity<OrderGarments>()
+            builder.Entity<OrderProduct>()
                 .HasKey(x => new { x.ProductId, x.OrderId });
 
-            builder.Entity<OrderShoes>()
-                .HasKey(x => new { x.ProductId, x.OrderId });
-
-            builder.Entity<OrderAccessories>()
-                .HasKey(x => new { x.ProductId, x.OrderId });
-
-            builder.Entity<OrderGarments>()
-                .Property(x => x.Price)
-                .HasColumnType("decimal(18, 2)");
-
-            builder.Entity<OrderShoes>()
-                .Property(x => x.Price)
-                .HasColumnType("decimal(18, 2)");
-
-            builder.Entity<OrderAccessories>()
+            builder.Entity<OrderProduct>()
                 .Property(x => x.Price)
                 .HasColumnType("decimal(18, 2)");
 

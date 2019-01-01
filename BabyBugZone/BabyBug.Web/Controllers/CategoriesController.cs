@@ -9,16 +9,16 @@ namespace BabyBug.Web.Controllers
 {
     public class CategoriesController : Controller
     {
-        private readonly ICategoriesService categoryService;
+        private readonly ICategoryService categoryService;
 
-        public CategoriesController(ICategoriesService categoryService)
+        public CategoriesController(ICategoryService categoryService)
         {
             this.categoryService = categoryService;
         }
 
-        public ActionResult Index()
+        public async Task<ActionResult> Index()
         {
-            var categories = this.categoryService
+            var categories = await this.categoryService
                 .GetAllGarmentCategories();
 
             return View(categories);

@@ -9,21 +9,17 @@ namespace BabyBug.Data.Models
     {
         public ProductSize()
         {
-            this.GarmentSpecifications = new HashSet<GarmentSpecification>();
-
-            this.ShoeSpecifications = new HashSet<ShoeSpecification>();
-
-            this.AccessorySpecifications = new HashSet<AccessorySpecification>();
+            this.ProductSpecifications = new HashSet<ProductSpecification>();
         }
 
         public int Id { get; set; }
 
         public string Value { get; set; }
 
-        public ICollection<GarmentSpecification> GarmentSpecifications { get; set; }
+        public ProductType ProductType { get; set; }
 
-        public ICollection<ShoeSpecification> ShoeSpecifications { get; set; }
+        public int ProductTypeId { get; set; }
 
-        public ICollection<AccessorySpecification> AccessorySpecifications { get; set; }
+        public ICollection<ProductSpecification> ProductSpecifications { get; set; }
     }
 }

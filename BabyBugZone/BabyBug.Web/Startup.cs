@@ -68,12 +68,13 @@ namespace BabyBug.Web
 
             
             //Services
-            services.AddScoped<ICategoriesService, CategoriesService>();
-            services.AddScoped<IGarmentsService, GarmentsService>();
-            services.AddScoped<IGarmentSizeService, GarmentSizeService>();
-            services.AddScoped<IOrdersService, OrdersService>();
+            services.AddScoped<ICategoryService, CategoryService>();
+            services.AddScoped<IProductService, ProductService>();
+            services.AddScoped<ISizeService, SizeService>();
+            services.AddScoped<IOrderService, OrderService>();
             services.AddScoped<IBlogService, BlogService>();
             services.AddScoped<IHomeService, HomeService>();
+            services.AddScoped<ITypeManagementService, TypeManagementService>();
 
             services
                 .AddMvc(options =>

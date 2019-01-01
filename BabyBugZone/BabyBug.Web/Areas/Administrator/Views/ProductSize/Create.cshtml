@@ -1,0 +1,62 @@
+﻿@model BabyBug.Common.ViewModels.ProductSize.CreateProductSizeModel
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+
+@{
+    ViewData["Title"] = "Create";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container single_product_container">
+    <div class="row">
+        <div class="col">
+
+            <!-- Breadcrumbs -->
+
+            <div class="breadcrumbs d-flex flex-row align-items-center">
+                <ul>
+                    <li><a asp-controller="Home" asp-action="Index">Home</a></li>
+                    <li><a asp-area="Administrator" asp-controller="ProductSize" asp-action="All"><i class="fa fa-angle-right" aria-hidden="true"></i>Product Sizes</a></li>
+                    <li class="active"><a asp-area="Administrator" asp-controller="ProductSize" asp-action="Create"><i class="fa fa-angle-right" aria-hidden="true"></i>Create</a></li>
+                </ul>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Create sizes -->
+    <h4>Create Garment Size</h4>
+    <hr />
+    <div class="row">
+        <div class="col-md-4">
+            <form method="post" asp-area="Administrator" asp-controller="ProductSize" asp-action="Create">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <div class="form-group">
+                    <label asp-for="Values" class="control-label"></label>
+                    <input asp-for="Values" class="form-control" />
+                    <p>*input values should be separated by ; , (space)</p>
+                    <span asp-validation-for="Values" class="text-danger"></span>
+                </div>
+                <div class="funkyradio">
+                    @if (Model.Types.Any())
+                    {
+                        <h5>Choose type:</h5>
+                        foreach (var type in Model.Types)
+                        {
+                            <div class="funkyradio-danger">
+                                <input asp-for="Type" type="radio" value=@type id="@type" />
+                                <label asp-for="Type" for="@type">@type</label>
+                            </div>
+                        }
+                    }
+                </div>
+                <div class="form-group">
+                    <input type="submit" value="Create" class="btn btn-primary" />
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

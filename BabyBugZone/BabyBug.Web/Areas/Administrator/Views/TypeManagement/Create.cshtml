@@ -1,11 +1,10 @@
-﻿@model BabyBug.Common.ViewModels.Categories.CreateCategoryModel
+﻿@model BabyBug.Common.ViewModels.TypeManagement.CreateTypeModel
 @addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
 
 @{
     ViewData["Title"] = "Create";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
-
 <div class="container single_product_container">
     <div class="row">
         <div class="col">
@@ -23,32 +22,27 @@
         </div>
     </div>
 
-    <!-- Create category -->
-    <h4>Create Category</h4>
+    <!-- Create type -->
+    <h4>Create Type</h4>
     <hr />
     <div class="row">
         <div class="col-md-4">
-            <form method="post" asp-area="Administrator" asp-controller="Categories" asp-action="Create" enctype="multipart/form-data">
+            <form method="post" asp-area="Administrator" asp-controller="TypeManagement" asp-action="Create">
                 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                 <div class="form-group">
                     <label asp-for="Name" class="control-label"></label>
                     <input type="text" asp-for="Name" class="form-control" />
                     <span asp-validation-for="Name" class="text-danger"></span>
                 </div>
-                <div class="form-group">
-                    <p>Upload one or more files using this form:</p>
-                    <input asp-for="Picture" type="file" accept="image/*" />
-                    <span asp-validation-for="Picture" class="text-danger"></span>
-                </div>
                 <div class="funkyradio">
-                    @if (Model.CategoryTypes.Any())
+                    @if (Model.Types.Any())
                     {
-                        <h5>Choose category products type:</h5>
-                        foreach (var type in Model.CategoryTypes)
+                        <h5>Choose type:</h5>
+                        foreach (var type in Model.Types)
                         {
                             <div class="funkyradio-danger">
-                                <input asp-for="CategoryType" type="radio" value=@type id="@type" />
-                                <label asp-for="CategoryType" for="@type">@type</label>
+                                <input asp-for="Type" type="radio" value=@type id="@type" />
+                                <label asp-for="Type" for="@type">@type</label>
                             </div>
                         }
                     }

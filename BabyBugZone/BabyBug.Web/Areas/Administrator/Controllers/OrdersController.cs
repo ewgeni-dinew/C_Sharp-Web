@@ -12,9 +12,9 @@ namespace BabyBug.Web.Areas.Administrator.Controllers
     [Authorize(Roles = "Admin")]
     public class OrdersController : Controller
     {
-        private readonly IOrdersService ordersService;
+        private readonly IOrderService ordersService;
 
-        public OrdersController(IOrdersService ordersService)
+        public OrdersController(IOrderService ordersService)
         {
             this.ordersService = ordersService;
         }

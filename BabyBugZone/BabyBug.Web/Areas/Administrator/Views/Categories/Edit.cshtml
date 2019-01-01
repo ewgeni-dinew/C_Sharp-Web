@@ -29,12 +29,25 @@
     <hr />
     <div class="row">
         <div class="col-md-4">
-            <form method="post" asp-area="Administrator" asp-controller="Categories" asp-action="Edit" asp-route-id=@Model.Id enctype="multipart/form-data">                
+            <form method="post" asp-area="Administrator" asp-controller="Categories" asp-action="Edit" asp-route-id=@Model.Id enctype="multipart/form-data">
                 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                 <div class="form-group">
                     <label asp-for="Name" class="control-label"></label>
                     <input asp-for="Name" class="form-control" placeholder=@Model.Name />
                     <span asp-validation-for="Name" class="text-danger"></span>
+                </div>
+                <div class="funkyradio">
+                    @if (Model.CategoryTypes.Any())
+                    {
+                        <h5>Choose category products type:</h5>
+                        foreach (var type in Model.CategoryTypes)
+                        {
+                            <div class="funkyradio-danger">
+                                <input asp-for="CategoryType" type="radio" value=@type id="@type" onload="javascript:SetCheckedTrue(@type)" />
+                                <label asp-for="CategoryType" for="@type">@type</label>
+                            </div>
+                        }
+                    }
                 </div>
                 <div class="form-group">
                     <p>Upload one or more files using this form:</p>
@@ -51,4 +64,12 @@
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+
+    <script type="text/javascript">
+        function deliveryOfficeCheck(type) {
+            if (type=@Model.CategoryType) {
+                document.getElementById(type).checked = true;
+            }
+        }
+    </script>
 }

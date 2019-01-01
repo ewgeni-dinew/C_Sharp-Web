@@ -12,9 +12,9 @@ namespace BabyBug.Web.Controllers
 {
     public class OrdersController : Controller
     {
-        private readonly IOrdersService ordersService;
+        private readonly IOrderService ordersService;
 
-        public OrdersController(IOrdersService ordersService)
+        public OrdersController(IOrderService ordersService)
         {
             this.ordersService = ordersService;
         }
@@ -22,7 +22,7 @@ namespace BabyBug.Web.Controllers
         [HttpPost]
         [Authorize()]
         [AutoValidateAntiforgeryToken]
-        public async Task<ActionResult> Order(int id, GarmentDetailsModel model)
+        public async Task<ActionResult> Order(int id, ProductDetailsModel model)
         {
             if (!ModelState.IsValid)
             {
@@ -67,7 +67,7 @@ namespace BabyBug.Web.Controllers
                 return this.RedirectToAction("ManageDelivery", "Orders", new { username = this.User.Identity.Name });
             }
 
-            await this.ordersService.SetDeliveryInfoAsync(id, model);
+            //await this.ordersService.SetDeliveryInfoAsync(id, model);
 
             return this.RedirectToAction("FinishedOrder", "Orders", new { id });
         }

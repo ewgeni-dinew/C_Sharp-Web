@@ -11,11 +11,7 @@ namespace BabyBug.Data.Models
     {
         public Order()
         {
-            this.OrderGarments = new HashSet<OrderGarments>();
-
-            this.OrderShoes = new HashSet<OrderShoes>();
-
-            this.OrderAccessories = new HashSet<OrderAccessories>();
+            this.OrderProducts = new HashSet<OrderProduct>();            
 
             Status = OrderStatus.Created;
         }
@@ -32,14 +28,14 @@ namespace BabyBug.Data.Models
 
         public PaymentType PaymentType { get; set; }
 
+        public int PaymentTypeId { get; set; }
+
         public DeliveryType DeliveryType { get; set; }
+
+        public int DeliveryTypeId { get; set; }
 
         public string DeliveryDestination { get; set; }
 
-        public ICollection<OrderGarments> OrderGarments { get; set; }
-
-        public ICollection<OrderShoes> OrderShoes { get; set; }
-
-        public ICollection<OrderAccessories> OrderAccessories { get; set; }
+        public ICollection<OrderProduct> OrderProducts { get; set; }
     }
 }

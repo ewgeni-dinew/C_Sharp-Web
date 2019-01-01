@@ -14,7 +14,5 @@ namespace BabyBug.Data.Models.Contracts
         string ImageUrl { get; set; }
 
         string ImageId { get; set; }
-
-        CategoryType CategoryType { get; set; }
     }
 }
