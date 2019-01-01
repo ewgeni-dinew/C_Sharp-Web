@@ -11,7 +11,7 @@ namespace BabyBug.Services.Contracts
     {
         BabyBugDbContext DbContext { get; set; }
 
-        ICollection<BaseProductSizeModel> GetAllGarmentSizes();
+        Task<ICollection<BaseProductSizeModel>> GetAllGarmentSizesAsync();
 
         CreateProductSizeModel GetCreateSizeModel();
 
@@ -21,7 +21,7 @@ namespace BabyBug.Services.Contracts
 
         Task DeleteSizeAsync(int id);
 
-        Task<ProductManageSizesModel> GetCurrentGarmentSizeDetails(int id);
+        Task<ProductManageSizesModel> GetCurrentProductSizeDetails(int productId, string categoryName);
 
         Task AddQuantityToGarmentAsync(int id, ProductManageSizesModel model);
 

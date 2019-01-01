@@ -33,13 +33,17 @@
             @if (User.IsInRole("Admin"))
             {
                 <li class="menu_item has-children nav_item_red">
-                    <a href="#">
-                        Orders
-                        <i class="fa fa-angle-down"></i>
-                    </a>
+                    <a>Orders<i class="fa fa-angle-down"></i></a>
                     <ul class="menu_selection">
                         <li><a asp-area="Administrator" asp-controller="Orders" asp-action="Awaiting">Awaiting</a></li>
                         <li><a asp-area="Administrator" asp-controller="Orders" asp-action="Approved">Approved</a></li>
+                    </ul>
+                </li>
+                <li class="menu_item has-children nav_item_blue">
+                    <a>Management<i class="fa fa-angle-down"></i></a>
+                    <ul class="menu_selection">
+                        <li><a asp-area="Administrator" asp-controller="TypeManagement" asp-action="Index">Types</a></li>
+                        <li><a asp-area="Administrator" asp-controller="ProductSize" asp-action="Index">Sizes</a></li>
                     </ul>
                 </li>
             }

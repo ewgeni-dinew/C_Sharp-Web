@@ -1,10 +1,10 @@
 ﻿<div class="top_nav">
     <div class="container">
         <div class="row">
-            <div class="col-md-6">
+            <div class="col-md-4">
                 <div class="top_nav_left">free shipping on all orders over 50 BGN</div>
             </div>
-            <div class="col-md-6 text-right">
+            <div class="col-md-8 text-right">
                 <div class="top_nav_right">
                     <ul class="top_nav_menu">
 
@@ -30,20 +30,24 @@
                         <li class="account pr-3">
                             <partial name="_LoginPartial" />
                         </li>
-
                         @if (User.IsInRole("Admin"))
                         {
                             <li class="account pr-3 nav_item_red">
-                                <a href="#">
-                                    Orders
-                                    <i class="fa fa-angle-down"></i>
-                                </a>
+                                <a>Orders<i class="fa fa-angle-down"></i></a>
                                 <ul class="account_selection">
                                     <li><a asp-area="Administrator" asp-controller="Orders" asp-action="Awaiting">Awaiting</a></li>
                                     <li><a asp-area="Administrator" asp-controller="Orders" asp-action="Approved">Approved</a></li>
                                 </ul>
                             </li>
+                            <li class="account pr-3 nav_item_blue">
+                                <a>Management<i class="fa fa-angle-down"></i></a>
+                                <ul class="account_selection">
+                                    <li><a asp-area="Administrator" asp-controller="TypeManagement" asp-action="Index">Types</a></li>
+                                    <li><a asp-area="Administrator" asp-controller="ProductSize" asp-action="Index">Sizes</a></li>
+                                </ul>
+                            </li>
                         }
+
                     </ul>
                 </div>
             </div>

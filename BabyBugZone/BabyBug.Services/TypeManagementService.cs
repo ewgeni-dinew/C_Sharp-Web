@@ -2,6 +2,7 @@
 using BabyBug.Data.Models;
 using BabyBug.Services.Contracts;
 using BabyBugZone.Data;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,7 +17,7 @@ namespace BabyBug.Services
             : base(DbContext)
         {
         }
-        
+
         public AllTypesModel GetAllTypes()
         {
             var productTypes = this.DbContext
@@ -51,6 +52,9 @@ namespace BabyBug.Services
                 PaymentTypes = paymentTypes,
                 DeliveryTypes = deliveryTypes,
                 ProductTypes = productTypes,
+                ProductTypeName = nameof(ProductType),
+                PaymentTypeName = nameof(PaymentType),
+                DeliveryTypeName = nameof(DeliveryType)
             };
 
             return model;
@@ -81,7 +85,7 @@ namespace BabyBug.Services
                     Type = model.Name
                 };
 
-                await this.DbContext.ProductTypes.AddAsync(type);                
+                await this.DbContext.ProductTypes.AddAsync(type);
             }
             else if (model.Type.Equals(nameof(DeliveryType)))
             {
@@ -90,7 +94,7 @@ namespace BabyBug.Services
                     Type = model.Name
                 };
 
-                await this.DbContext.DeliveryTypes.AddAsync(type);            
+                await this.DbContext.DeliveryTypes.AddAsync(type);
             }
             else if (model.Type.Equals(nameof(PaymentType)))
             {
@@ -100,6 +104,88 @@ namespace BabyBug.Services
                 };
 
                 await this.DbContext.PaymentTypes.AddAsync(type);
+            }
+
+            await this.DbContext.SaveChangesAsync();
+        }
+
+        public EditTypeModel GetEditTypeModel(string typeName)
+        {
+            ICollection<string> types;
+
+            switch (typeName)
+            {
+                case nameof(ProductType):
+                    types = this.DbContext
+                        .ProductTypes
+                        .Select(x => x.Type)
+                        .ToHashSet();
+                    break;
+                case nameof(PaymentType):
+                    types = this.DbContext
+                        .PaymentTypes
+                        .Select(x => x.Type)
+                        .ToHashSet();
+                    break;
+                case nameof(DeliveryType):
+                    types = this.DbContext
+                        .DeliveryTypes
+                        .Select(x => x.Type)
+                        .ToHashSet();
+                    break;
+                default:
+                    types = new HashSet<string>();
+                    break;
+            }
+
+            var model = new EditTypeModel
+            {
+                Types = types,
+                ClassName = typeName
+            };
+
+            return model;
+        }
+
+        public async Task EditTypeAsync(EditTypeModel model)
+        {
+            switch (model.ClassName)
+            {
+                case nameof(ProductType):
+                    var productType = await this.DbContext
+                        .ProductTypes
+                        .FirstOrDefaultAsync(x => x.Type.Equals(model.OldName));
+
+                    if (!model.NewName.Equals(productType.Type))
+                    {
+                        productType.Type = model.NewName;
+                    }
+                    break;
+
+                case nameof(PaymentType):
+                    var paymentType = await this.DbContext
+                         .PaymentTypes
+                         .FirstOrDefaultAsync(x => x.Type.Equals(model.OldName));
+
+                    if (!model.NewName.Equals(paymentType.Type))
+                    {
+                        paymentType.Type = model.NewName;
+                    }
+                    break;
+
+                case nameof(DeliveryType):
+                    var deliveryType = await this.DbContext
+                        .DeliveryTypes
+                        .FirstOrDefaultAsync(x => x.Type.Equals(model.OldName));
+
+                    if (!model.NewName.Equals(deliveryType.Type))
+                    {
+                        deliveryType.Type = model.NewName;
+                    }
+                    break;
+
+                default:
+                    throw new ArgumentException();
             }
 
             await this.DbContext.SaveChangesAsync();

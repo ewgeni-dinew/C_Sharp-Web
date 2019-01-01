@@ -16,5 +16,9 @@ namespace BabyBug.Services.Contracts
         CreateTypeModel GetCreateTypeModel();
 
         Task CreateTypeAsync(CreateTypeModel model);
+
+        EditTypeModel GetEditTypeModel(string typeName);
+
+        Task EditTypeAsync(EditTypeModel model);
     }
 }

@@ -15,8 +15,8 @@
             <div class="breadcrumbs d-flex flex-row align-items-center">
                 <ul>
                     <li><a asp-controller="Home" asp-action="Index">Home</a></li>
-                    <li><a asp-controller="Categories" asp-action="All"><i class="fa fa-angle-right" aria-hidden="true"></i>Categories</a></li>
-                    <li class="active"><a asp-controller="Categories" asp-action="All"><i class="fa fa-angle-right" aria-hidden="true"></i>{CategoryName}</a></li>
+                    <li><a asp-controller="Categories" asp-action="Index"><i class="fa fa-angle-right" aria-hidden="true"></i>Categories</a></li>
+                    <li class="active"><a asp-controller="Categories" asp-action="Index"><i class="fa fa-angle-right" aria-hidden="true"></i>@Model.CategoryName</a></li>
                 </ul>
             </div>
 
@@ -107,13 +107,13 @@
                     <hr />
                     <div class="quantity d-flex flex-row align-items-center justify-content-center">
                         <div class="col">
-                            <a class="btn btn-success" asp-area="Administrator" asp-controller="Garments" asp-action="Edit" asp-route-id=@Model.Id>Edit</a>
+                            <a class="btn btn-success" asp-area="Administrator" asp-controller="Products" asp-action="Edit" asp-route-id=@Model.Id>Edit</a>
                         </div>
                         <div class="col">
-                            <a class="btn btn-warning" asp-area="Administrator" asp-controller="GarmentSize" asp-action="ManageSizes" asp-route-id=@Model.Id>Manage sizes</a>
+                            <a class="btn btn-warning" asp-area="Administrator" asp-controller="ProductSize" asp-action="ManageSizes" asp-route-id=@Model.Id asp-route-name=@Model.CategoryName>Manage sizes</a>
                         </div>
                         <div class="col">
-                            <a class="btn btn-outline-danger" asp-area="Administrator" asp-controller="Garments" asp-action="Delete" asp-route-id=@Model.Id>Delete</a>
+                            <a class="btn btn-outline-danger" asp-area="Administrator" asp-controller="Products" asp-action="Delete" asp-route-id=@Model.Id>Delete</a>
                         </div>
                     </div>
                 }

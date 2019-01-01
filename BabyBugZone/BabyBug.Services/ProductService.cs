@@ -32,9 +32,15 @@ namespace BabyBug.Services
                 .Select(x => x.Name)
                 .ToHashSet();
 
+            var productTypes = this.DbContext
+                .ProductTypes
+                .Select(x => x.Type)
+                .ToHashSet();
+
             var model = new CreateProductModel
             {
                 CategoryNames = categories,
+                ProductTypes = productTypes
             };
 
             return model;
@@ -43,10 +49,18 @@ namespace BabyBug.Services
         public async Task CreateProductAsync(CreateProductModel model)
         {
             //get category id
-            var categoryId = this.DbContext
+            var category = await this.DbContext
                 .ProductCategories
-                .FirstOrDefault(x => x.Name.Equals(model.CategoryName))
-                .Id;
+                .FirstOrDefaultAsync(x => x.Name.Equals(model.CategoryName));
+
+            var productType = await this.DbContext
+                .ProductTypes
+                .FirstOrDefaultAsync(x => x.Id.Equals(category.ProductTypeId));
+
+            if (!productType.Type.Equals(model.ProductType))
+            {
+                throw new ArgumentException();
+            }
 
             var file = model.Picture;
 
@@ -59,7 +73,7 @@ namespace BabyBug.Services
                 Description = model.Description,
                 Price = model.Price,
                 Gender = model.Gender,
-                CategoryId = categoryId,
+                CategoryId = category.Id,
                 ImageId = uploadResult.PublicId,
                 ImageUrl = BASE_PATH + uploadResult.PublicId,
             };
@@ -77,6 +91,10 @@ namespace BabyBug.Services
             var product = await this.DbContext
                 .Products
                 .FirstOrDefaultAsync(x => x.Id.Equals(id));
+
+            var category = await this.DbContext
+                .ProductCategories
+                .FirstOrDefaultAsync(x => x.Id.Equals(product.CategoryId));
 
             var productSizes = this.DbContext
                 .ProductSpecifications
@@ -97,6 +115,7 @@ namespace BabyBug.Services
             var model = new ProductDetailsModel
             {
                 AvailableSizes = availableSizes,
+                CategoryName = category.Name,
                 Id = product.Id,
                 Name = product.Name,
                 Description = product.Description,

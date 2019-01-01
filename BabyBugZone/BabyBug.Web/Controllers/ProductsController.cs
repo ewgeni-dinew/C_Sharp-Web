@@ -24,7 +24,8 @@ namespace BabyBug.Web.Controllers
 
         public async Task<ActionResult> Details(int id)
         {
-            var model = await this.garmentService.GetDetailsModelAsync(id);
+            var model = await this.garmentService
+                .GetDetailsModelAsync(id);
 
             return View(model);
         }

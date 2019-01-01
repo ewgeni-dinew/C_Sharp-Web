@@ -23,7 +23,8 @@ namespace BabyBug.Web.Areas.Administrator.Controllers
 
         public ActionResult Index()
         {
-            var model = this.managementService.GetAllTypes();
+            var model = this.managementService
+                .GetAllTypes();
 
             return View(model);
         }
@@ -49,30 +50,28 @@ namespace BabyBug.Web.Areas.Administrator.Controllers
 
             return this.RedirectToAction("Index");
         }
-
-        // GET: TypeManagement/Edit/5
-        public ActionResult Edit(int id)
-        {
-            return View();
-        }
-
-        // POST: TypeManagement/Edit/5
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, IFormCollection collection)
-        {
-            try
-            {
-                // TODO: Add update logic here
-
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
-            }
-        }
-
         
+        public ActionResult Edit(string name)
+        {
+            var model = this.managementService
+                .GetEditTypeModel(name);
+
+            return View(model);
+        }
+        
+        [HttpPost]
+        [AutoValidateAntiforgeryToken]
+        public async Task<ActionResult> Edit(EditTypeModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return this.RedirectToAction("Edit");
+            }
+
+            await this.managementService
+                .EditTypeAsync(model);
+
+            return this.RedirectToAction("Index");
+        }        
     }
 }

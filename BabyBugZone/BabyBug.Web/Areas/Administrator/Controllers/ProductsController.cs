@@ -28,7 +28,9 @@ namespace BabyBug.Web.Areas.Administrator.Controllers
 
         public ActionResult Create()
         {
-            var model = this.garmentService.GetProductCreateModel();
+            var model = this.garmentService
+                .GetProductCreateModel();
+
             return View(model);
         }
 
@@ -42,7 +44,8 @@ namespace BabyBug.Web.Areas.Administrator.Controllers
                 return this.View();
             }
 
-            await this.garmentService.CreateProductAsync(model);
+            await this.garmentService
+                .CreateProductAsync(model);
 
             return RedirectToAction("Index", "Home", new { area = "" });
         }

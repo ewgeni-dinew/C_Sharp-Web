@@ -19,20 +19,25 @@ namespace BabyBug.Services
         {
         }
 
-        public ICollection<BaseProductSizeModel> GetAllGarmentSizes()
+        public async Task<ICollection<BaseProductSizeModel>> GetAllGarmentSizesAsync()
         {
-            var garmentsSizes = this.DbContext
+            var productSizes = this.DbContext
                 .ProductSizes
                 .ToHashSet();
 
             var collection = new HashSet<BaseProductSizeModel>();
 
-            foreach (var size in garmentsSizes)
+            foreach (var size in productSizes.OrderBy(x => x.ProductTypeId))
             {
+                var type = await this.DbContext
+                    .ProductTypes
+                    .FirstOrDefaultAsync(x => x.Id.Equals(size.ProductTypeId));
+
                 var model = new BaseProductSizeModel
                 {
                     Id = size.Id,
-                    Name = size.Value
+                    Name = size.Value,
+                    Type = type.Type
                 };
 
                 collection.Add(model);
@@ -123,22 +128,26 @@ namespace BabyBug.Services
                 .FirstOrDefaultAsync(x => x.Id.Equals(id));
         }
 
-        public async Task<ProductManageSizesModel> GetCurrentGarmentSizeDetails(int id)
+        public async Task<ProductManageSizesModel> GetCurrentProductSizeDetails(int productId, string categoryName)
         {
-            //AllGarmentSizes
-            var allGarmentSizes = this.DbContext
+            var category = await this.DbContext
+                .ProductCategories
+                .FirstOrDefaultAsync(x => x.Name.Equals(categoryName));
+
+            var allProductSizes = this.DbContext
                 .ProductSizes
+                .Where(x => x.ProductTypeId.Equals(category.ProductTypeId))
                 .Select(x => x.Value)
                 .ToHashSet();
 
-            var garmentSpecifications = this.DbContext
+            var productSpecifications = this.DbContext
                 .ProductSpecifications
-                .Where(x => x.ProductId.Equals(id))
+                .Where(x => x.ProductId.Equals(productId))
                 .ToList();
 
             var dictionary = new Dictionary<string, uint>();
 
-            foreach (var kvp in garmentSpecifications)
+            foreach (var kvp in productSpecifications)
             {
                 var sizeName = await this.DbContext
                     .ProductSizes
@@ -153,9 +162,10 @@ namespace BabyBug.Services
 
             var model = new ProductManageSizesModel
             {
-                GarmentId = id,
+                GarmentId = productId,
                 CurrentSizes = dictionary,
-                AllGarmentSizes = allGarmentSizes,
+                AllGarmentSizes = allProductSizes,
+                CategoryName = category.Name,
             };
 
             return model;

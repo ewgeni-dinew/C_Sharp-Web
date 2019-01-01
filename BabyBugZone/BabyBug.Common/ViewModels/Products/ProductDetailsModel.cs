@@ -9,6 +9,8 @@ namespace BabyBug.Common.ViewModels.Garments
     {
         public int Id { get; set; }
 
+        public string CategoryName { get; set; }
+
         public string Name { get; set; }
 
         public char Gender { get; set; }
@@ -18,8 +20,6 @@ namespace BabyBug.Common.ViewModels.Garments
         public decimal Price { get; set; }
         
         public string CreatedOn { get; set; }
-        
-        public string CategoryName { get; set; }
 
         public string ImageUrl { get; set; }
 

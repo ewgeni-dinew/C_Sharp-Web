@@ -15,6 +15,8 @@ namespace BabyBug.Common.ViewModels.ProductSize
 
         public string ChoosenSize { get; set; }
 
+        public string CategoryName { get; set; }
+
         [Required]
         [Display(Name = "Sizes")]
         [Range(1, 100)]

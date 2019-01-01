@@ -6,6 +6,14 @@
         color: black
     }
 
+.nav_item_blue {
+    background-color: deepskyblue;
+}
+
+    .nav_item_blue a {
+        color: black
+    }
+
 .btn-select {
     position: relative;
     padding: 0;

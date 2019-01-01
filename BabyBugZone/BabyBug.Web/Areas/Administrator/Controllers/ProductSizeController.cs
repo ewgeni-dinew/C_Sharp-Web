@@ -21,10 +21,10 @@ namespace BabyBug.Web.Areas.Administrator.Controllers
             this.garmentSizeService = garmentSizeService;
         }
 
-        public ActionResult All()
+        public async Task<ActionResult> Index()
         {
-            var model = this.garmentSizeService
-                .GetAllGarmentSizes();
+            var model = await this.garmentSizeService
+                .GetAllGarmentSizesAsync();
 
             return View(model);
         }
@@ -48,7 +48,7 @@ namespace BabyBug.Web.Areas.Administrator.Controllers
 
             await this.garmentSizeService.CreateSizeAsync(model);
 
-            return this.RedirectToAction("All");
+            return this.RedirectToAction("Index");
         }
 
         [HttpPost]
@@ -57,12 +57,13 @@ namespace BabyBug.Web.Areas.Administrator.Controllers
         {
             await this.garmentSizeService.DeleteSizeAsync(id);
 
-            return this.RedirectToAction("All");
+            return this.RedirectToAction("Index");
         }
 
-        public async Task<ActionResult> ManageSizes(int id)
+        public async Task<ActionResult> ManageSizes(int id, string name)
         {
-            var model = await this.garmentSizeService.GetCurrentGarmentSizeDetails(id);
+            var model = await this.garmentSizeService
+                .GetCurrentProductSizeDetails(id, name);
 
             return this.View(model);
         }
@@ -80,7 +81,7 @@ namespace BabyBug.Web.Areas.Administrator.Controllers
         {
             await this.garmentSizeService.EditSizeAsync(model);
 
-            return this.RedirectToAction("All");
+            return this.RedirectToAction("Index");
         }
 
         [HttpPost]

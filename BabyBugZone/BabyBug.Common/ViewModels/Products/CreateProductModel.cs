@@ -31,6 +31,10 @@ namespace BabyBug.Common.ViewModels.Garments
         [Display(Name = "CategoryName")]
         public string CategoryName { get; set; }
 
+        public HashSet<string> ProductTypes { get; set; }
+
+        public string ProductType { get; set; }
+
         [Required]
         [Display(Name = "Price")]
         [DataType(DataType.Currency)]        

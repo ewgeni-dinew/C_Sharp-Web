@@ -36,6 +36,19 @@
                     <input asp-for="Name" type="text" class="form-control" />
                     <span asp-validation-for="Name" class="text-danger"></span>
                 </div>
+                <div class="funkyradio">
+                    @if (Model.ProductTypes.Any())
+                    {
+                        <h5>Choose type:</h5>
+                        foreach (var type in Model.ProductTypes)
+                        {
+                            <div class="funkyradio-danger">
+                                <input asp-for="ProductType" type="radio" value=@type id="@type" />
+                                <label asp-for="ProductType" for="@type">@type</label>
+                            </div>
+                        }
+                    }
+                </div>
                 <div class="form-group">
                     <label class="radio-inline"><input asp-for="Gender" type="radio" value="M">M</label>
                     <label class="radio-inline"><input asp-for="Gender" type="radio" value="F">F</label>
