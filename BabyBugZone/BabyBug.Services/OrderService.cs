@@ -20,9 +20,9 @@ namespace BabyBug.Services
         {
         }
 
-        public async Task OrderGarmentAsync(int id, string userName, ProductDetailsModel model)
+        public async Task OrderProductAsync(int id, string userName, ProductDetailsModel model)
         {
-            var garment = await this.DbContext
+            var product = await this.DbContext
                 .Products
                 .FirstOrDefaultAsync(x => x.Id.Equals(id));
 
@@ -59,16 +59,16 @@ namespace BabyBug.Services
                     .SaveChangesAsync();
                 }
 
-                var orderGarment = new OrderProduct
+                var orderProduct = new OrderProduct
                 {
                     ProductId = id,
-                    Price = garment.Price,
+                    Price = product.Price,
                     Size = model.Size,
                     Quantity = model.Quantity,
                 };
 
                 order.OrderProducts
-                    .Add(orderGarment);
+                    .Add(orderProduct);
             }
             else
             {
@@ -131,7 +131,8 @@ namespace BabyBug.Services
 
             var order = await this.DbContext
                 .Orders
-                .FirstOrDefaultAsync(x => x.UserId.Equals(user.Id) && x.Status.Equals(OrderStatus.Created));
+                .FirstOrDefaultAsync(x => x.UserId.Equals(user.Id)
+                                    && x.Status.Equals(OrderStatus.Created));
 
             var orderedProducts = this.DbContext
                 .OrderProducts
@@ -142,10 +143,17 @@ namespace BabyBug.Services
 
             foreach (var orderProduct in orderedProducts)
             {
-                var garmentName = this.DbContext
+                var product = await this.DbContext
                     .Products
-                    .FirstOrDefault(x => x.Id.Equals(orderProduct.ProductId))
-                    .Name;
+                    .Select(x => new
+                    {
+                        x.Id,
+                        x.Name,
+                        x.CategoryId
+                    })
+                    .FirstOrDefaultAsync(x => x.Id.Equals(orderProduct.ProductId));
+
+                var productType = await this.GetProductTypeAsync(product.CategoryId);
 
                 var temp = new BaseOrderedProductModel
                 {
@@ -154,7 +162,8 @@ namespace BabyBug.Services
                     Price = orderProduct.Price,
                     Size = orderProduct.Size,
                     Quantity = orderProduct.Quantity,
-                    Name = garmentName
+                    Name = product.Name,
+                    ProductType = productType
                 };
 
                 model.Add(temp);
@@ -192,9 +201,17 @@ namespace BabyBug.Services
 
             foreach (var orderProduct in orderedProducts)
             {
-                var garment = await this.DbContext
+                var product = await this.DbContext
                     .Products
+                    .Select(x => new
+                    {
+                        x.Id,
+                        x.Name,
+                        x.CategoryId
+                    })
                     .FirstOrDefaultAsync(x => x.Id.Equals(orderProduct.ProductId));
+
+                var productType = await this.GetProductTypeAsync(product.CategoryId);
 
                 var temp = new BaseOrderedProductModel
                 {
@@ -203,7 +220,8 @@ namespace BabyBug.Services
                     Price = orderProduct.Price,
                     Size = orderProduct.Size,
                     Quantity = orderProduct.Quantity,
-                    Name = garment.Name,
+                    Name = product.Name,
+                    ProductType = productType,
                 };
 
                 productsCollection.Add(temp);
@@ -216,8 +234,8 @@ namespace BabyBug.Services
                 OrderedProducts = productsCollection,
                 PhoneNumber = user.PhoneNumber,
                 Address = order.DeliveryDestination,
-                DeliveryType = order.DeliveryType.ToString(),
-                PaymentType = order.PaymentType.ToString(),
+                DeliveryType = await GetDeliveryTypeName((int)order.DeliveryTypeId),
+                PaymentType = await GetPaymentTypeName((int)order.PaymentTypeId),
                 City = user.City,
                 DeliveryAddress = order.DeliveryDestination,
                 OrderStatus = orderStatus.ToString()
@@ -226,18 +244,36 @@ namespace BabyBug.Services
             return model;
         }
 
+        private async Task<string> GetPaymentTypeName(int paymentTypeId)
+        {
+            var type = await this.DbContext
+               .PaymentTypes
+               .FirstOrDefaultAsync(x => x.Id.Equals(paymentTypeId));
+
+            return type.Type;
+        }
+
+        private async Task<string> GetDeliveryTypeName(int deliveryTypeId)
+        {
+            var type = await this.DbContext
+               .DeliveryTypes
+               .FirstOrDefaultAsync(x => x.Id.Equals(deliveryTypeId));
+
+            return type.Type;
+        }
+
         public async Task RemoveProductFromOrderAsync(int orderId, int productId, string size)
         {
-            var orderGarment = await this.DbContext.OrderProducts
+            var orderProduct = await this.DbContext.OrderProducts
                 .FirstOrDefaultAsync(x => x.OrderId.Equals(orderId) &&
                                     x.ProductId.Equals(productId)
                                     && x.Size.Equals(size));
 
-            if (orderGarment != null)
+            if (orderProduct != null)
             {
                 this.DbContext
                     .OrderProducts
-                    .Remove(orderGarment);
+                    .Remove(orderProduct);
 
                 await this.DbContext
                     .SaveChangesAsync();
@@ -255,6 +291,16 @@ namespace BabyBug.Services
                 .FirstOrDefaultAsync(x => x.UserId.Equals(user.Id)
                                     && x.Status.Equals(OrderStatus.Created));
 
+            var paymentTypes = this.DbContext
+                .PaymentTypes
+                .Select(x => x.Type)
+                .ToHashSet();
+
+            var deliveryTypes = this.DbContext
+                .DeliveryTypes
+                .Select(x => x.Type)
+                .ToHashSet();
+
             var model = new UserDataModel
             {
                 Username = user.UserName,
@@ -263,70 +309,78 @@ namespace BabyBug.Services
                 Telephone = user.PhoneNumber,
                 City = user.City,
                 Address = user.Address,
-                OrderId = order.Id
+                OrderId = order.Id,
+                PaymentTypes = paymentTypes,
+                DeliveryTypes = deliveryTypes,
             };
 
             return model;
         }
 
-        //public async Task SetDeliveryInfoAsync(int orderId, UserDataModel model)
-        //{
-        //    var user = await this.DbContext
-        //        .Users
-        //        .FirstOrDefaultAsync(x => x.UserName.Equals(model.Username));
+        public async Task SetDeliveryInfoAsync(int orderId, UserDataModel model)
+        {
+            var user = await this.DbContext
+                .Users
+                .FirstOrDefaultAsync(x => x.UserName.Equals(model.Username));
 
-        //    var order = await this.DbContext
-        //        .Orders
-        //        .FirstOrDefaultAsync(x => x.UserId.Equals(user.Id)
-        //                            && x.Status.Equals(OrderStatus.Created));
+            var order = await this.DbContext
+                .Orders
+                .FirstOrDefaultAsync(x => x.UserId.Equals(user.Id)
+                                    && x.Status.Equals(OrderStatus.Created));
 
-        //    //update user info
-        //    if (model.FirstName != null)
-        //    {
-        //        user.FirstName = model.FirstName;
-        //    }
-        //    if (model.LastName != null)
-        //    {
-        //        user.LastName = model.LastName;
-        //    }
-        //    if (model.Telephone != null)
-        //    {
-        //        user.PhoneNumber = model.Telephone;
-        //    }
-        //    if (model.City != null)
-        //    {
-        //        user.City = model.City;
-        //    }
-        //    if (model.Address != null)
-        //    {
-        //        user.Address = model.Address;
-        //    }
-        //    await this.DbContext.SaveChangesAsync();
+            //update user info
+            if (!model.FirstName.Equals(user.FirstName))
+            {
+                user.FirstName = model.FirstName;
+            }
+            if (!model.LastName.Equals(user.LastName))
+            {
+                user.LastName = model.LastName;
+            }
+            if (!model.Telephone.Equals(user.PhoneNumber))
+            {
+                user.PhoneNumber = model.Telephone;
+            }
+            if (!model.City.Equals(user.City))
+            {
+                user.City = model.City;
+            }
+            if (!model.Address.Equals(user.Address))
+            {
+                user.Address = model.Address;
+            }
 
-        //    //set payment type
-        //    var paymentType = Enum.Parse<PaymentType>(model.PaymentType);
+            await this.DbContext
+                .SaveChangesAsync();
 
-        //    order.PaymentType = paymentType;
+            //set payment type
+            var paymentType = await this.DbContext
+                .PaymentTypes
+                .FirstOrDefaultAsync(x => x.Type.Equals(model.PaymentType));
 
-        //    //set delivery type
-        //    var deliveryType = Enum.Parse<DeliveryType>(model.DeliveryType);
+            order.PaymentTypeId = paymentType.Id;
 
-        //    order.DeliveryType = deliveryType;
+            //set delivery type
+            var deliveryType = await this.DbContext
+                .DeliveryTypes
+                .FirstOrDefaultAsync(x => x.Type.Equals(model.DeliveryType));
 
-        //    if (deliveryType.Equals(DeliveryType.EcontToAddress) ||
-        //       deliveryType.Equals(DeliveryType.SpeedyToAddress))
-        //    {
-        //        order.DeliveryDestination = user.Address;
-        //    }
-        //    else
-        //    {
-        //        order.DeliveryDestination = model.DeliveryDestination;
-        //    }
+            order.DeliveryTypeId = deliveryType.Id;
 
-        //    order.Status = OrderStatus.Awaiting;
+            if (!deliveryType.Type.Contains("Office"))
+            {
+                order.DeliveryDestination = user.Address;
+            }
+            else
+            {
+                order.DeliveryDestination = model.DeliveryDestination;
+            }
 
-        //    await this.DbContext.SaveChangesAsync();
-        //}
+            order.Status = OrderStatus.Awaiting;
+
+            await this.DbContext
+                .SaveChangesAsync();
+        }
 
         public async Task ApproveOrderAsync(int id)
         {
@@ -339,7 +393,7 @@ namespace BabyBug.Services
             await this.DbContext.SaveChangesAsync();
         }
 
-        public async Task SetOrderDate(int id)
+        public async Task SetOrderDateAsync(int id)
         {
             var order = await this.DbContext
                 .Orders
@@ -363,7 +417,31 @@ namespace BabyBug.Services
                 .Orders
                 .Remove(order);
 
-            await this.DbContext.SaveChangesAsync();
+            await this.DbContext
+                .SaveChangesAsync();
+        }
+
+        private async Task<string> GetProductTypeAsync(int categoryId)
+        {
+            var category = await this.DbContext
+                    .ProductCategories
+                    .Select(x => new
+                    {
+                        x.Id,
+                        x.ProductTypeId
+                    })
+                    .FirstOrDefaultAsync(x => x.Id.Equals(categoryId));
+
+            var productType = await this.DbContext
+                .ProductTypes
+                .Select(x => new
+                {
+                    x.Id,
+                    x.Type,
+                })
+                .FirstOrDefaultAsync(x => x.Id.Equals(category.ProductTypeId));
+
+            return productType.Type;
         }
     }
 }

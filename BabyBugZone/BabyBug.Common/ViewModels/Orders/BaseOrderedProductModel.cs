@@ -17,5 +17,7 @@ namespace BabyBug.Common.ViewModels.Orders
         public uint Quantity { get; set; }
 
         public decimal Price { get; set; }
+
+        public string ProductType { get; set; }
     }
 }

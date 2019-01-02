@@ -54,7 +54,7 @@
                     <span class="ti-truck"></span><span>safe delivery</span>
                 </div>
                 <div class="original_price">$629.99</div>
-                <div class="product_price"><span style="color:black">Price: </span> @Model.Price</div>
+                <div class="product_price"><span style="color:black">Price: </span> $@Model.Price</div>
                 <ul class="star_rating">
                     <li><i class="fa fa-star" aria-hidden="true"></i></li>
                     <li><i class="fa fa-star" aria-hidden="true"></i></li>
@@ -62,61 +62,7 @@
                     <li><i class="fa fa-star" aria-hidden="true"></i></li>
                     <li><i class="fa fa-star-o" aria-hidden="true"></i></li>
                 </ul>
-
-                <form id="orderForm" method="post" asp-controller="Orders" asp-action="Order" asp-route-id=@Model.Id>
-                    <div class="quantity d-flex flex-column flex-sm-row align-items-sm-center">
-                        <span>Quantity:</span>
-                        <div class="quantity_selector">
-                            <div class="center">
-                                <div class="input-group">
-                                    <span class="input-group-btn">
-                                        <button type="button" class="btn btn-number" disabled="disabled" data-type="minus" data-field="quant[1]">
-                                            <span class="glyphicon glyphicon-minus">-</span>
-                                        </button>
-                                    </span>
-                                    <input asp-for="@Model.Quantity" type="text" id="quant[1]" class="form-control input-number" value="1" />
-                                    <span class="input-group-btn">
-                                        <button type="button" class="btn btn-default btn-number" data-type="plus" data-field="quant[1]">
-                                            <span class="glyphicon glyphicon-plus">+</span>
-                                        </button>
-                                    </span>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="product_favorite d-flex flex-column align-items-center justify-content-center"></div>
-                    </div>
-                    <div class="quantity d-flex flex-column flex-sm-row align-items-sm-center">
-                        <span>Size:</span>
-                        <div class="quantity_selector">
-                            <select asp-for=@Model.Size class="form-control" id="exampleFormControlSelect1">
-                                @foreach (var size in Model.AvailableSizes)
-                                {
-                                    <option value=@size>@size</option>
-                                }
-                            </select>
-                        </div>
-                    </div>
-
-                    <div class="quantity d-flex flex-column flex-sm-row align-items-sm-center">
-                        <div class="red_button add_to_cart_button"><a href="javascript:{}" onclick="document.getElementById('orderForm').submit();">add to cart</a></div>
-
-                    </div>
-                </form>
-                @if (User.IsInRole("Admin"))
-                {
-                    <hr />
-                    <div class="quantity d-flex flex-row align-items-center justify-content-center">
-                        <div class="col">
-                            <a class="btn btn-success" asp-area="Administrator" asp-controller="Products" asp-action="Edit" asp-route-id=@Model.Id>Edit</a>
-                        </div>
-                        <div class="col">
-                            <a class="btn btn-warning" asp-area="Administrator" asp-controller="ProductSize" asp-action="ManageSizes" asp-route-id=@Model.Id asp-route-name=@Model.CategoryName>Manage sizes</a>
-                        </div>
-                        <div class="col">
-                            <a class="btn btn-outline-danger" asp-area="Administrator" asp-controller="Products" asp-action="Delete" asp-route-id=@Model.Id>Delete</a>
-                        </div>
-                    </div>
-                }
+                <partial name="_OrderProductFormPartial" model=@Model />
             </div>
         </div>
     </div>
@@ -133,7 +79,10 @@
                 <div class="tabs_container">
                     <ul class="tabs d-flex flex-sm-row flex-column align-items-left align-items-md-center justify-content-center">
                         <li class="tab active" data-active-tab="tab_1"><span>Description</span></li>
-                        <li class="tab" data-active-tab="tab_2"><span>Additional Information</span></li>
+                        @if (User.IsInRole("Admin"))
+                        {
+                            <li class="tab" data-active-tab="tab_2"><span>Administrator Panel</span></li>
+                        }
                         <li class="tab" data-active-tab="tab_3"><span>Reviews (2)</span></li>
                     </ul>
                 </div>
@@ -141,6 +90,28 @@
         </div>
         <div class="row">
             <div class="col">
+
+                <!-- Tab Description -->
+
+                <div id="tab_1" class="tab_container active">
+                    <div class="row">
+                        <div class="col-lg-5 desc_col">
+                            <div class="tab_title">
+                                <h4>Description</h4>
+                            </div>
+                            <div class="tab_text_block">
+                                <h2>@Model.Name</h2>
+                                <p>@Model.Description</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                @if (User.IsInRole("Admin"))
+                {
+                    <!-- Tab Administrator panel -->
+                    <partial name="_ProductAdminPanelPartial" />
+                }
 
                 <!-- Tab Reviews -->
 

@@ -12,7 +12,7 @@ namespace BabyBug.Services.Contracts
     {
         BabyBugDbContext DbContext { get; set; }
 
-        Task OrderGarmentAsync(int id, string userName, ProductDetailsModel model);
+        Task OrderProductAsync(int id, string userName, ProductDetailsModel model);
 
         Task<ICollection<OrderViewModel>> GetAwaitingOrdersAsync();
 
@@ -28,11 +28,11 @@ namespace BabyBug.Services.Contracts
 
         Task<UserDataModel> GetUserDataModelAsync(string username);
 
-        //Task SetDeliveryInfoAsync(int orderId, UserDataModel model);
+        Task SetDeliveryInfoAsync(int orderId, UserDataModel model);
 
         Task ApproveOrderAsync(int id);
 
-        Task SetOrderDate(int id);
+        Task SetOrderDateAsync(int id);
 
         Task RemoveOrderAsync(int id);
     }

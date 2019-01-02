@@ -40,6 +40,14 @@ namespace BabyBugZone.Data
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
+            builder.Entity<DeliveryType>()
+                .Property(x => x.Type)
+                .IsRequired(false);
+
+            builder.Entity<PaymentType>()
+                .Property(x => x.Type)
+                .IsRequired(false);
+
             builder.Entity<ProductType>()
                 .HasMany(x => x.Categories)
                 .WithOne(c => c.ProductType)
@@ -70,12 +78,14 @@ namespace BabyBugZone.Data
             builder.Entity<Order>()
                 .HasOne(x => x.DeliveryType)
                 .WithMany(c => c.Orders)
-                .HasForeignKey(x => x.DeliveryTypeId);
+                .HasForeignKey(x => x.DeliveryTypeId)
+                .IsRequired(false);
 
             builder.Entity<Order>()
                 .HasOne(x => x.PaymentType)
                 .WithMany(c => c.Orders)
-                .HasForeignKey(x => x.PaymentTypeId);
+                .HasForeignKey(x => x.PaymentTypeId)
+                .IsRequired(false);
 
             builder.Entity<OrderProduct>()
                 .HasKey(x => new { x.ProductId, x.OrderId });

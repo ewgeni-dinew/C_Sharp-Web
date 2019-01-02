@@ -224,8 +224,8 @@ namespace BabyBug.Data.Migrations
                     MadeOn_Date = table.Column<DateTime>(nullable: false),
                     UserId = table.Column<string>(nullable: true),
                     Status = table.Column<int>(nullable: false),
-                    PaymentTypeId = table.Column<int>(nullable: false),
-                    DeliveryTypeId = table.Column<int>(nullable: false),
+                    PaymentTypeId = table.Column<int>(nullable: true),
+                    DeliveryTypeId = table.Column<int>(nullable: true),
                     DeliveryDestination = table.Column<string>(nullable: true)
                 },
                 constraints: table =>

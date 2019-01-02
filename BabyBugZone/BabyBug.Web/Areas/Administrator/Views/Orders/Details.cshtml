@@ -29,6 +29,7 @@
                 <tr>
                     <th scope="col">#</th>
                     <th scope="col">Product name</th>
+                    <th scope="col">Type</th>
                     <th scope="col">Size</th>
                     <th scope="col">Quantity</th>
                     <th scope="col">Price</th>
@@ -39,7 +40,8 @@
             {
                 <tr>
                     <th scope="row">@index</th>
-                    <td><a asp-controller="Garments" asp-action="Details" asp-route-id=@product.ProductId>@product.Name</a></td>
+                    <td><a asp-controller="Products" asp-action="Details" asp-route-id=@product.ProductId>@product.Name</a></td>
+                    <td>@product.ProductType</td>
                     <td>@product.Size</td>
                     <td>@product.Quantity</td>
                     <td>@product.Price</td>
@@ -113,7 +115,9 @@
                 <a class="btn btn-primary" asp-area="Administrator" asp-controller="Orders" asp-action="Awaiting">Back</a>
             </div>
             <div class="col-sm-3 ">
-                <a class="btn btn-success" asp-area="Administrator" asp-controller="Orders" asp-action="Approve" asp-route-id=@Model.OrderId>Approve</a>
+                <form method="post" asp-area="Administrator" asp-controller="Orders" asp-action="Approve" asp-route-id=@Model.OrderId>
+                    <input class="btn btn-success" type="submit" value="Approve" />
+                </form>
             </div>
         }
         else

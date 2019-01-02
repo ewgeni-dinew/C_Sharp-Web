@@ -19,7 +19,7 @@ namespace BabyBug.Services
         {
         }
 
-        public async Task<ICollection<BaseProductSizeModel>> GetAllGarmentSizesAsync()
+        public async Task<ICollection<BaseProductSizeModel>> GetAllProductSizesAsync()
         {
             var productSizes = this.DbContext
                 .ProductSizes
@@ -162,69 +162,72 @@ namespace BabyBug.Services
 
             var model = new ProductManageSizesModel
             {
-                GarmentId = productId,
+                ProductId = productId,
                 CurrentSizes = dictionary,
-                AllGarmentSizes = allProductSizes,
+                AllProductSizes = allProductSizes,
                 CategoryName = category.Name,
             };
 
             return model;
         }
 
-        public async Task AddQuantityToGarmentAsync(int id, ProductManageSizesModel model)
+        public async Task AddQuantityToProductAsync(int id, ProductManageSizesModel model)
         {
-            var garment = await this.DbContext
+            var product = await this.DbContext
                 .Products
                 .FirstOrDefaultAsync(x => x.Id.Equals(id));
 
-            var garmentSize = await this.DbContext
+            var productSize = await this.DbContext
                 .ProductSizes
                 .FirstOrDefaultAsync(x => x.Value.Equals(model.ChoosenSize));
 
             var specification = await this.DbContext
                 .ProductSpecifications
-                .FirstOrDefaultAsync(x => x.ProductId.Equals(garment.Id)
-                    && x.ProductSizeId.Equals(garmentSize.Id));
+                .FirstOrDefaultAsync(x => x.ProductId.Equals(product.Id)
+                    && x.ProductSizeId.Equals(productSize.Id));
 
             if (specification == null)
             {
                 specification = new ProductSpecification
                 {
-                    ProductId = garment.Id,
-                    ProductSizeId = garmentSize.Id,
+                    ProductId = product.Id,
+                    ProductSizeId = productSize.Id,
                     Quantity = model.InputQuantity
                 };
 
-                garment.Specifications.Add(specification);
+                product.Specifications.Add(specification);
             }
             else
             {
                 specification.Quantity += model.InputQuantity;
             }
-            await this.DbContext.SaveChangesAsync();
+
+            await this.DbContext
+                .SaveChangesAsync();
         }
 
-        public async Task RemoveQuantityFromGarmentAsync(int id, ProductManageSizesModel model)
+        public async Task RemoveQuantityFromProductAsync(int id, ProductManageSizesModel model)
         {
-            var garment = await this.DbContext
+            var product = await this.DbContext
                 .Products
                 .FirstOrDefaultAsync(x => x.Id.Equals(id));
 
-            var garmentSize = await this.DbContext
+            var productSize = await this.DbContext
                 .ProductSizes
                 .FirstOrDefaultAsync(x => x.Value.Equals(model.ChoosenSize));
 
             var specification = await this.DbContext
                 .ProductSpecifications
-                .FirstOrDefaultAsync(x => x.ProductId.Equals(garment.Id)
-                    && x.ProductSizeId.Equals(garmentSize.Id));
+                .FirstOrDefaultAsync(x => x.ProductId.Equals(product.Id)
+                    && x.ProductSizeId.Equals(productSize.Id));
 
             if (specification != null
                 && model.InputQuantity <= specification.Quantity)
             {
                 specification.Quantity -= model.InputQuantity;
 
-                await this.DbContext.SaveChangesAsync();
+                await this.DbContext
+                    .SaveChangesAsync();
             }
         }
     }

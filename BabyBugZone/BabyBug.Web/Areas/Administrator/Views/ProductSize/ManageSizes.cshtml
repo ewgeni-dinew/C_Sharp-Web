@@ -2,7 +2,7 @@
 @addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
 
 @{
-    ViewData["Title"] = "ManageSizes";
+    ViewData["Title"] = "Manage Sizes";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
@@ -16,7 +16,7 @@
                 <ul>
                     <li><a asp-controller="Home" asp-action="Index">Home</a></li>
                     <li><a asp-area="Administrator" asp-controller="ProductSize" asp-action="Index"><i class="fa fa-angle-right" aria-hidden="true"></i>Product Size</a></li>
-                    <li class="active"><a asp-area="Administrator" asp-controller="ProductSize" asp-action="ManageSizes" asp-route-id=@Model.GarmentId asp-route-name=@Model.CategoryName><i class="fa fa-angle-right" aria-hidden="true"></i>Manage</a></li>
+                    <li class="active"><a asp-area="Administrator" asp-controller="ProductSize" asp-action="ManageSizes" asp-route-id=@Model.ProductId asp-route-name=@Model.CategoryName><i class="fa fa-angle-right" aria-hidden="true"></i>Manage</a></li>
                 </ul>
             </div>
 
@@ -61,7 +61,7 @@
                     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                     <div class="form-group">
                         <select asp-for=@Model.ChoosenSize class="form-control">
-                            @foreach (var c in Model.AllGarmentSizes)
+                            @foreach (var c in Model.AllProductSizes)
                             {
                                 <option value=@c>@c</option>
                             }
@@ -76,10 +76,10 @@
                     <div class="form-group">
                         <div class="row">
                             <div class="col">
-                                <input asp-area="Administrator" asp-controller="ProductSize" asp-action="AddSizes" asp-route-id=@Model.GarmentId type="submit" value="Add" class="btn btn-primary" />
+                                <input asp-area="Administrator" asp-controller="ProductSize" asp-action="AddSizes" asp-route-id=@Model.ProductId type="submit" value="Add" class="btn btn-primary" />
                             </div>
                             <div class=" col">
-                                <input asp-area="Administrator" asp-controller="ProductSize" asp-action="RemoveSizes" asp-route-id=@Model.GarmentId type="submit" value="Remove" class="btn btn-danger" />
+                                <input asp-area="Administrator" asp-controller="ProductSize" asp-action="RemoveSizes" asp-route-id=@Model.ProductId type="submit" value="Remove" class="btn btn-danger" />
                             </div>
                         </div>
                     </div>

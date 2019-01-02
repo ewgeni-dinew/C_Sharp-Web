@@ -7,11 +7,11 @@ namespace BabyBug.Common.ViewModels.ProductSize
 {
     public class ProductManageSizesModel
     {
-        public int GarmentId { get; set; }
+        public int ProductId { get; set; }
 
         public IDictionary<string, uint> CurrentSizes { get; set; }
 
-        public HashSet<string> AllGarmentSizes { get; set; }
+        public HashSet<string> AllProductSizes { get; set; }
 
         public string ChoosenSize { get; set; }
 

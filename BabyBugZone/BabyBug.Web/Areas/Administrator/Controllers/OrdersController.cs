@@ -21,28 +21,32 @@ namespace BabyBug.Web.Areas.Administrator.Controllers
 
         public async Task<ActionResult> Awaiting()
         {
-            var model = await this.ordersService.GetAwaitingOrdersAsync();
+            var model = await this.ordersService
+                .GetAwaitingOrdersAsync();
 
             return View(model);
         }
 
         public async Task<ActionResult> Approved()
         {
-            var model = await this.ordersService.GetApprovedOrdersAsync();
+            var model = await this.ordersService
+                .GetApprovedOrdersAsync();
 
             return View(model);
         }
 
         public async Task<ActionResult> DetailsAwaiting(int id)
         {
-            var model = await this.ordersService.GetAwaitingOrderedProductsAdminAsync(id);
+            var model = await this.ordersService
+                .GetAwaitingOrderedProductsAdminAsync(id);
 
             return this.View("Details", model);
         }
 
         public async Task<ActionResult> DetailsApproved(int id)
         {
-            var model = await this.ordersService.GetApprovedOrderedProductsAdminAsync(id);
+            var model = await this.ordersService
+                .GetApprovedOrderedProductsAdminAsync(id);
 
             return this.View("Details", model);
         }
@@ -51,7 +55,8 @@ namespace BabyBug.Web.Areas.Administrator.Controllers
         [AutoValidateAntiforgeryToken]
         public async Task<ActionResult> Approve(int id)
         {
-            await this.ordersService.ApproveOrderAsync(id);
+            await this.ordersService
+                .ApproveOrderAsync(id);
 
             return this.RedirectToAction("Awaiting", "Orders");
         }
@@ -60,7 +65,8 @@ namespace BabyBug.Web.Areas.Administrator.Controllers
         [AutoValidateAntiforgeryToken]
         public async Task<ActionResult> RemoveOrder(int id)
         {
-            await this.ordersService.RemoveOrderAsync(id);
+            await this.ordersService
+                .RemoveOrderAsync(id);
 
             return this.RedirectToAction("Awaiting", "Orders");
         }

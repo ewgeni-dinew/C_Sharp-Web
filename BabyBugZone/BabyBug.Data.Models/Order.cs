@@ -28,11 +28,11 @@ namespace BabyBug.Data.Models
 
         public PaymentType PaymentType { get; set; }
 
-        public int PaymentTypeId { get; set; }
+        public int? PaymentTypeId { get; set; }
 
         public DeliveryType DeliveryType { get; set; }
 
-        public int DeliveryTypeId { get; set; }
+        public int? DeliveryTypeId { get; set; }
 
         public string DeliveryDestination { get; set; }
 

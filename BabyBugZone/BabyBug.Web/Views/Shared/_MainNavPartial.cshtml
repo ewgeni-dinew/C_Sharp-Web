@@ -19,7 +19,7 @@
                         @*<li><a href="#"><i class="fa fa-search" aria-hidden="true"></i></a></li>*@
                         <li><a asp-area="Identity" asp-page="/Account/Manage/Index"><i class="fa fa-user" aria-hidden="true"></i></a></li>
                         <li class="checkout">
-                            <a asp-controller="Orders" asp-action="MyOrders">
+                            <a asp-area="User" asp-controller="Orders" asp-action="MyOrders">
                                 <i class="fa fa-shopping-cart" aria-hidden="true"></i>
                                 <span id="checkout_items" class="checkout_items">2</span>
                             </a>
