@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace BabyBug.Services
 {
-    public class HomeService : BaseCloudinaryService, IHomeService
+    public class HomeService : BaseDbService, IHomeService
     {
         public HomeService(BabyBugDbContext DbContext)
             : base(DbContext)

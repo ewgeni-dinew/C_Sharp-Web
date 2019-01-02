@@ -1,0 +1,20 @@
+﻿<div id="tab_2" class="tab_container">
+    <div class="row">
+        <div class="col additional_info_col">
+            <div class="tab_title additional_info_title">
+                <h4>Management</h4>
+            </div>
+            <div class="quantity d-flex flex-row align-items-center justify-content-center">
+                <div class="col">
+                    <a class="btn btn-success" asp-area="Administrator" asp-controller="Products" asp-action="Edit" asp-route-id=@Model.Id>Edit</a>
+                </div>
+                <div class="col">
+                    <a class="btn btn-warning" asp-area="Administrator" asp-controller="ProductSize" asp-action="ManageSizes" asp-route-id=@Model.Id asp-route-name=@Model.CategoryName>Manage sizes</a>
+                </div>
+                <div class="col">
+                    <a class="btn btn-outline-danger" asp-area="Administrator" asp-controller="Products" asp-action="Delete" asp-route-id=@Model.Id>Delete</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

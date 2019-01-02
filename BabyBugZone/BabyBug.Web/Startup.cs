@@ -75,6 +75,7 @@ namespace BabyBug.Web
             services.AddScoped<IBlogService, BlogService>();
             services.AddScoped<IHomeService, HomeService>();
             services.AddScoped<ITypeManagementService, TypeManagementService>();
+            services.AddScoped<IProductCatalogService, ProductCatalogService>();
 
             services
                 .AddMvc(options =>

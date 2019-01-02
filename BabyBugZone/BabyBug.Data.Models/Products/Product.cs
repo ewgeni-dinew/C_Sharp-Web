@@ -35,6 +35,8 @@ namespace BabyBug.Data.Models.Products
 
         public int CategoryId { get; set; }
 
+        public int? TypeId { get; set; }
+
         [DataType(DataType.Currency)]
         [Column(TypeName = "decimal(18,2)")]
         public decimal Price { get; set; }

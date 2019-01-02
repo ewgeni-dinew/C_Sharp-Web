@@ -8,23 +8,20 @@ using System.Text;
 
 namespace BabyBug.Services
 {
-    public abstract class BaseCloudinaryService
+    public abstract class BaseCloudinaryService : BaseDbService
     {
         protected const string BASE_PATH = @"https://res.cloudinary.com/dm6qsz74d/image/upload/v1545506271/";
 
         protected BaseCloudinaryService(BabyBugDbContext DbContext)
+            : base(DbContext)
         {
             this.Account = new Account(
                 "dm6qsz74d",
                 "468634173751356",
                 "M-LBxFKAP9qqhMzNd8Sgsx5RxE8");
 
-            this.Cloudinary = new Cloudinary(this.Account);
-
-            this.DbContext = DbContext;
+            this.Cloudinary = new Cloudinary(this.Account);            
         }
-
-        public BabyBugDbContext DbContext { get; set; }
 
         public Account Account { get; set; }
 

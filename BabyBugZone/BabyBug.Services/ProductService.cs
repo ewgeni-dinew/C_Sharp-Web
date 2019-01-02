@@ -76,6 +76,7 @@ namespace BabyBug.Services
                 CategoryId = category.Id,
                 ImageId = uploadResult.PublicId,
                 ImageUrl = BASE_PATH + uploadResult.PublicId,
+                TypeId = category.ProductTypeId
             };
 
             //add garment to DB

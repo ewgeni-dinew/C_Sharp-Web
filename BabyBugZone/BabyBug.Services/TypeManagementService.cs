@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace BabyBug.Services
 {
-    public class TypeManagementService : BaseCloudinaryService, ITypeManagementService
+    public class TypeManagementService : BaseDbService, ITypeManagementService
     {
         public TypeManagementService(BabyBugDbContext DbContext)
             : base(DbContext)

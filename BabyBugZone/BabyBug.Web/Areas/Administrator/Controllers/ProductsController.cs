@@ -14,11 +14,11 @@ namespace BabyBug.Web.Areas.Administrator.Controllers
     [Authorize(Roles = "Admin")]
     public class ProductsController : Controller
     {
-        private readonly IProductService garmentService;
+        private readonly IProductService productService;
 
         public ProductsController(IProductService garmentService)
         {
-            this.garmentService = garmentService;
+            this.productService = garmentService;
         }
 
         public ActionResult Index()
@@ -28,7 +28,7 @@ namespace BabyBug.Web.Areas.Administrator.Controllers
 
         public ActionResult Create()
         {
-            var model = this.garmentService
+            var model = this.productService
                 .GetProductCreateModel();
 
             return View(model);
@@ -44,7 +44,7 @@ namespace BabyBug.Web.Areas.Administrator.Controllers
                 return this.View();
             }
 
-            await this.garmentService
+            await this.productService
                 .CreateProductAsync(model);
 
             return RedirectToAction("Index", "Home", new { area = "" });
@@ -52,7 +52,7 @@ namespace BabyBug.Web.Areas.Administrator.Controllers
 
         public async Task<ActionResult> Edit(int id)
         {
-            var model = await this.garmentService.GetEditModelAsync(id);
+            var model = await this.productService.GetEditModelAsync(id);
 
             return View(model);
         }
@@ -66,14 +66,14 @@ namespace BabyBug.Web.Areas.Administrator.Controllers
                 return this.View();
             }
 
-            await this.garmentService.EditProductAsync(id, model);
+            await this.productService.EditProductAsync(id, model);
 
             return RedirectToAction("Index", "Home", new { area = "" });
         }
 
         public async Task<ActionResult> Delete(int id)
         {
-            var model = await this.garmentService.GetDeleteModelAsync(id);
+            var model = await this.productService.GetDeleteModelAsync(id);
 
             return View(model);
         }
@@ -87,7 +87,7 @@ namespace BabyBug.Web.Areas.Administrator.Controllers
                 return this.View();
             }
 
-            await this.garmentService.DeleteProductAsync(model.Id);
+            await this.productService.DeleteProductAsync(model.Id);
 
             return RedirectToAction("Index", "Home", new { area = "" });
         }
