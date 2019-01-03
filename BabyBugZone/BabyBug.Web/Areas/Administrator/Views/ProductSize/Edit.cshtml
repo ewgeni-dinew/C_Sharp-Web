@@ -6,6 +6,11 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
+@section Styles{
+    <link rel="stylesheet" type="text/css" href="~/css/single_styles.css">
+    <link rel="stylesheet" type="text/css" href="~/css/single_responsive.css">
+}
+
 <div class="container single_product_container">
     <div class="row">
         <div class="col">
@@ -31,7 +36,7 @@
             <form method="post" asp-area="Administrator" asp-controller="ProductSize" asp-action="Edit">
                 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                 <div class="form-group">
-                    <input type="hidden" asp-for="Id" value="@Model.Id"/>
+                    <input type="hidden" asp-for="Id" value="@Model.Id" />
                     <label asp-for="Name" class="control-label"></label>
                     <input asp-for="Name" class="form-control" />
                     <p>*input values should be separated by ; , (space)</p>

@@ -12,6 +12,8 @@ namespace BabyBug.Services.Contracts
 
         Task<HomeCatalogModel> GetHomeModelByTypeAsync(string type);
 
-        Task<HomeCatalogModel> GetHomeModelByCategory(string name);
+        Task<HomeCatalogModel> GetHomeModelByCategoryAsync(string name);
+
+        Task<HomeCatalogModel> GetHomeModelByCriteriaAsync(FilterProductsModel model);
     }
 }

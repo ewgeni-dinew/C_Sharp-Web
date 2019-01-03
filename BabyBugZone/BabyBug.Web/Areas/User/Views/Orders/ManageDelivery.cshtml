@@ -6,6 +6,11 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
+@section Styles{
+    <link rel="stylesheet" type="text/css" href="~/css/single_styles.css">
+    <link rel="stylesheet" type="text/css" href="~/css/single_responsive.css">
+}
+
 <div class="container single_product_container">
     <div class="row">
         <div class="col">
@@ -66,7 +71,7 @@
                         @foreach (var paymentType in Model.PaymentTypes)
                         {
                             <div class="funkyradio-danger">
-                                <input asp-for="PaymentType" type="radio" value=@paymentType id="radio1"/>
+                                <input asp-for="PaymentType" type="radio" value=@paymentType id="radio1" />
                                 <label asp-for="PaymentType" for="radio1">@paymentType</label>
                             </div>
                         }
@@ -79,7 +84,7 @@
                                 <input asp-for="DeliveryType" type="radio" value=@deliveryType id=@deliveryType onclick="javascript:deliveryOfficeCheck();" />
                                 <label asp-for="DeliveryType" for=@deliveryType>@deliveryType</label>
                             </div>
-                        }                        
+                        }
                     </div>
                     <div class="form-group" id="officeName" style="display:none">
                         <label asp-for="DeliveryDestination" class="control-label">Input office name:</label>

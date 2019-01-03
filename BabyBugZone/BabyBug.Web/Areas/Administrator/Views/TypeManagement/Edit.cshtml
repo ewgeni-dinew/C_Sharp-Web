@@ -6,6 +6,10 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
+@section Styles{
+    <link rel="stylesheet" type="text/css" href="~/css/single_styles.css">
+    <link rel="stylesheet" type="text/css" href="~/css/single_responsive.css">
+}
 <div class="container single_product_container">
     <div class="row">
         <div class="col">
@@ -30,9 +34,9 @@
         <div class="col-md-6">
             <form method="post" asp-area="Administrator" asp-controller="TypeManagement" asp-action="Edit">
                 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-                <input asp-for=@Model.ClassName type="hidden" value=@Model.ClassName/>
+                <input asp-for=@Model.ClassName type="hidden" value=@Model.ClassName />
                 <div class="form-group">
-                     <select asp-for=@Model.OldName class="form-control">
+                    <select asp-for=@Model.OldName class="form-control">
                         <option>--Select type--</option>
                         @foreach (var c in Model.Types)
                         {
@@ -44,7 +48,7 @@
                     <label asp-for=@Model.NewName class="control-label"></label>
                     <input asp-for=@Model.NewName class="form-control" placeholder=@Model.OldName />
                     <span asp-validation-for=@Model.NewName class="text-danger"></span>
-                </div>                
+                </div>
                 <div class="form-group">
                     <input type="submit" value="Save" class="btn btn-primary" />
                 </div>

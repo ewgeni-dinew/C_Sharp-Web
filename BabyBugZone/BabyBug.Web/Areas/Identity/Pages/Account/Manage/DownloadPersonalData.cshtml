@@ -2,11 +2,18 @@
 @model DownloadPersonalDataModel
 @{
     ViewData["Title"] = "Download Your Data";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
     ViewData["ActivePage"] = ManageNavPages.PersonalData;
 }
 
+@section Styles{
+    <link rel="stylesheet" type="text/css" href="~/css/single_styles.css">
+    <link rel="stylesheet" type="text/css" href="~/css/single_responsive.css">
+}
 <div class="container single_product_container">
     <h4>@ViewData["Title"]</h4>
+
 </div>
 
 @section Scripts {

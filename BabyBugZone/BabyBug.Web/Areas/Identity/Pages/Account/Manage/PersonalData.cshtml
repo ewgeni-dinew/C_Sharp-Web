@@ -2,13 +2,22 @@
 @model PersonalDataModel
 @{
     ViewData["Title"] = "Personal Data";
+
     ViewData["ActivePage"] = ManageNavPages.PersonalData;
+}
+
+@section Styles{
+    <link rel="stylesheet" type="text/css" href="~/css/single_styles.css">
+    <link rel="stylesheet" type="text/css" href="~/css/single_responsive.css">
 }
 
 <div class="container single_product_container">
     <h4>@ViewData["Title"]</h4>
 
     <div class="row">
+        <div class="col-md-3">
+            <partial name="_ManageNav" />
+        </div>
         <div class="col-md-6">
             <p>Your account contains personal data that you have given us. This page allows you to download or delete that data.</p>
             <p>

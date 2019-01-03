@@ -21,14 +21,15 @@
                 </ul>
             </li>
             <li class="menu_item has-children">
-                <a href="#">
+                <partial name="_LoginPartial"/>
+                @*<a href="#">
                     My Account
                     <i class="fa fa-angle-down"></i>
                 </a>
                 <ul class="menu_selection">
                     <li><a href="#"><i class="fa fa-sign-in" aria-hidden="true"></i>Sign In</a></li>
                     <li><a href="#"><i class="fa fa-user-plus" aria-hidden="true"></i>Register</a></li>
-                </ul>
+                </ul>*@
             </li>
             @if (User.IsInRole("Admin"))
             {
@@ -48,9 +49,9 @@
                 </li>
             }
             <li class="menu_item"><a asp-controller="Home" asp-action="Index">home</a></li>
-            <li class="menu_item"><a asp-controller="Categories" asp-action="Index">categories</a></li>
+            <li class="menu_item"><a asp-area="Shopping" asp-controller="Categories" asp-action="Index">categories</a></li>
+            <li class="menu_item"><a asp-area="Shopping" asp-controller="Products" asp-action="Index">shop</a></li>
             <li class="menu_item"><a href="#">promotion</a></li>
-            <li class="menu_item"><a href="#">shop</a></li>
             <li class="menu_item"><a asp-controller="Blog" asp-action="Index">blog</a></li>
             <li class="menu_item"><a href="#">contact</a></li>
         </ul>

@@ -13,5 +13,9 @@ namespace BabyBug.Common.ViewModels.ProductCatalog
         public int StartPrice { get; set; }
 
         public int EndPrice { get; set; }
+
+        public string CategoryName { get; set; }
+
+        public string ProductType { get; set; }
     }
 }
