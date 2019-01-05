@@ -1,0 +1,18 @@
+﻿@model BabyBug.Common.ViewModels.Garments.ProductDetailsModel
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+
+<div class="product_details_title">
+    <h2>@Model.Name</h2>
+    <p>@Model.Description</p>
+</div>
+<div class="free_delivery d-flex flex-row align-items-center justify-content-center">
+    <span class="ti-truck"></span><span>safe delivery</span>
+</div>
+<div class="product_price"><span style="color:black">Price: </span> $@Model.Price</div>
+<ul class="star_rating">
+    <li><i class="fa fa-star" aria-hidden="true"></i></li>
+    <li><i class="fa fa-star" aria-hidden="true"></i></li>
+    <li><i class="fa fa-star" aria-hidden="true"></i></li>
+    <li><i class="fa fa-star" aria-hidden="true"></i></li>
+    <li><i class="fa fa-star-o" aria-hidden="true"></i></li>
+</ul>

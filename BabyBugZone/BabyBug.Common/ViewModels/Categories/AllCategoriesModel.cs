@@ -6,10 +6,6 @@ namespace BabyBug.Common.ViewModels.Categories
 {
     public class AllCategoriesModel
     {
-        public ICollection<BaseCategoryModel> GarmentCategories { get; set; }
-
-        public ICollection<BaseCategoryModel> ShoeCategories { get; set; }
-
-        public ICollection<BaseCategoryModel> AccessoryCategories { get; set; }
+        public ICollection<CategoryIndexModel> AllCategories { get; set; }
     }
 }

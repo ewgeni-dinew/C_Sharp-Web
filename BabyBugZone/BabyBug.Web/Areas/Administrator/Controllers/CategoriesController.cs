@@ -34,6 +34,7 @@ namespace BabyBug.Web.Areas.Administrator.Controllers
         [AutoValidateAntiforgeryToken]
         public async Task<ActionResult> Create(CreateCategoryModel model)
         {
+            
             if (!this.ModelState.IsValid)
             {
                 return this.View();

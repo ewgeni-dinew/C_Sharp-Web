@@ -1,0 +1,29 @@
+﻿@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+
+<div class="banner">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-4">
+                <div class="banner_item align-items-center" style="background-image:url(/images/little-boy-image.jpg)">
+                    <div class="banner_category">
+                        <a asp-area="Shopping" asp-controller="Products" asp-action="FilterByGender" asp-route-gender="M">Boy's</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="banner_item align-items-center" style="background-image:url(/images/accessories.jpg)">
+                    <div class="banner_category">
+                        <a asp-area="Shopping" asp-controller="Products" asp-action="FilterByType" asp-route-type="accessory">accessories</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="banner_item align-items-center" style="background-image:url(/images/little-girl-image.jpg)">
+                    <div class="banner_category">
+                        <a asp-area="Shopping" asp-controller="Products" asp-action="FilterByGender" asp-route-gender="F">Girl's</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,4 +1,4 @@
-﻿@model int
+﻿@model string
 @addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
 
 @{
@@ -28,11 +28,5 @@
         </div>
     </div>
 
-    <h2 class="pt-5">Thank you for your order!</h2>
-    <hr />
-    <h3>We will contact you as soon as possible.</h3>
-    <h4>Your order number is: @Model. </h4>
-    <p>Please do not hesitate to contact us, if any questions arise.</p>
-    <hr />
-    <a class="btn btn-primary" asp-controller="Home" asp-action="Index">Back to Home</a>
+    <partial name="_FinishedOrderPartial" model=Model/>
 </div>

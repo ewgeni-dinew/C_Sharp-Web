@@ -20,7 +20,9 @@ namespace BabyBug.Web.Controllers
 
         public async Task<ActionResult> Index()
         {
-            var model = await this.homeService.GetIndexModelAsync();
+            var model = await this.homeService
+                .GetIndexModelAsync();
+
             return View(model);
         }
 

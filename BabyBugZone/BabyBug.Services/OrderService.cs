@@ -393,7 +393,7 @@ namespace BabyBug.Services
             await this.DbContext.SaveChangesAsync();
         }
 
-        public async Task SetOrderDateAsync(int id)
+        public async Task<string> SetOrderDateAsync(int id)
         {
             var order = await this.DbContext
                 .Orders
@@ -404,6 +404,8 @@ namespace BabyBug.Services
 
             await this.DbContext
                 .SaveChangesAsync();
+
+            return String.Format($"XF1:+{id:D6}");
         }
 
         public async Task RemoveOrderAsync(int id)

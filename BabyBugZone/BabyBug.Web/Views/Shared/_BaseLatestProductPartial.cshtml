@@ -1,0 +1,17 @@
+﻿@model BabyBug.Common.ViewModels.Home.BaseLatestProductModel
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+
+<div class="product product_filter">
+    <div class="product_image">
+        <img src=@Model.ImageUrl alt="">
+    </div>
+    <div class="favorite"></div>
+    <div class="product_bubble product_bubble_left product_bubble_green d-flex flex-column align-items-center"><span>new</span></div>
+    <div class="product_info">
+        <h6 class="product_name">
+            <a asp-area="Shopping" asp-controller="Products" asp-action="Details" asp-route-id=@Model.Id>@Model.Name</a>
+        </h6>
+        <div class="product_price">$@Model.Price</div>
+    </div>
+</div>
+<div class="red_button add_to_cart_button"><a asp-area="Shopping" asp-controller="Products" asp-action="Details" asp-route-id=@Model.Id>Details</a></div>

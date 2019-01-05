@@ -19,7 +19,7 @@
             <div class="breadcrumbs d-flex flex-row align-items-center">
                 <ul>
                     <li><a asp-controller="Home" asp-action="Index">Home</a></li>
-                    <li><a><i class="fa fa-angle-right" aria-hidden="true"></i>Manage Types</a></li>
+                    <li><a asp-area="Administrator" asp-controller="TypeManagement" asp-action="Index"><i class="fa fa-angle-right" aria-hidden="true"></i>Manage Types</a></li>
                     <li class="active"><a asp-area="Administrator" asp-controller="TypeManagement" asp-action="Edit" asp-route-name="@Model.ClassName"><i class="fa fa-angle-right" aria-hidden="true"></i>Edit</a></li>
                 </ul>
             </div>

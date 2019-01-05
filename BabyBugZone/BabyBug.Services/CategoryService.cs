@@ -26,44 +26,52 @@ namespace BabyBug.Services
         {
         }
 
-        public async Task<AllCategoriesModel> GetAllProductCategories()
+        public AllCategoriesModel GetAllProductCategories()
         {
-            var categories = this.DbContext
-                .ProductCategories
-                .ToList();
-
-            var model = new AllCategoriesModel
+            var model = new AllCategoriesModel()
             {
-                GarmentCategories = new HashSet<BaseCategoryModel>(),
-                ShoeCategories = new HashSet<BaseCategoryModel>(),
-                AccessoryCategories = new HashSet<BaseCategoryModel>(),
+                AllCategories = new HashSet<CategoryIndexModel>(),
             };
 
-            foreach (var category in categories)
+            var productTypes = this.DbContext
+                .ProductTypes
+                .ToHashSet();
+
+            foreach (var type in productTypes)
             {
-                var productType = await this.DbContext
-                    .ProductTypes
-                    .FirstOrDefaultAsync(x => x.Id.Equals(category.ProductTypeId));
+                var categories = this.DbContext
+                    .ProductCategories
+                    .Where(x => x.ProductTypeId.Equals(type.Id))
+                    .ToHashSet();
 
-                var baseModel = new BaseCategoryModel()
+                foreach (var category in categories)
                 {
-                    Name = category.Name,
-                    Id = category.Id,
-                    ImageUrl = category.ImageUrl
-                };
+                    var baseModel = new BaseCategoryModel()
+                    {
+                        Name = category.Name,
+                        Id = category.Id,
+                        ImageUrl = category.ImageUrl
+                    };
 
-                switch (productType.Type)
-                {
-                    case "Accessory":
-                        model.AccessoryCategories.Add(baseModel);
-                        break;
-                    case "Shoe":
-                        model.ShoeCategories.Add(baseModel);
-                        break;
-                    case "Garment":
-                        model.GarmentCategories.Add(baseModel);
-                        break;
-                    default: throw new NotImplementedException();
+                    if (!model.AllCategories.Any(x => x.TypeName.Equals(type.Type)))
+                    {
+                        var allCategoriesModel = new CategoryIndexModel
+                        {
+                            TypeName = type.Type,
+                            SubCategories = new HashSet<BaseCategoryModel>(),
+                        };
+
+                        allCategoriesModel.SubCategories.Add(baseModel);
+
+                        model.AllCategories.Add(allCategoriesModel);
+                    }
+                    else
+                    {
+                        model.AllCategories
+                            .FirstOrDefault(x => x.TypeName.Equals(type.Type))
+                            .SubCategories
+                            .Add(baseModel);
+                    }
                 }
             }
 

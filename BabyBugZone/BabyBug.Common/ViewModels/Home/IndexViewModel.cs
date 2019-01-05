@@ -8,5 +8,7 @@ namespace BabyBug.Common.ViewModels.Home
     public class IndexViewModel
     {
         public ICollection<HomePageBlogModel> BlogPages { get; set; }
+
+        public ICollection<BaseLatestProductModel> LatestProducts { get; set; }
     }
 }

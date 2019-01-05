@@ -7,8 +7,8 @@
 }
 
 @section Styles {
-    <link rel="stylesheet" type="text/css" href="~/css/main_styles.css">
-    <link rel="stylesheet" type="text/css" href="~/css/responsive.css">
+    <link rel="stylesheet" type="text/css" href="~/css/single_styles.css">
+    <link rel="stylesheet" type="text/css" href="~/css/single_responsive.css">
 }
 
 <div class="container single_product_container">
@@ -38,11 +38,11 @@
     {
         <div class="row">
             <div class="col-md-3">
-                <a class="btn btn-success" asp-area="Administrator" asp-controller="Blog" asp-action="Edit" asp-route-id=@Model.Id>Edit page</a>
+                <a class="btn btn-primary" asp-area="Administrator" asp-controller="Blog" asp-action="Edit" asp-route-id=@Model.Id>Edit page</a>
             </div>
             <div class="col-md-3">
                 <form method="post" asp-area="Administrator" asp-controller="Blog" asp-action="Delete" asp-route-id=@Model.Id>
-                    <input type="submit" value="Delete" class="btn btn-outline-danger" />
+                    <input type="submit" value="Delete" class="btn btn-danger" />
                 </form>
             </div>
         </div>

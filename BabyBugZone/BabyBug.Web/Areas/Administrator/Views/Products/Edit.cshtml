@@ -54,7 +54,7 @@
                     @if (Model.Gender.Equals("M"))
                     {
                         <label class="radio-inline"><input asp-for="Gender" type="radio" value="M" checked>M</label>
-                        <label class="radio-inline"><input asp-for="Gender" type="radio" value="F">F</label>
+                        <label class="radio-inline"><input asp-for="Gender" type="radio" value="F">Girl's</label>
                     }
                     else
                     {
@@ -65,7 +65,7 @@
                 </div>
                 <div class="form-group">
                     <label asp-for="Description" class="control-label">Description</label>
-                    <input asp-for="Description" type="text" class="form-control" placeholder=@Model.Description />
+                    <textarea asp-for="Description" rows="12" class="form-control" placeholder=@Model.Description></textarea>
                     <span asp-validation-for="Description" class="text-danger"></span>
                 </div>
                 <div class="form-group">

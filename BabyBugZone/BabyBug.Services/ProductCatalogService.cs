@@ -15,6 +15,7 @@ namespace BabyBug.Services
     {
         private const int CURRENT_START_PAGE = 1;
         private const int PRODUCTS_PER_PAGE_COUNT = 1;
+        private const string GENDER_VALUE = "";
 
         //private const int PAGE_ITEMS_MAXCOUNT = 3;
 
@@ -25,14 +26,33 @@ namespace BabyBug.Services
 
         public async Task<HomeCatalogModel> GetHomeViewModelAsync()
         {
-            return await this.GetHomeModelByTypeAsync("Garment");
+            return await this.GetHomeModelByTypeAsync("Garment", GENDER_VALUE);
         }
 
-        public async Task<HomeCatalogModel> GetHomeModelByTypeAsync(string typeName)
+        public async Task<HomeCatalogModel> GetHomeModelByGenderAsync(string gender)
         {
+            return await this.GetHomeModelByTypeAsync("Garment", gender);
+        }
+
+        public async Task<HomeCatalogModel> GetHomeModelByTypeAsync(string type)
+        {
+            return await this.GetHomeModelByTypeAsync(type, "");
+        }
+
+        public async Task<HomeCatalogModel> GetHomeModelByTypeAsync(string typeName, string gender)
+        {
+            IEnumerable<BaseProductModel> products;
+
             var type = await this.GetProductTypeByNameAsync(typeName);
 
-            var products = await this.GetProductsByTypeAsync(typeName);
+            if (gender.Equals(string.Empty))
+            {
+                products = await this.GetProductsByTypeAsync(typeName);
+            }
+            else
+            {
+                products = this.GetProductsByGenderAsync(gender);
+            }
 
             var model = new HomeCatalogModel()
             {
@@ -44,14 +64,14 @@ namespace BabyBug.Services
                 FilterModel = new FilterProductsModel
                 {
                     Sizes = this.GetFilterSizesByType(type.Id),
-                    Gender = string.Empty
+                    Gender = gender
                 },
                 PaginationModel = this.GetPaginationModel(products, CURRENT_START_PAGE)
             };
 
             return model;
         }
-
+        
         public async Task<HomeCatalogModel> SetPaginationModelAsync(int pageIndex, HomeCatalogModel model)
         {
             var homeModel = await this.GetHomeModelByCriteriaAsync(model);
@@ -166,7 +186,7 @@ namespace BabyBug.Services
             IEnumerable<BaseProductModel> products;
 
             int startPrice = 0;
-            int endPrice = 0;
+            int endPrice = int.MaxValue;
 
             if (model.PriceRange != null)
             {
@@ -228,6 +248,22 @@ namespace BabyBug.Services
             await this.DbContext.SaveChangesAsync();
 
             return products;
+        }
+
+        private IEnumerable<BaseProductModel> GetProductsByGenderAsync(string gender)
+        {
+            return this.DbContext
+                .Products
+                .Where(x => x.Gender.ToString().Equals(gender))
+                .Select(x => new BaseProductModel
+                {
+                    Id = x.Id,
+                    Name = x.Name,
+                    ImageUrl = x.ImageUrl,
+                    Price = x.Price,
+                    Gender = x.Gender.ToString(),
+                })
+                .ToHashSet();
         }
 
         private async Task<IEnumerable<BaseProductModel>> GetProductsByTypeAsync(string productTypeName)
@@ -314,6 +350,6 @@ namespace BabyBug.Services
 
             return list;
         }
-
+        
     }
 }

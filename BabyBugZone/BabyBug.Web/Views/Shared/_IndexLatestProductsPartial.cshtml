@@ -1,0 +1,25 @@
+﻿@model ICollection<BabyBug.Common.ViewModels.Home.BaseLatestProductModel>
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+
+@foreach (var product in Model)
+{
+    if (product.Gender.Equals("M"))
+    {
+        <div class="product-item men">
+            <partial name="_BaseLatestProductPartial" model=@product/>
+        </div>
+    }
+    else if (product.Gender.Equals("F"))
+    {
+        <div class="product-item women">
+            <partial name="_BaseLatestProductPartial" model=@product />
+        </div>
+    }
+    else if (product.ProductType.Equals("Accessory"))
+    {
+        <div class="product-item accessories">
+            <partial name="_BaseLatestProductPartial" model=@product />
+        </div>
+    }
+}
+

@@ -30,19 +30,30 @@ namespace BabyBug.Web.Areas.Administrator.Controllers
         [AutoValidateAntiforgeryToken]
         public async Task<ActionResult> Create(CreatePageModel model)
         {
-            if (!ModelState.IsValid)
+            try
             {
-                return this.View();
+                if (!ModelState.IsValid)
+                {
+                    return this.View();
+                }
+
+                await this.blogService
+                    .CreateBlogPageAsync(model);
+
+                return this.RedirectToAction("Index", "Blog");
             }
+            catch (Exception)
+            {
 
-            await this.blogService.CreateBlogPageAsync(model);
-
-            return this.RedirectToAction("Index", "Blog");
+                throw;
+            }
+            
         }
 
         public async Task<ActionResult> Edit(int id)
         {
-            var model = await this.blogService.GetEditPageModelByIdAsync(id);
+            var model = await this.blogService
+                .GetEditPageModelByIdAsync(id);
 
             return View(model);
         }
@@ -51,24 +62,42 @@ namespace BabyBug.Web.Areas.Administrator.Controllers
         [AutoValidateAntiforgeryToken]
         public async Task<ActionResult> Edit(int id, PageEditModel model)
         {
-            if (!ModelState.IsValid)
+            try
             {
-                return this.RedirectToAction("Edit", "Blog", new { id });
+                if (!ModelState.IsValid)
+                {
+                    return this.RedirectToAction("Edit", "Blog", new { id });
+                }
+
+                await this.blogService.EditBlogPageAsync(id, model);
+
+                return this.RedirectToAction("Index", "Home");
             }
+            catch (Exception)
+            {
 
-            await this.blogService.EditBlogPageAsync(id, model);
-
-            return this.RedirectToAction("Index", "Home");
+                throw;
+            }
+           
         }
         
         [HttpPost]
         [AutoValidateAntiforgeryToken]
         public async Task<ActionResult> Delete(int id)
         {
-            await this.blogService
-                .DeleteBlogAsync(id);
+            try
+            {
+                await this.blogService
+                        .DeleteBlogAsync(id);
 
-            return this.RedirectToAction("Index", "Home");
+                return this.RedirectToAction("Index", "Home");
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+            
         }
     }
 }

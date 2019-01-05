@@ -1,0 +1,68 @@
+﻿@model BabyBug.Common.ViewModels.Orders.UserDataModel
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+
+<form method="post" asp-area="User" asp-controller="Orders" asp-action="ManageDelivery" asp-route-id=@Model.OrderId>
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    <input asp-for="Username" type="hidden" placeholder=@Model.Username />
+    <div class="col">
+        <div class="row">
+            <div class="col form-group">
+                <label asp-for="FirstName" class="control-label"></label>
+                <input asp-for="FirstName" class="form-control" placeholder=@Model.FirstName />
+                <span asp-validation-for="FirstName" class="text-danger"></span>
+            </div>
+            <div class="col form-group">
+                <label asp-for="LastName" class="control-label"></label>
+                <input asp-for="LastName" class="form-control" placeholder=@Model.LastName />
+                <span asp-validation-for="LastName" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="form-group">
+            <label asp-for="Telephone" class="control-label"></label>
+            <input asp-for="Telephone" class="form-control" placeholder=@Model.Telephone />
+            <span asp-validation-for="Telephone" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="City" class="control-label"></label>
+            <input asp-for="City" class="form-control" placeholder=@Model.City />
+            <span asp-validation-for="City" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="Address" class="control-label"></label>
+            <input asp-for="Address" class="form-control" placeholder=@Model.Address />
+            <span asp-validation-for="Address" class="text-danger"></span>
+        </div>
+    </div>
+    <hr class="mt-5" />
+    <div class="col">
+        <div class="funkyradio">
+            <h5>Choose payment type:</h5>
+            @foreach (var paymentType in Model.PaymentTypes)
+            {
+                <div class="funkyradio-danger">
+                    <input asp-for="PaymentType" type="radio" value=@paymentType id="radio1" />
+                    <label asp-for="PaymentType" for="radio1">@paymentType</label>
+                </div>
+            }
+        </div>
+        <div class="funkyradio">
+            <h5>Choose delivery type:</h5>
+            @foreach (var deliveryType in Model.DeliveryTypes)
+            {
+                <div class="funkyradio-danger">
+                    <input asp-for="DeliveryType" type="radio" value=@deliveryType id=@deliveryType onclick="javascript:deliveryOfficeCheck();" />
+                    <label asp-for="DeliveryType" for=@deliveryType>@deliveryType</label>
+                </div>
+            }
+        </div>
+        <div class="form-group" id="officeName" style="display:none">
+            <label asp-for="DeliveryDestination" class="control-label">Input office name:</label>
+            <input asp-for="DeliveryDestination" class="form-control" />
+            <span asp-validation-for="DeliveryDestination" class="text-danger"></span>
+        </div>
+    </div>
+    <hr />
+    <div class="form-group">
+        <input type="submit" value="Finish Order" class="btn btn-primary" />
+    </div>
+</form>

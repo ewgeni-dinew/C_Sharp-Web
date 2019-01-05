@@ -1,0 +1,32 @@
+﻿@model BabyBug.Common.ViewModels.Categories.AllCategoriesModel
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+
+@foreach (var category in Model.AllCategories)
+{
+    <h5>@category.TypeName</h5>
+    <hr />
+    <div class="row">
+        @foreach (var subCategory in category.SubCategories)
+        {
+            <div class="col-md-4 col-sm-6 mb-5">
+                <div class="banner_item align-items-center" style="background-image:url(@subCategory.ImageUrl)">
+                    <div class="banner_category">
+                        <a asp-area="Shopping" asp-controller="Products" asp-action="FilterByCategory" asp-route-name=@subCategory.Name>@subCategory.Name</a>
+                    </div>
+                </div>
+                @if (User.IsInRole("Admin"))
+                {
+                    <div class="row">
+                        <div class="col">
+                            <a class="btn btn-outline-primary" asp-area="Administrator" asp-controller="Categories" asp-action="Edit" asp-route-id=@subCategory.Id>Edit</a>
+                        </div>
+                        <div class="col">
+                            <a class="btn btn-outline-danger" asp-area="Administrator" asp-controller="Categories" asp-action="Delete" asp-route-id=@subCategory.Id>Delete</a>
+                        </div>
+                    </div>
+                }
+            </div>
+        }
+    </div>
+
+}

@@ -65,5 +65,12 @@ namespace BabyBug.Web.Areas.Shopping.Controllers
 
             return this.View("Index", homeModel);
         }
+
+        public async Task<ActionResult> FilterByGender(string gender)
+        {
+            var model = await this.catalogService.GetHomeModelByGenderAsync(gender);
+
+            return this.View("Index", model);
+        }
     }
 }

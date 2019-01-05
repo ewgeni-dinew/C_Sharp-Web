@@ -27,90 +27,9 @@
         </div>
     </div>
 
-    @if (Model.OrderedProducts.Any())
-    {
-        <table class="table table-striped">
-            <thead>
-                <tr>
-                    <th scope="col">#</th>
-                    <th scope="col">Product name</th>
-                    <th scope="col">Type</th>
-                    <th scope="col">Size</th>
-                    <th scope="col">Quantity</th>
-                    <th scope="col">Price</th>
-                </tr>
-            </thead>
-            @{ var index = 1; }
-            @foreach (var product in Model.OrderedProducts)
-            {
-                <tr>
-                    <th scope="row">@index</th>
-                    <td><a asp-area="Shopping" asp-controller="Products" asp-action="Details" asp-route-id=@product.ProductId>@product.Name</a></td>
-                    <td>@product.ProductType</td>
-                    <td>@product.Size</td>
-                    <td>@product.Quantity</td>
-                    <td>@product.Price</td>
-                </tr>
-                index++;
-            }
+    <partial name="_OrderDetailsTablePartial"/>
 
-        </table>
-    }
-    <hr />
-    <div class="row">
-        <div class="col">
-            <dl class="row">
-                <dt class="col-sm-4">
-                    @Html.DisplayNameFor(model => model.UserFullName)
-                </dt>
-                <dd class="col-sm-8">
-                    @Html.DisplayFor(model => model.UserFullName)
-                </dd>
-                <dt class="col-sm-4">
-                    @Html.DisplayNameFor(model => model.PhoneNumber)
-                </dt>
-                <dd class="col-sm-8">
-                    @Html.DisplayFor(model => model.PhoneNumber)
-                </dd>
-                <dt class="col-sm-4">
-                    @Html.DisplayNameFor(model => model.City)
-                </dt>
-                <dd class="col-sm-8">
-                    @Html.DisplayFor(model => model.City)
-                </dd>
-                <dt class="col-sm-4">
-                    @Html.DisplayNameFor(model => model.Address)
-                </dt>
-                <dd class="col-sm-8">
-                    @Html.DisplayFor(model => model.Address)
-                </dd>
-            </dl>
-        </div>
-        <div class="col">
-            <dl class="row">
-                <dt class="col-sm-4">
-                    @Html.DisplayNameFor(model => model.PaymentType)
-                </dt>
-                <dd class="col-sm-8">
-                    @Html.DisplayFor(model => model.PaymentType)
-                </dd>
-                <dt class="col-sm-4">
-                    @Html.DisplayNameFor(model => model.DeliveryType)
-                </dt>
-                <dd class="col-sm-8">
-                    @Html.DisplayFor(model => model.DeliveryType)
-                </dd>
-                <dt class="col-sm-4">
-                    @Html.DisplayNameFor(model => model.DeliveryAddress)
-                </dt>
-                <dd class="col-sm-8">
-                    @Html.DisplayFor(model => model.DeliveryAddress)
-                </dd>
-                <dt class="col-sm-4">Total price:</dt>
-                <dd class="col-sm-8">@Model.OrderedProducts.Sum(x => x.Price * x.Quantity)</dd>
-            </dl>
-        </div>
-    </div>
+    <partial name="_OrderDetailsInfoPartial" model=@Model/>
     <hr />
     <div class="row">
 

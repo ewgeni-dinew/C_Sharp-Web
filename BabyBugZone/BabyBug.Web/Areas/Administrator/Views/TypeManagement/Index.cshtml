@@ -28,24 +28,7 @@
         </div>
     </div>
 
-    @if (Model.ProductTypes.Any())
-    {
-        <h5>Product types:</h5>
-        <partial name="_TypeTablePartial" model="@Model.ProductTypes" />
-        <a class="btn btn-success" asp-area="Administrator" asp-controller="TypeManagement" asp-action="Edit" asp-route-name="@Model.ProductTypeName">Edit</a>
-    }
-    @if (Model.PaymentTypes.Any())
-    {
-        <h5 class="pt-5">Payment types:</h5>
-        <partial name="_TypeTablePartial" model="@Model.PaymentTypes" />
-        <a class="btn btn-success" asp-area="Administrator" asp-controller="TypeManagement" asp-action="Edit" asp-route-name="@Model.PaymentTypeName">Edit</a>
-    }
-    @if (Model.DeliveryTypes.Any())
-    {
-        <h5 class="pt-5">Delivery types:</h5>
-        <partial name="_TypeTablePartial" model="@Model.DeliveryTypes" />
-        <a class="btn btn-success" asp-area="Administrator" asp-controller="TypeManagement" asp-action="Edit" asp-route-name="@Model.DeliveryTypeName">Edit</a>
-    }
+    <partial name="_TypeIndexTablePartial" model=@Model/>
     <hr />
     <div class="row">
         <a class="btn btn-primary" asp-area="Administrator" asp-controller="TypeManagement" asp-action="Create">Create</a>

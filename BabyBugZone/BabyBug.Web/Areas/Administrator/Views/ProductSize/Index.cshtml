@@ -55,7 +55,9 @@
                         <a class="btn btn-success" asp-area="Administrator" asp-controller="ProductSize" asp-action="Edit" asp-route-id=@size.Id>Edit</a>
                     </td>
                     <td>
-                        <a class="btn btn-outline-danger" asp-area="Administrator" asp-controller="ProductSize" asp-action="Delete" asp-route-id=@size.Id>Delete</a>
+                        <form method="post" asp-area="Administrator" asp-controller="ProductSize" asp-action="Delete" asp-route-id=@size.Id>
+                            <input type="submit" class="btn btn-outline-danger" value="Delete"/>
+                        </form>
                     </td>
                 </tr>
                 index++;
