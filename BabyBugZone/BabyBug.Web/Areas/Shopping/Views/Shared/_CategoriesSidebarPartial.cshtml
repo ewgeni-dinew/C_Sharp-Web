@@ -1,0 +1,28 @@
+﻿@model BabyBug.Common.ViewModels.ProductCatalog.HomeCatalogModel
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+
+<div class="sidebar_section sidebar-bottom">
+    <div class="sidebar_title">
+        <h5>Categories</h5>
+    </div>
+    <ul class="sidebar_categories">
+        @foreach (var category in Model.CategoryNames)
+        {
+            if (category.Equals(Model.CategoryName))
+            {
+                <li class="active">
+                    <a asp-area="Shopping" asp-controller="Products" asp-action="FilterByCategory" asp-route-name=@category><span><i class="fa fa-angle-double-right" aria-hidden="true"></i></span>@category</a>
+                </li>
+            }
+            else
+            {
+                <li>
+                    <a asp-area="Shopping" asp-controller="Products" asp-action="FilterByCategory" asp-route-name=@category>@category</a>
+                </li>
+            }
+        }
+    </ul>
+    <div class="show_more">
+        <span><span>+</span>Show More</span>
+    </div>
+</div>

@@ -1,4 +1,4 @@
-@charset "utf-8";
+﻿@charset "utf-8";
 /* CSS Document */
 
 /******************************
@@ -1160,8 +1160,13 @@ section
 {
 	padding-bottom: 35px;
 	margin-bottom: 50px;
-	border-bottom: solid 1px #ebebeb;
+	border-bottom: solid 1px lightgrey;
 }
+
+.sidebar-bottom {
+    border-bottom: 2.5px solid black;
+}
+
 .sidebar_title h5
 {
 	font-size: 18px;

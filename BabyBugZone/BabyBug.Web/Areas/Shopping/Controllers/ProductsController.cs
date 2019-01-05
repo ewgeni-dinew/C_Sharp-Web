@@ -38,9 +38,11 @@ namespace BabyBug.Web.Areas.Shopping.Controllers
             return View(model);
         }
 
-        public ActionResult IndexFilter(HomeCatalogModel model)
+        public ActionResult IndexPage(int pageIndex, HomeCatalogModel model)
         {
-            return View("Index", model);
+            var homeModel = this.catalogService.SetPaginationModel(pageIndex, model);
+
+            return this.View("Index", homeModel);
         }
 
         public async Task<ActionResult> FilterByType(string type)
@@ -57,11 +59,11 @@ namespace BabyBug.Web.Areas.Shopping.Controllers
             return this.View("Index", model);
         }
 
-        public async Task<ActionResult> FilterByCriteria(FilterProductsModel model)
+        public async Task<ActionResult> FilterByCriteria(HomeCatalogModel model)
         {
             var homeModel = await this.catalogService.GetHomeModelByCriteriaAsync(model);
 
-            return this.RedirectToAction("IndexFilter", "Products", new { area = "Shopping", model });
+            return this.View("Index", homeModel);
         }
     }
 }

@@ -20,7 +20,7 @@
     <link rel="stylesheet" type="text/css" href="~/plugins/OwlCarousel2-2.2.1/owl.carousel.css">
     <link rel="stylesheet" type="text/css" href="~/plugins/OwlCarousel2-2.2.1/owl.theme.default.css">
     <link rel="stylesheet" type="text/css" href="~/plugins/OwlCarousel2-2.2.1/animate.css">
-    @RenderSection("Styles", false);
+    @RenderSection("Styles", false)
     <link rel="stylesheet" type="text/css" href="~/css/site.css">
 </head>
 <body>
@@ -43,9 +43,9 @@
         <partial name="_HamburgerManuPartial" />
 
         <div>
-            <partial name="_CookieConsentPartial" />
             <main role="main" class="pb-3">
                 @RenderBody()
+                <partial name="_CookieConsentPartial" />
             </main>
         </div>
 

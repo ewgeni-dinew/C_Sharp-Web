@@ -1,0 +1,66 @@
+﻿@model BabyBug.Common.ViewModels.ProductCatalog.HomeCatalogModel
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+
+<!-- Gender -->
+<div class="sidebar_section">
+    <div class="sidebar_title">
+        <h5>Gender</h5>
+    </div>
+    @if (Model.FilterModel.Gender.Equals("M"))
+    {
+        <label class="radio-inline pr-2"><input asp-for=@Model.FilterModel.Gender type="radio" value="M" checked="checked">Boy's</label>
+
+    }
+    else if (Model.FilterModel.Gender.Equals("F"))
+    {
+        <label class="radio-inline"><input asp-for=@Model.FilterModel.Gender type="radio" value="F" checked="checked">Girl's</label>
+    }
+    else
+    {
+        <label class="radio-inline pr-2"><input asp-for=@Model.FilterModel.Gender type="radio" value="M" >Boy's</label>
+        <label class="radio-inline"><input asp-for=@Model.FilterModel.Gender type="radio" value="F" >Girl's</label>
+    }
+</div>
+
+<!-- Sizes -->
+<div class="sidebar_section">
+    <div class="sidebar_title">
+        <h5>Sizes</h5>
+    </div>
+
+    <ul class="checkboxes">
+        @foreach (var size in Model.FilterModel.Sizes)
+        {
+            <li><i class="fa fa-square-o" aria-hidden="true"></i><span>@size</span></li>
+        }
+    </ul>
+
+</div>
+
+<!-- Price -->
+<div class="sidebar_section">
+    <div class="sidebar_title">
+        <h5>Filter by Price</h5>
+    </div>
+    <p>
+        <input asp-for=@Model.FilterModel.PriceRange type="text" id="amount" readonly style="border:0; color:#f6931f; font-weight:bold;">
+    </p>
+    <div id="slider-range"></div>
+</div>
+
+@section Scripts{
+    <script type="text/javascript">
+        function getCheckedValues() {
+            
+            //var selected = new Array();
+
+            $(document).ready(function () {
+
+                $("input:checkbox[name=type]:checked").each(function () {
+                    selected.push($(this).val());
+                });
+
+            });
+        }
+    </script>
+}

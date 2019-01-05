@@ -5,12 +5,15 @@
     ViewData["Title"] = "All";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
-@section Styles{
+
+@section Styles {
     <link rel="stylesheet" type="text/css" href="~/css/main_styles.css">
     <link rel="stylesheet" type="text/css" href="~/css/responsive.css">
+
     <link rel="stylesheet" type="text/css" href="~/css/single_styles.css">
     <link rel="stylesheet" type="text/css" href="~/css/single_responsive.css">
 }
+
 <div class="container single_product_container">
     <div class="row">
         <div class="col">
@@ -28,7 +31,7 @@
     </div>
 
     <!-- Banner -->
-    <div class="banner">
+    <div class="banner mt-0">
         <div class="container">
             <h5>Garments</h5>
             <hr />
@@ -38,7 +41,7 @@
                     <div class="col-md-4 col-sm-6 mb-5">
                         <div class="banner_item align-items-center" style="background-image:url(@category.ImageUrl)">
                             <div class="banner_category">
-                                <a href="categories.html">@category.Name</a>
+                                <a asp-area="Shopping" asp-controller="Products" asp-action="FilterByCategory" asp-route-name=@category.Name>@category.Name</a>
                             </div>
                         </div>
                         @if (User.IsInRole("Admin"))
