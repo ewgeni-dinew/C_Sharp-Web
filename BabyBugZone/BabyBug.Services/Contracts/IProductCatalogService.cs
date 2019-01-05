@@ -8,7 +8,7 @@ namespace BabyBug.Services.Contracts
 {
     public interface IProductCatalogService
     {
-        Task<HomeCatalogModel> GetHomeViewModel();
+        Task<HomeCatalogModel> GetHomeViewModelAsync();
 
         Task<HomeCatalogModel> GetHomeModelByTypeAsync(string type);
 
@@ -16,6 +16,6 @@ namespace BabyBug.Services.Contracts
 
         Task<HomeCatalogModel> GetHomeModelByCriteriaAsync(HomeCatalogModel model);
 
-        HomeCatalogModel SetPaginationModel(int pageIndex, HomeCatalogModel model);
+        Task<HomeCatalogModel> SetPaginationModelAsync(int pageIndex, HomeCatalogModel model);
     }
 }

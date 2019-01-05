@@ -26,7 +26,7 @@ namespace BabyBug.Services
         {
         }
 
-        public async Task<AllCategoriesModel> GetAllGarmentCategories()
+        public async Task<AllCategoriesModel> GetAllProductCategories()
         {
             var categories = this.DbContext
                 .ProductCategories

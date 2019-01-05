@@ -23,7 +23,7 @@ namespace BabyBug.Services
         {
         }
 
-        public async Task<HomeCatalogModel> GetHomeViewModel()
+        public async Task<HomeCatalogModel> GetHomeViewModelAsync()
         {
             return await this.GetHomeModelByTypeAsync("Garment");
         }
@@ -52,15 +52,17 @@ namespace BabyBug.Services
             return model;
         }
 
-        public HomeCatalogModel SetPaginationModel(int pageIndex, HomeCatalogModel model)
+        public async Task<HomeCatalogModel> SetPaginationModelAsync(int pageIndex, HomeCatalogModel model)
         {
-            var paginationModel = this.GetPaginationModel(model.AllProducts, pageIndex);
+            var homeModel = await this.GetHomeModelByCriteriaAsync(model);
 
-            model.PaginationModel = paginationModel;
+            var paginationModel = this.GetPaginationModel(homeModel.AllProducts, pageIndex);
 
-            return model;
+            homeModel.PaginationModel = paginationModel;
+
+            return homeModel;
         }
-       
+
         public async Task<HomeCatalogModel> GetHomeModelByCategoryAsync(string categoryName)
         {
             var category = await this.DbContext
@@ -99,6 +101,8 @@ namespace BabyBug.Services
         public async Task<HomeCatalogModel> GetHomeModelByCriteriaAsync(HomeCatalogModel model)
         {
             IEnumerable<BaseProductModel> productsTemp;
+            IEnumerable<BaseProductModel> products;
+            var gender = model.FilterModel.Gender;
 
             var type = await this.GetProductTypeByNameAsync(model.ProductType);
 
@@ -111,7 +115,15 @@ namespace BabyBug.Services
                 productsTemp = await this.GetProductsByTypeAsync(model.ProductType);
             }
 
-            var products = await this.GetProductsByCriteriaAsync(productsTemp, model.FilterModel);
+            if (model.FilterModel.GetType().GetProperties().Any(c => c.GetValue(model.FilterModel) != null))
+            {
+                products = await this.GetProductsByCriteriaAsync(productsTemp, model.FilterModel);
+            }
+            else
+            {
+                products = productsTemp;
+                gender = string.Empty;
+            }
 
             var resultModel = new HomeCatalogModel
             {
@@ -122,7 +134,7 @@ namespace BabyBug.Services
                 ProductType = model.ProductType,
                 FilterModel = new FilterProductsModel
                 {
-                    Gender = model.FilterModel.Gender,
+                    Gender = gender,
                     Sizes = this.GetFilterSizesByType(type.Id),
                 },
                 PaginationModel = this.GetPaginationModel(products, CURRENT_START_PAGE)
@@ -148,15 +160,22 @@ namespace BabyBug.Services
                 .ToHashSet();
         }
 
-        private async Task<IEnumerable<BaseProductModel>> GetProductsByCriteriaAsync(IEnumerable<BaseProductModel> productsTemp, FilterProductsModel model)
+        private async Task<IEnumerable<BaseProductModel>> GetProductsByCriteriaAsync(
+            IEnumerable<BaseProductModel> productsTemp, FilterProductsModel model)
         {
             IEnumerable<BaseProductModel> products;
 
-            var priceRange = model.PriceRange
+            int startPrice = 0;
+            int endPrice = 0;
+
+            if (model.PriceRange != null)
+            {
+                var priceRange = model.PriceRange
                             .Split(new char[] { ' ', '-', '$' }, StringSplitOptions.RemoveEmptyEntries);
 
-            var startPrice = int.Parse(priceRange[0]);
-            var endPrice = int.Parse(priceRange[1]);
+                startPrice = int.Parse(priceRange[0]);
+                endPrice = int.Parse(priceRange[1]);
+            }
 
             if (model.Gender != null)
             {
@@ -275,7 +294,7 @@ namespace BabyBug.Services
         private IEnumerable<BaseProductModel> GetDisplayProducts(IEnumerable<BaseProductModel> products, int pageIndex)
         {
             return products
-                .Skip((pageIndex-1) * PRODUCTS_PER_PAGE_COUNT)
+                .Skip((pageIndex - 1) * PRODUCTS_PER_PAGE_COUNT)
                 .Take(PRODUCTS_PER_PAGE_COUNT)
                 .ToHashSet();
         }

@@ -33,14 +33,14 @@ namespace BabyBug.Web.Areas.Shopping.Controllers
 
         public async Task<ActionResult> Index()
         {
-            var model = await this.catalogService.GetHomeViewModel();
+            var model = await this.catalogService.GetHomeViewModelAsync();
 
             return View(model);
         }
 
-        public ActionResult IndexPage(int pageIndex, HomeCatalogModel model)
+        public async Task<ActionResult> IndexPage(int pageIndex, HomeCatalogModel model)
         {
-            var homeModel = this.catalogService.SetPaginationModel(pageIndex, model);
+            var homeModel = await this.catalogService.SetPaginationModelAsync(pageIndex, model);
 
             return this.View("Index", homeModel);
         }

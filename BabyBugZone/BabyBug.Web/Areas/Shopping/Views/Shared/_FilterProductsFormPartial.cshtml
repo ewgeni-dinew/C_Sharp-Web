@@ -6,20 +6,8 @@
     <div class="sidebar_title">
         <h5>Gender</h5>
     </div>
-    @if (Model.FilterModel.Gender.Equals("M"))
-    {
-        <label class="radio-inline pr-2"><input asp-for=@Model.FilterModel.Gender type="radio" value="M" checked="checked">Boy's</label>
-
-    }
-    else if (Model.FilterModel.Gender.Equals("F"))
-    {
-        <label class="radio-inline"><input asp-for=@Model.FilterModel.Gender type="radio" value="F" checked="checked">Girl's</label>
-    }
-    else
-    {
-        <label class="radio-inline pr-2"><input asp-for=@Model.FilterModel.Gender type="radio" value="M" >Boy's</label>
-        <label class="radio-inline"><input asp-for=@Model.FilterModel.Gender type="radio" value="F" >Girl's</label>
-    }
+    <label class="radio-inline pr-2"><input id="boys_radio" asp-for=@Model.FilterModel.Gender type="radio" value="M">Boy's</label>
+    <label class="radio-inline"><input id="girls_radio" asp-for=@Model.FilterModel.Gender type="radio" value="F">Girl's</label>
 </div>
 
 <!-- Sizes -->

@@ -20,7 +20,7 @@ namespace BabyBug.Web.Areas.Shopping.Controllers
         public async Task<ActionResult> Index()
         {
             var categories = await this.categoryService
-                .GetAllGarmentCategories();
+                .GetAllProductCategories();
 
             return View(categories);
         }

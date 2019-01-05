@@ -11,7 +11,7 @@ namespace BabyBug.Services.Categories.Contracts
     {
         BabyBugDbContext DbContext { get; set; }
 
-        Task<AllCategoriesModel> GetAllGarmentCategories();
+        Task<AllCategoriesModel> GetAllProductCategories();
 
         CreateCategoryModel GetCreateCategoryModel();
 

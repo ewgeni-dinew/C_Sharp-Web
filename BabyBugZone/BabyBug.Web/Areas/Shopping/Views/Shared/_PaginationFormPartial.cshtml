@@ -1,0 +1,35 @@
+﻿@model BabyBug.Common.ViewModels.ProductCatalog.HomeCatalogModel
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+
+<div class="page_current">
+    <span>@Model.PaginationModel.CurrentPage</span>
+    <ul class="page_selection">
+        @for (int i = 1; i <= Model.PaginationModel.AllPages; i++)
+        {
+            <li>
+                <form method="get" id="page_form" asp-area="Shopping" asp-controller="Products" asp-action="IndexPage">
+                    <input type="hidden" asp-for=@Model.ProductType value=@Model.ProductType />
+                    <input type="hidden" asp-for=@Model.CategoryName value=@Model.CategoryName />
+                    <input type="hidden" asp-for=@Model.FilterModel.Gender value=@Model.FilterModel.Gender />
+                    <input type="hidden" asp-for=@Model.FilterModel.PriceRange />
+
+                    <a onclick="javascript: sendForm(@i);">@i</a>
+                </form>
+            </li>
+        }
+    </ul>
+</div>
+<div class="page_total"><span>of</span> @Model.PaginationModel.AllPages</div>
+@if (Model.PaginationModel.CurrentPage != Model.PaginationModel.AllPages)
+{
+    <div id="next_page" class="page_next">
+        <form method="get" id="page_form" asp-area="Shopping" asp-controller="Products" asp-action="IndexPage">
+            <input type="hidden" asp-for=@Model.ProductType value=@Model.ProductType />
+            <input type="hidden" asp-for=@Model.CategoryName value=@Model.CategoryName />
+            <input type="hidden" asp-for=@Model.FilterModel.Gender value=@Model.FilterModel.Gender />
+            <input type="hidden" asp-for=@Model.FilterModel.PriceRange value=@Model.FilterModel.PriceRange />
+
+            <a onclick="javascript: sendForm(@(Model.PaginationModel.CurrentPage+1));"><i class="fa fa-long-arrow-right" aria-hidden="true"></i></a>
+        </form>
+    </div>
+}
