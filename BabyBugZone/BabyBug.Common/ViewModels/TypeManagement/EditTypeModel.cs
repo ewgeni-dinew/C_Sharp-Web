@@ -18,7 +18,7 @@ namespace BabyBug.Common.ViewModels.TypeManagement
 
         [Required]
         [StringLength(35, ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.", MinimumLength = 4)]
-        [RegularExpression("^[A-z]+$", ErrorMessage = "Invalid Type name.")
+        [RegularExpression("^[A-z]+$", ErrorMessage = "Invalid Type name.")]
         public string NewName { get; set; }
     }
 }

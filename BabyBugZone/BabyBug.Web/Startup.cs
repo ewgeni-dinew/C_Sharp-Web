@@ -19,8 +19,6 @@ using BabyBug.Services.Categories.Contracts;
 using BabyBug.Services;
 using BabyBug.Services.Contracts;
 using System.Globalization;
-using CloudinaryDotNet;
-using CloudinaryDotNet.Actions;
 using Microsoft.AspNetCore.CookiePolicy;
 
 namespace BabyBug.Web
@@ -138,8 +136,29 @@ namespace BabyBug.Web
 
             app.UseAuthentication();
 
+            // X-Content-Type-Options header
+            app.UseXContentTypeOptions();
+            // Referrer-Policy header.
+            app.UseReferrerPolicy(opts => opts.NoReferrer());
+            // X-Xss-Protection header
+            app.UseXXssProtection(options => options.Enabled());
+            // X-Frame-Options header
+            app.UseXfo(options => options.Deny());
+            // Content-Security-Policy header
+            app.UseCsp(opts => opts
+                .BlockAllMixedContent()
+                .StyleSources(s => s.Self())
+                .StyleSources(s => s.UnsafeInline())
+                .FontSources(s => s.Self())
+                .FormActions(s => s.Self())
+                .FrameAncestors(s => s.Self())
+                .ImageSources(s => s.Self())
+                .ScriptSources(s => s.Self())
+            );
+
+
             app.UseMvc(routes =>
-            {
+            {                
                 routes.MapRoute(
                     name: "areas",
                 template: "{area:exists}/{controller=Home}/{action=Index}/{id?}");

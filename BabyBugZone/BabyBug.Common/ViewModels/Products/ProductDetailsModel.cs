@@ -25,8 +25,10 @@ namespace BabyBug.Common.ViewModels.Garments
 
         public HashSet<string> AvailableSizes { get; set; }
 
+        [Required]
         public string Size { get; set; }
 
+        [Required]
         [Display(Name="Quantity")]
         [Range(0,5, ErrorMessage ="The quantity must be between 0 and 5!")]
         public uint Quantity { get; set; }
