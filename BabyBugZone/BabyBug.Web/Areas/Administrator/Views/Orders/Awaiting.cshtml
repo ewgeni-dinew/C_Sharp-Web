@@ -7,31 +7,39 @@
 }
 
 @section Styles{
-    <link rel="stylesheet" type="text/css" href="~/css/single_styles.css">
-    <link rel="stylesheet" type="text/css" href="~/css/single_responsive.css">
+    <partial name="_SingleStylesPartial" />
+    <link rel="stylesheet" type="text/css" href="~/css/datatables.css">
 }
 
-    <div class="container single_product_container">
-        <div class="row">
-            <div class="col">
+<div class="container single_product_container">
+    <div class="row">
+        <div class="col">
 
-                <!-- Breadcrumbs -->
+            <!-- Breadcrumbs -->
 
-                <div class="breadcrumbs d-flex flex-row align-items-center">
-                    <ul>
-                        <li><a asp-controller="Home" asp-action="Index">Home</a></li>
-                        <li><a><i class="fa fa-angle-right" aria-hidden="true"></i>Orders</a></li>
-                        <li class="active"><a asp-area="Administrator" asp-controller="Orders" asp-action="Awaiting"><i class="fa fa-angle-right" aria-hidden="true"></i>Awaiting</a></li>
-                    </ul>
-                </div>
-
+            <div class="breadcrumbs d-flex flex-row align-items-center">
+                <ul>
+                    <li><a asp-controller="Home" asp-action="Index">Home</a></li>
+                    <li><a><i class="fa fa-angle-right" aria-hidden="true"></i>Orders</a></li>
+                    <li class="active"><a asp-area="Administrator" asp-controller="Orders" asp-action="Awaiting"><i class="fa fa-angle-right" aria-hidden="true"></i>Awaiting</a></li>
+                </ul>
             </div>
+
         </div>
-
-        <!-- Table -->
-        <partial name="_AwaitingOrdersTablePartial" model=@Model />
-
     </div>
 
+    <!-- Table -->
+    <partial name="_AwaitingOrdersTablePartial" model=@Model />
 
+</div>
+
+@section Scripts{
+    <script src="~/js/datatables.js" asp-append-version="true"></script>
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('#table_awaiting').DataTable();
+        });
+    </script>
+}
 

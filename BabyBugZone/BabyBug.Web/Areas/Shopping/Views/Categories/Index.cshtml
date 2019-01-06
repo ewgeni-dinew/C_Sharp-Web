@@ -7,11 +7,8 @@
 }
 
 @section Styles {
-    <link rel="stylesheet" type="text/css" href="~/css/main_styles.css">
-    <link rel="stylesheet" type="text/css" href="~/css/responsive.css">
-
-    <link rel="stylesheet" type="text/css" href="~/css/single_styles.css">
-    <link rel="stylesheet" type="text/css" href="~/css/single_responsive.css">
+    <partial name="_MainStylesPartial" />
+    <partial name="_SingleStylesPartial" />
 }
 
 <div class="container single_product_container">
@@ -33,7 +30,7 @@
     <!-- Banner -->
     <div class="banner mt-0">
         <div class="container">
-            <partial name="_CategoriesIndexPartial" model=@Model/>
+            <partial name="_CategoriesIndexPartial" model=@Model />
         </div>
     </div>
 

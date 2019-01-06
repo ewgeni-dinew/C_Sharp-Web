@@ -14,6 +14,8 @@ namespace BabyBug.Common.ViewModels.ProductSize
 
         public HashSet<string> Types { get; set; }
 
+        [Required]
+        [RegularExpression(@"[a-zA-Z0-9\,\;\s\-\(\)]^+$", ErrorMessage = "Invalid Type name.")]        
         public string Type { get; set; }
     }
 }

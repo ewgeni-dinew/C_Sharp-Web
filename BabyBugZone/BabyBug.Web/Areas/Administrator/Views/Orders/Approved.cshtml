@@ -7,8 +7,9 @@
 }
 
 @section Styles{
-    <link rel="stylesheet" type="text/css" href="~/css/single_styles.css">
-    <link rel="stylesheet" type="text/css" href="~/css/single_responsive.css">
+    <partial name="_SingleStylesPartial" />
+    <link rel="stylesheet" type="text/css" href="~/css/datatables.css">
+
 }
 
 <div class="container single_product_container">
@@ -27,10 +28,38 @@
 
         </div>
     </div>
-
+    @*<div class="funkyradio">
+            <h5>Search by:</h5>
+            <div class="funkyradio-danger">
+                <input asp-for="SearchCriteria" type="radio" value="name" id="name" onclick="javascript:getSearchCriteria();" />
+                <label asp-for="SearchCriteria" for="name">Customer name</label>
+            </div>
+            <div class="funkyradio-danger">
+                <input asp-for="SearchCriteria" type="radio" value="orderId" id="order" onclick="javascript:getSearchCriteria();" />
+                <label asp-for="SearchCriteria" for="order">Order id</label>
+            </div>
+        </div>
+        <div class="form-group" id="officeName" style="display:none">
+            <label asp-for="DeliveryDestination" class="control-label">Input office name:</label>
+            <input asp-for="DeliveryDestination" class="form-control" />
+            <span asp-validation-for="DeliveryDestination" class="text-danger"></span>
+        </div>
+        <div class="form-group" id="officeName" style="display:none">
+            <label asp-for="DeliveryDestination" class="control-label">Input office name:</label>
+            <input asp-for="DeliveryDestination" class="form-control" />
+            <span asp-validation-for="DeliveryDestination" class="text-danger"></span>
+        </div>*@
     <!-- Table -->
-    <partial name="_ApprovedOrdersTablePartial" model=@Model/>
+    <partial name="_ApprovedOrdersTablePartial" model=@Model />
 
 </div>
 
+@section Scripts{
+    <script src="~/js/datatables.js" asp-append-version="true"></script>
 
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('#table_approved').DataTable();
+        });
+    </script>
+}

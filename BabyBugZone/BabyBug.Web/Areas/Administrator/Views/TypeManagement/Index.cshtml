@@ -7,8 +7,7 @@
 }
 
 @section Styles{
-    <link rel="stylesheet" type="text/css" href="~/css/single_styles.css">
-    <link rel="stylesheet" type="text/css" href="~/css/single_responsive.css">
+    <partial name="_SingleStylesPartial" />
 }
 
 <div class="container single_product_container">
@@ -28,7 +27,7 @@
         </div>
     </div>
 
-    <partial name="_TypeIndexTablePartial" model=@Model/>
+    <partial name="_TypeIndexTablePartial" model=@Model />
     <hr />
     <div class="row">
         <a class="btn btn-primary" asp-area="Administrator" asp-controller="TypeManagement" asp-action="Create">Create</a>

@@ -12,6 +12,7 @@ namespace BabyBug.Common.ViewModels.Blog
 
         [Display(Name = "Author")]
         [StringLength(25, ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.", MinimumLength = 5)]
+        [RegularExpression("^[A-z]+$", ErrorMessage = "Invalid Author name.")]
         public string Author { get; set; }
         
         [Display(Name = "Header")]

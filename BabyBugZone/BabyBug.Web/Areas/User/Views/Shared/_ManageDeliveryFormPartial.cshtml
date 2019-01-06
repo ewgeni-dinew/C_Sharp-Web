@@ -44,6 +44,7 @@
                     <label asp-for="PaymentType" for="radio1">@paymentType</label>
                 </div>
             }
+            <span asp-validation-for="PaymentType" class="text-danger"></span>
         </div>
         <div class="funkyradio">
             <h5>Choose delivery type:</h5>
@@ -53,6 +54,7 @@
                     <input asp-for="DeliveryType" type="radio" value=@deliveryType id=@deliveryType onclick="javascript:deliveryOfficeCheck();" />
                     <label asp-for="DeliveryType" for=@deliveryType>@deliveryType</label>
                 </div>
+                <span asp-validation-for="DeliveryType" class="text-danger"></span>
             }
         </div>
         <div class="form-group" id="officeName" style="display:none">

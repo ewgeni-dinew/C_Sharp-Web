@@ -12,6 +12,7 @@ namespace BabyBug.Common.ViewModels.Categories
         [Required]
         [Display(Name = "Name")]
         [StringLength(30, ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.", MinimumLength = 5)]
+        [RegularExpression("^[A-z]+$", ErrorMessage = "Invalid Category name.")]
         public string Name { get; set; }
 
         [Required]
@@ -21,6 +22,7 @@ namespace BabyBug.Common.ViewModels.Categories
 
         public ICollection<string> CategoryTypes { get; set; }
 
+        [Required]
         public string CategoryType { get; set; }
     }
 }

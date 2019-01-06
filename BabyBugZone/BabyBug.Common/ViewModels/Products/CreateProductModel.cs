@@ -12,11 +12,11 @@ namespace BabyBug.Common.ViewModels.Garments
         [Required]
         [Display(Name = "Name")]
         [StringLength(30, ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.", MinimumLength = 3)]
+        [RegularExpression("^[A-z]+$", ErrorMessage = "Invalid Product name.")]
         public string Name { get; set; }
 
         [Required]
         [Display(Name = "Gender")]
-        //[StringLength(1, ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.", MinimumLength = 1)]
         public char Gender { get; set; }
 
         [Required]

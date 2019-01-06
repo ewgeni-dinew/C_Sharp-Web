@@ -7,8 +7,8 @@
 }
 
 @section Styles{
-    <link rel="stylesheet" type="text/css" href="~/css/single_styles.css">
-    <link rel="stylesheet" type="text/css" href="~/css/single_responsive.css">
+    <partial name="_SingleStylesPartial"/>
+    <link rel="stylesheet" type="text/css" href="~/css/datatables.css">
 }
 
 <div class="container single_product_container">
@@ -27,9 +27,9 @@
         </div>
     </div>
 
-    <partial name="_OrderDetailsTablePartial"/>
+    <partial name="_OrderDetailsTablePartial" />
 
-    <partial name="_OrderDetailsInfoPartial" model=@Model/>
+    <partial name="_OrderDetailsInfoPartial" model=@Model />
     <hr />
     <div class="row">
 
@@ -59,3 +59,13 @@
     </div>
 
 </div>
+
+@section Scripts{
+    <script src="~/js/datatables.js" asp-append-version="true"></script>
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('#table_orderInfo').DataTable();
+        });
+    </script>
+}

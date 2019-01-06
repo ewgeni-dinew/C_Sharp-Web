@@ -21,6 +21,7 @@ using BabyBug.Services.Contracts;
 using System.Globalization;
 using CloudinaryDotNet;
 using CloudinaryDotNet.Actions;
+using Microsoft.AspNetCore.CookiePolicy;
 
 namespace BabyBug.Web
 {
@@ -66,7 +67,7 @@ namespace BabyBug.Web
                  facebookOptions.AppSecret = Configuration["Authentication:Facebook:AppSecret"];
              });
 
-            
+
             //Services
             services.AddScoped<ICategoryService, CategoryService>();
             services.AddScoped<IProductService, ProductService>();
@@ -128,7 +129,12 @@ namespace BabyBug.Web
             RoleSeeder.CreateRoles(provider, this.Configuration).Wait();
             app.UseHttpsRedirection();
             app.UseStaticFiles();
-            app.UseCookiePolicy();
+            app.UseCookiePolicy(new CookiePolicyOptions
+            {
+                HttpOnly = HttpOnlyPolicy.Always,
+                Secure = CookieSecurePolicy.Always,
+                MinimumSameSitePolicy = SameSiteMode.None
+            });
 
             app.UseAuthentication();
 

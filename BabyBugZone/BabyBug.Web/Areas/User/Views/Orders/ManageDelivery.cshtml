@@ -7,8 +7,7 @@
 }
 
 @section Styles{
-    <link rel="stylesheet" type="text/css" href="~/css/single_styles.css">
-    <link rel="stylesheet" type="text/css" href="~/css/single_responsive.css">
+    <partial name="_SingleStylesPartial" />
 }
 
 <div class="container single_product_container">
@@ -32,7 +31,7 @@
     <hr />
     <div class="row">
         <div class="col-lg-6">
-            <partial name="_ManageDeliveryFormPartial" model=@Model/>
+            <partial name="_ManageDeliveryFormPartial" model=@Model />
         </div>
     </div>
 </div>

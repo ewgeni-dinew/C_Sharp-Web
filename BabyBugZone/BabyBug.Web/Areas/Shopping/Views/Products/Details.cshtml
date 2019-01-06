@@ -9,8 +9,7 @@
 @section Styles{
     <link rel="stylesheet" type="text/css" href="~/plugins/themify-icons/themify-icons.css">
     <link rel="stylesheet" type="text/css" href="~/plugins/jquery-ui-1.12.1.custom/jquery-ui.css">
-    <link rel="stylesheet" type="text/css" href="~/css/single_styles.css">
-    <link rel="stylesheet" type="text/css" href="~/css/single_responsive.css">
+    <partial name="_SingleStylesPartial" />
 }
 <div class="container single_product_container">
     <div class="row">
@@ -30,10 +29,10 @@
     </div>
 
     <div class="row">
-        <partial name="_ProductDetailsImagesPartial" model=@Model/>
+        <partial name="_ProductDetailsImagesPartial" model=@Model />
         <div class="col-lg-5">
             <div class="product_details">
-                <partial name="_ProductDetailsPartial" model=@Model/>
+                <partial name="_ProductDetailsPartial" model=@Model />
                 <partial name="_OrderProductFormPartial" model=@Model />
             </div>
         </div>
@@ -43,7 +42,7 @@
 
 <!-- Tabs -->
 
-<partial name="_ProductDetailsTabPartial" model=@Model/>
+<partial name="_ProductDetailsTabPartial" model=@Model />
 
 @section Scripts {
     <script src="~/plugins/jquery-ui-1.12.1.custom/jquery-ui.js" asp-append-version="true"></script>

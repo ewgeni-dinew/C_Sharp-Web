@@ -7,37 +7,36 @@
 }
 
 @section Styles{
-    <link rel="stylesheet" type="text/css" href="~/css/single_styles.css">
-    <link rel="stylesheet" type="text/css" href="~/css/single_responsive.css">
+    <partial name="_SingleStylesPartial" />
 }
 
-    <div class="container single_product_container">
-        <div class="row">
-            <div class="col">
+<div class="container single_product_container">
+    <div class="row">
+        <div class="col">
 
-                <!-- Breadcrumbs -->
+            <!-- Breadcrumbs -->
 
-                <div class="breadcrumbs d-flex flex-row align-items-center">
-                    <ul>
-                        <li><a asp-controller="Home" asp-action="Index">Home</a></li>
-                        <li><a><i class="fa fa-angle-right" aria-hidden="true"></i>Orders</a></li>
-                        <li class="active"><a asp-area="User" asp-controller="Orders" asp-action="MyOrders"><i class="fa fa-angle-right" aria-hidden="true"></i>My Orders</a></li>
-                    </ul>
-                </div>
-
+            <div class="breadcrumbs d-flex flex-row align-items-center">
+                <ul>
+                    <li><a asp-controller="Home" asp-action="Index">Home</a></li>
+                    <li><a><i class="fa fa-angle-right" aria-hidden="true"></i>Orders</a></li>
+                    <li class="active"><a asp-area="User" asp-controller="Orders" asp-action="MyOrders"><i class="fa fa-angle-right" aria-hidden="true"></i>My Orders</a></li>
+                </ul>
             </div>
+
         </div>
-        @if (Model.Any())
-        {
-            <partial name="_MyOrdersTablePartial" model=@Model />
-        }
-        else
-        {
-            <div class="row">
-                <h2>No products in the shopping cart yet.</h2>
-            </div>
-        }
-        <a class="btn btn-primary" asp-area="Shopping" asp-controller="Products" asp-action="Index">Continue Shopping</a>
     </div>
+    @if (Model.Any())
+    {
+        <partial name="_MyOrdersTablePartial" model=@Model />
+    }
+    else
+    {
+        <div class="row">
+            <h2>No products in the shopping cart yet.</h2>
+        </div>
+    }
+    <a class="btn btn-primary" asp-area="Shopping" asp-controller="Products" asp-action="Index">Continue Shopping</a>
+</div>
 
 

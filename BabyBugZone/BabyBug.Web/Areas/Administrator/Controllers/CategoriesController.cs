@@ -43,7 +43,7 @@ namespace BabyBug.Web.Areas.Administrator.Controllers
             await this.categoriesService.
                 CreateCategoryAsync(model);
 
-            return RedirectToAction("Index", "Categories", new { area = "" });
+            return RedirectToAction("Index", "Categories", new { area = "Shopping" });
         }
 
         public async Task<ActionResult> Edit(int id)
@@ -65,7 +65,7 @@ namespace BabyBug.Web.Areas.Administrator.Controllers
 
             await this.categoriesService.EditCategoryAsync(id, model);
 
-            return RedirectToAction("Index", "Categories", new { area = "" });
+            return RedirectToAction("Index", "Categories", new { area = "Shopping" });
         }
 
 
@@ -89,7 +89,7 @@ namespace BabyBug.Web.Areas.Administrator.Controllers
 
             await this.categoriesService.DeleteCategoryAsync(id);
 
-            return RedirectToAction("Index", "Categories", new { area = "" });
+            return RedirectToAction("Index", "Categories", new { area = "Shopping" });
         }
 
     }
