@@ -128,15 +128,11 @@ namespace BabyBug.Services
                 .FirstOrDefaultAsync(x => x.Id.Equals(id));
         }
 
-        public async Task<ProductManageSizesModel> GetCurrentProductSizeDetails(int productId, string categoryName)
+        public async Task<ProductManageSizesModel> GetCurrentProductSizeDetails(int productId, int typeId)
         {
-            var category = await this.DbContext
-                .ProductCategories
-                .FirstOrDefaultAsync(x => x.Name.Equals(categoryName));
-
             var allProductSizes = this.DbContext
                 .ProductSizes
-                .Where(x => x.ProductTypeId.Equals(category.ProductTypeId))
+                .Where(x => x.ProductTypeId.Equals(typeId))
                 .Select(x => x.Value)
                 .ToHashSet();
 
@@ -165,7 +161,6 @@ namespace BabyBug.Services
                 ProductId = productId,
                 CurrentSizes = dictionary,
                 AllProductSizes = allProductSizes,
-                CategoryName = category.Name,
             };
 
             return model;
@@ -202,6 +197,8 @@ namespace BabyBug.Services
                 specification.Quantity += model.InputQuantity;
             }
 
+            product.IsAvailable = true;
+
             await this.DbContext
                 .SaveChangesAsync();
         }
@@ -221,14 +218,30 @@ namespace BabyBug.Services
                 .FirstOrDefaultAsync(x => x.ProductId.Equals(product.Id)
                     && x.ProductSizeId.Equals(productSize.Id));
 
-            if (specification != null
-                && model.InputQuantity <= specification.Quantity)
+            if (specification != null && specification.Quantity > model.InputQuantity)
             {
                 specification.Quantity -= model.InputQuantity;
-
-                await this.DbContext
-                    .SaveChangesAsync();
             }
+            else
+            {
+                specification.Quantity = 0;
+            }
+
+            await this.DbContext
+                    .SaveChangesAsync();
+
+            if (this.DbContext.ProductSpecifications
+                .Where(x => x.ProductId.Equals(product.Id)).Any(x => x.Quantity > 0))
+            {
+                product.IsAvailable = true;
+            }
+            else
+            {
+                product.IsAvailable = false;
+            }
+
+            await this.DbContext
+                    .SaveChangesAsync();
         }
     }
 }

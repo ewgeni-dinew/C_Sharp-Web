@@ -11,7 +11,7 @@
                     <a class="btn btn-primary" asp-area="Administrator" asp-controller="Products" asp-action="Edit" asp-route-id=@Model.Id>Edit</a>
                 </div>
                 <div class="col">
-                    <a class="btn btn-primary" asp-area="Administrator" asp-controller="ProductSize" asp-action="ManageSizes" asp-route-id=@Model.Id asp-route-name=@Model.CategoryName>Manage sizes</a>
+                    <a class="btn btn-primary" asp-area="Administrator" asp-controller="ProductSize" asp-action="ManageSizes" asp-route-id=@Model.Id asp-route-typeId=@Model.TypeId>Manage sizes</a>
                 </div>
                 <div class="col">
                     <a class="btn btn-danger" asp-area="Administrator" asp-controller="Products" asp-action="Delete" asp-route-id=@Model.Id>Delete</a>

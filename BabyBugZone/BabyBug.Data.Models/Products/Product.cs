@@ -18,7 +18,7 @@ namespace BabyBug.Data.Models.Products
 
             this.OrderProducts = new HashSet<OrderProduct>();
 
-            this.IsAvailable = true;
+            this.IsAvailable = false;
 
             this.CreatedOn = DateTime.UtcNow;
         }

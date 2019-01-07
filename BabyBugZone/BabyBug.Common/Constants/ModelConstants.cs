@@ -28,7 +28,7 @@ namespace BabyBug.Common.Constants
         public const int DESTINATION_NAME_LENGTH_MAX = 30;
         public const int PRODUCT_NAME_MAX = 25;
         public const int PRODUCT_NAME_MIN = 3;
-        public const int PRODUCT_DESCRIPTION_MAX = 200;
+        public const int PRODUCT_DESCRIPTION_MAX = 800;
         public const int PRODUCT_DESCRIPTION_MIN = 10;
 
         public const string CATEGORY_NAME_RGX_ERROR = "Invalid Category name.";

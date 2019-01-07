@@ -1,0 +1,33 @@
+﻿@model ICollection<BabyBug.Common.ViewModels.Products.BaseProductModel>
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+
+<table id="table_products" class="table table-striped">
+    <thead>
+        <tr>
+            <th scope="col">#</th>
+            <th scope="col">Name</th>
+            <th scope="col">Type</th>
+            <th scope="col">Created On</th>
+            <th scope="col">Manage</th>
+            <th scope="col">Edit</th>
+        </tr>
+    </thead>
+    @{ var index = 1; }
+    @foreach (var product in Model)
+    {
+        <tr>
+            <th scope="row">@index</th>
+            <td>@product.Name</td>
+            <td>@product.Type</td>
+            <td>@product.CreatedOn</td>
+            <td>
+                <a class="btn btn-success" asp-area="Administrator" asp-controller="ProductSize" asp-action="ManageSizes" asp-route-id=@product.Id asp-route-typeId=@product.TypeId>Manage Sizes</a>
+            </td>
+            <td>
+                <a class="btn btn-primary" asp-area="Administrator" asp-controller="Products" asp-action="Edit" asp-route-id=@product.Id>Edit</a>
+            </td>
+        </tr>
+        index++;
+    }
+
+</table>

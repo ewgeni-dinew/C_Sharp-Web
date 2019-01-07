@@ -74,10 +74,10 @@ namespace BabyBug.Web.Areas.Administrator.Controllers
             }
         }
 
-        public async Task<ActionResult> ManageSizes(int id, string name)
+        public async Task<ActionResult> ManageSizes(int id, int typeId)
         {
             var model = await this.garmentSizeService
-                .GetCurrentProductSizeDetails(id, name);
+                .GetCurrentProductSizeDetails(id, typeId);
 
             return this.View(model);
         }

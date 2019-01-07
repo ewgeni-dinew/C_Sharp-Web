@@ -21,6 +21,13 @@ namespace BabyBug.Web.Areas.Administrator.Controllers
             this.productService = garmentService;
         }
 
+        public async Task<ActionResult> Index()
+        {
+            var model = await this.productService.GetOutOfStockProductsModelAsync();
+
+            return this.View(model);
+        }
+
         public ActionResult Create()
         {
             var model = this.productService
@@ -43,7 +50,7 @@ namespace BabyBug.Web.Areas.Administrator.Controllers
                 await this.productService
                     .CreateProductAsync(model);
 
-                return RedirectToAction("Index", "Home", new { area = "" });
+                return RedirectToAction("Index", "Products", new { area = "Administrator" });
             }
             catch (Exception ex)
             {

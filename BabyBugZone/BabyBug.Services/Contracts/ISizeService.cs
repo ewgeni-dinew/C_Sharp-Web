@@ -21,7 +21,7 @@ namespace BabyBug.Services.Contracts
 
         Task DeleteSizeAsync(int id);
 
-        Task<ProductManageSizesModel> GetCurrentProductSizeDetails(int productId, string categoryName);
+        Task<ProductManageSizesModel> GetCurrentProductSizeDetails(int productId, int typeId);
 
         Task AddQuantityToProductAsync(int id, ProductManageSizesModel model);
 

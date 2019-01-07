@@ -71,7 +71,7 @@ namespace BabyBug.Services
 
             return model;
         }
-        
+
         public async Task<HomeCatalogModel> SetPaginationModelAsync(int pageIndex, HomeCatalogModel model)
         {
             var homeModel = await this.GetHomeModelByCriteriaAsync(model);
@@ -206,7 +206,7 @@ namespace BabyBug.Services
             else
             {
                 products = productsTemp
-                        .Where(x => x.Price >= startPrice && x.Price <= endPrice)
+                        .Where(x => x.Price >= startPrice && x.Price <= endPrice )
                         .ToHashSet();
             }
 
@@ -250,11 +250,31 @@ namespace BabyBug.Services
             return products;
         }
 
+        //private IEnumerable<BaseProductModel> GetValidProducts(IEnumerable<BaseProductModel> products)
+        //{
+        //    var availableProducts = new HashSet<BaseProductModel>();
+
+        //    foreach (var product in products)
+        //    {
+        //        var specs = this.DbContext
+        //            .ProductSpecifications
+        //            .Where(x => x.Quantity > 0 && x.ProductId.Equals(product.Id))
+        //            .ToHashSet();
+
+        //        if (specs.Any())
+        //        {
+        //            availableProducts.Add(product);
+        //        }
+        //    }
+
+        //    return availableProducts;
+        //}
+
         private IEnumerable<BaseProductModel> GetProductsByGenderAsync(string gender)
         {
             return this.DbContext
                 .Products
-                .Where(x => x.Gender.ToString().Equals(gender))
+                .Where(x => x.Gender.ToString().Equals(gender) && x.IsAvailable == true)
                 .Select(x => new BaseProductModel
                 {
                     Id = x.Id,
@@ -272,7 +292,7 @@ namespace BabyBug.Services
 
             var products = this.DbContext
                 .Products
-                .Where(x => x.TypeId.Equals(productType.Id))
+                .Where(x => x.TypeId.Equals(productType.Id) && x.IsAvailable == true)
                 .Select(x => new BaseProductModel
                 {
                     Id = x.Id,
@@ -301,7 +321,7 @@ namespace BabyBug.Services
 
             var products = this.DbContext
                 .Products
-                .Where(x => x.CategoryId.Equals(category.Id))
+                .Where(x => x.CategoryId.Equals(category.Id) && x.IsAvailable == true)
                 .Select(x => new BaseProductModel
                 {
                     Id = x.Id,
@@ -350,6 +370,6 @@ namespace BabyBug.Services
 
             return list;
         }
-        
+
     }
 }

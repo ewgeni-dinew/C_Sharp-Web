@@ -125,6 +125,8 @@ namespace BabyBug.Services
 
         public async Task<ICollection<BaseOrderedProductModel>> GetOrderedProductsUserAsync(string username)
         {
+            var model = new HashSet<BaseOrderedProductModel>();
+
             var user = await this.DbContext
                 .Users
                 .FirstOrDefaultAsync(x => x.UserName.Equals(username));
@@ -134,12 +136,16 @@ namespace BabyBug.Services
                 .FirstOrDefaultAsync(x => x.UserId.Equals(user.Id)
                                     && x.Status.Equals(OrderStatus.Created));
 
+            if (order == null)
+            {
+                return model;
+            }
+
             var orderedProducts = this.DbContext
                 .OrderProducts
                 .Where(x => x.OrderId.Equals(order.Id))
                 .ToList();
 
-            var model = new HashSet<BaseOrderedProductModel>();
 
             foreach (var orderProduct in orderedProducts)
             {

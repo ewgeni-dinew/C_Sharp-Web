@@ -9,6 +9,8 @@ namespace BabyBug.Common.ViewModels.Garments
     {
         public int Id { get; set; }
 
+        public int TypeId { get; set; }
+
         public string CategoryName { get; set; }
 
         public string Name { get; set; }

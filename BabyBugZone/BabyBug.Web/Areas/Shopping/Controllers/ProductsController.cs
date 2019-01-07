@@ -25,10 +25,18 @@ namespace BabyBug.Web.Areas.Shopping.Controllers
 
         public async Task<ActionResult> Details(int id)
         {
-            var model = await this.productService
+            try
+            {
+                var model = await this.productService
                 .GetDetailsModelAsync(id);
 
-            return View(model);
+                return View(model);
+            }
+            catch (Exception ex)
+            {
+                return this.View("Error", ex.Message);
+            }
+            
         }
 
         public async Task<ActionResult> Index()

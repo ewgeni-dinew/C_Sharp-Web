@@ -80,10 +80,10 @@
                     <div class="form-group">
                         <div class="row">
                             <div class="col">
-                                <input asp-area="Administrator" asp-controller="ProductSize" asp-action="AddSizes" asp-route-id=@Model.ProductId type="submit" value="Add" class="btn btn-primary" />
+                                <input  type="submit" value="Add size" class="btn btn-primary"  asp-area="Administrator" asp-controller="ProductSize" asp-action="AddSizes" asp-route-id=@Model.ProductId/>
                             </div>
                             <div class=" col">
-                                <input asp-area="Administrator" asp-controller="ProductSize" asp-action="RemoveSizes" asp-route-id=@Model.ProductId type="submit" value="Remove" class="btn btn-danger" />
+                                <input type="submit" value="Remove size" class="btn btn-danger" asp-area="Administrator" asp-controller="ProductSize" asp-action="RemoveSizes" asp-route-id=@Model.ProductId/>
                             </div>
                         </div>
                     </div>

@@ -29,14 +29,19 @@
     @if (Model.Any())
     {
         <partial name="_MyOrdersTablePartial" model=@Model />
+        <div class="mt-3">
+            <a class="btn btn-primary" asp-area="Shopping" asp-controller="Products" asp-action="Index">Continue Shopping</a>
+        </div>
     }
     else
     {
         <div class="row">
-            <h2>No products in the shopping cart yet.</h2>
+            <h3>No products in the <i class="fa fa-shopping-cart" aria-hidden="true"></i> (shopping cart) yet.</h3>
+        </div>
+        <div class="mt-3">
+            <a class="btn btn-primary" asp-area="Shopping" asp-controller="Products" asp-action="Index">Start Shopping</a>
         </div>
     }
-    <a class="btn btn-primary" asp-area="Shopping" asp-controller="Products" asp-action="Index">Continue Shopping</a>
 </div>
 
 

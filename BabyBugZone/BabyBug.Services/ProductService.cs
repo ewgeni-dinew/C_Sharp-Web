@@ -1,4 +1,5 @@
 ﻿using BabyBug.Common.ViewModels.Garments;
+using BabyBug.Common.ViewModels.Products;
 using BabyBug.Data.Models;
 using BabyBug.Data.Models.Products;
 using BabyBug.Services.Contracts;
@@ -96,10 +97,20 @@ namespace BabyBug.Services
         {
             var product = await this.DbContext
                 .Products
-                .FirstOrDefaultAsync(x => x.Id.Equals(id));
+                .FirstOrDefaultAsync(x => x.Id.Equals(id) && x.IsAvailable==true);
+
+            if (product==null)
+            {
+                throw new ArgumentException("Product is unavailable at the moment.");
+            }
 
             var category = await this.DbContext
                 .ProductCategories
+                .Select(x => new
+                {
+                    x.Id,
+                    x.Name,
+                })
                 .FirstOrDefaultAsync(x => x.Id.Equals(product.CategoryId));
 
             var productSizes = this.DbContext
@@ -121,6 +132,7 @@ namespace BabyBug.Services
             var model = new ProductDetailsModel
             {
                 AvailableSizes = availableSizes,
+                TypeId = (int)product.TypeId,
                 CategoryName = category.Name,
                 Id = product.Id,
                 Name = product.Name,
@@ -249,6 +261,35 @@ namespace BabyBug.Services
 
             await this.DbContext
                 .SaveChangesAsync();
+        }
+
+        public async Task<ICollection<BaseProductModel>> GetOutOfStockProductsModelAsync()
+        {
+            var model = new HashSet<BaseProductModel>();
+
+            foreach (var product in this.DbContext.Products.Where(x => x.IsAvailable == false))
+            {
+                var type = await this.DbContext.ProductTypes.FirstOrDefaultAsync(x => x.Id.Equals(product.TypeId));
+
+                model.Add(new BaseProductModel
+                {
+                    Id = product.Id,
+                    Name = product.Name,
+                    Type = type.Type,
+                    TypeId = (int)product.TypeId,
+                    CreatedOn = product.CreatedOn.ToString("dd/MM/yyyy HH:mm"),
+                });
+            }
+            return model;            
+        }
+
+        private Dictionary<int,string> GetProductTypes()
+        {
+            var result = this.DbContext.ProductTypes.ToDictionary(x => x.Id, x => x.Type);
+
+            //var result = await this.DbContext.ProductTypes.FirstOrDefaultAsync(x => x.Id.Equals(typeId));
+
+            return result;
         }
     }
 }

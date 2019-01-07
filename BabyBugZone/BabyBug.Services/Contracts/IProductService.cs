@@ -1,4 +1,5 @@
 ﻿using BabyBug.Common.ViewModels.Garments;
+using BabyBug.Common.ViewModels.Products;
 using BabyBugZone.Data;
 using System;
 using System.Collections.Generic;
@@ -24,5 +25,7 @@ namespace BabyBug.Services.Contracts
         Task<EditProductModel> GetEditModelAsync(int id);
 
         Task EditProductAsync(int id, EditProductModel model);
+
+        Task<ICollection<BaseProductModel>> GetOutOfStockProductsModelAsync();
     }
 }
