@@ -7,6 +7,7 @@ using BabyBug.Common.ViewModels.Blog;
 using BabyBug.Data.Models;
 using BabyBug.Services.Contracts;
 using BabyBugZone.Data;
+using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 
 namespace BabyBug.Services
@@ -22,6 +23,11 @@ namespace BabyBug.Services
 
         public async Task CreateBlogPageAsync(CreatePageModel model)
         {
+            if (!this.IsValidImageFile(model.Picture))
+            {
+                throw new ArgumentException("Invalid file type!");
+            }
+
             var file = model.Picture;
 
             //upload image
@@ -60,6 +66,11 @@ namespace BabyBug.Services
 
         public async Task EditBlogPageAsync(int id, PageEditModel model)
         {
+            if (!this.IsValidImageFile(model.Picture))
+            {
+                throw new ArgumentException("Invalid file type!");
+            }
+
             var page = await this.DbContext
                 .BlogPages
                 .FirstOrDefaultAsync(x => x.Id.Equals(id));

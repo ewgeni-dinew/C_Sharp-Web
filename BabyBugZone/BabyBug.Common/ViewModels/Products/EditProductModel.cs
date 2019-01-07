@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using BabyBug.Common.Constants;
+using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -10,13 +11,13 @@ namespace BabyBug.Common.ViewModels.Garments
     {
         public int Id { get; set; }
 
-        [StringLength(30, ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.", MinimumLength = 3)]
-        [RegularExpression("^[A-z]+$", ErrorMessage = "Invalid Product name.")]
+        [StringLength(ModelConstants.PRODUCT_NAME_MAX, ErrorMessage = ModelConstants.ERROR_MSG, MinimumLength = ModelConstants.PRODUCT_NAME_MIN)]
+        [RegularExpression(ModelConstants.ALPHABETS_RGX, ErrorMessage = ModelConstants.PRODUCT_NAME_RGX_ERROR)]
         public string Name { get; set; }
 
         public char Gender { get; set; }
 
-        [StringLength(200, ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.", MinimumLength = 3)]
+        [StringLength(ModelConstants.PRODUCT_DESCRIPTION_MAX, ErrorMessage = ModelConstants.ERROR_MSG, MinimumLength = ModelConstants.PRODUCT_DESCRIPTION_MIN)]
         public string Description { get; set; }
 
         [DataType(DataType.Currency)]

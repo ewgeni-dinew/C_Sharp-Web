@@ -1,4 +1,5 @@
-﻿using System;
+﻿using BabyBug.Common.Constants;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Text;
@@ -9,8 +10,8 @@ namespace BabyBug.Common.ViewModels.TypeManagement
     {
         [Required]
         [Display(Name = "Name")]
-        [StringLength(35, ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.", MinimumLength = 4)]
-        [RegularExpression("^[A-z]+$", ErrorMessage = "Invalid Type name.")]
+        [StringLength(ModelConstants.TYPE_VALUE_MAX, ErrorMessage = ModelConstants.ERROR_MSG, MinimumLength = ModelConstants.TYPE_VALUE_MAX)]
+        [RegularExpression(ModelConstants.ALPHABETS_RGX, ErrorMessage = ModelConstants.TYPE_VALUE_RGX_ERROR)]
         public string Name { get; set; }
 
         public HashSet<string> Types { get; set; }

@@ -40,15 +40,22 @@ namespace BabyBug.Web.Areas.Administrator.Controllers
         [AutoValidateAntiforgeryToken]
         public async Task<ActionResult> Create(CreateTypeModel model)
         {
-            if (!ModelState.IsValid)
+            try
             {
-                return this.RedirectToAction("Create");
+                if (!ModelState.IsValid)
+                {
+                    return this.RedirectToAction("Create");
+                }
+
+                await this.managementService
+                    .CreateTypeAsync(model);
+
+                return this.RedirectToAction("Index");
             }
-
-            await this.managementService
-                .CreateTypeAsync(model);
-
-            return this.RedirectToAction("Index");
+            catch (Exception ex)
+            {
+                return this.View("Error", ex.Message);
+            }
         }
         
         public ActionResult Edit(string name)
@@ -63,15 +70,22 @@ namespace BabyBug.Web.Areas.Administrator.Controllers
         [AutoValidateAntiforgeryToken]
         public async Task<ActionResult> Edit(EditTypeModel model)
         {
-            if (!ModelState.IsValid)
+            try
             {
-                return this.RedirectToAction("Edit");
+                if (!ModelState.IsValid)
+                {
+                    return this.RedirectToAction("Edit");
+                }
+
+                await this.managementService
+                    .EditTypeAsync(model);
+
+                return this.RedirectToAction("Index");
             }
-
-            await this.managementService
-                .EditTypeAsync(model);
-
-            return this.RedirectToAction("Index");
+            catch (Exception ex)
+            {
+                return this.View("Error", ex.Message);
+            }
         }        
     }
 }

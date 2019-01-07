@@ -7,6 +7,7 @@
 }
 
 @section Styles {
+    <partial name="_SingleStylesPartial" />
     <partial name="_MainStylesPartial" />
 }
 
@@ -50,7 +51,9 @@
                                         <a class="btn btn-outline-primary" asp-area="Administrator" asp-controller="Blog" asp-action="Edit" asp-route-id=@blogPage.PageId>Edit</a>
                                     </div>
                                     <div class="col">
-                                        <a class="btn btn-outline-danger" asp-area="Administrator" asp-controller="Blog" asp-action="Delete" asp-route-id=@blogPage.PageId>Delete</a>
+                                        <form method="post" asp-area="Administrator" asp-controller="Blog" asp-action="Delete" asp-route-id=@blogPage.PageId>
+                                            <input type="submit" class="btn btn-outline-danger" value="Delete" />
+                                        </form>
                                     </div>
                                 </div>
                             }

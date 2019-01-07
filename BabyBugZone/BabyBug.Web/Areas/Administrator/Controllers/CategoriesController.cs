@@ -34,16 +34,23 @@ namespace BabyBug.Web.Areas.Administrator.Controllers
         [AutoValidateAntiforgeryToken]
         public async Task<ActionResult> Create(CreateCategoryModel model)
         {
-            
-            if (!this.ModelState.IsValid)
+            try
             {
-                return this.View();
+                if (!this.ModelState.IsValid)
+                {
+                    return this.View();
+                }
+
+                await this.categoriesService.
+                    CreateCategoryAsync(model);
+
+                return RedirectToAction("Index", "Categories", new { area = "Shopping" });
             }
-
-            await this.categoriesService.
-                CreateCategoryAsync(model);
-
-            return RedirectToAction("Index", "Categories", new { area = "Shopping" });
+            catch (Exception ex)
+            {
+                return this.View("Error", ex.Message);
+            }
+            
         }
 
         public async Task<ActionResult> Edit(int id)
@@ -58,14 +65,22 @@ namespace BabyBug.Web.Areas.Administrator.Controllers
         [AutoValidateAntiforgeryToken]
         public async Task<ActionResult> Edit(int id, EditCategoryModel model)
         {
-            if (!this.ModelState.IsValid)
+            try
             {
-                return this.RedirectToAction("Edit", new { id });
+                if (!this.ModelState.IsValid)
+                {
+                    return this.RedirectToAction("Edit", new { id });
+                }
+
+                await this.categoriesService.EditCategoryAsync(id, model);
+
+                return RedirectToAction("Index", "Categories", new { area = "Shopping" });
+            }
+            catch (Exception ex)
+            {
+                return this.View("Error", ex.Message);
             }
 
-            await this.categoriesService.EditCategoryAsync(id, model);
-
-            return RedirectToAction("Index", "Categories", new { area = "Shopping" });
         }
 
 
@@ -82,14 +97,22 @@ namespace BabyBug.Web.Areas.Administrator.Controllers
         [AutoValidateAntiforgeryToken]
         public async Task<ActionResult> Delete(int id, EditCategoryModel model)
         {
-            if (!this.ModelState.IsValid)
+            try
             {
-                return this.RedirectToAction("Delete", new { id });
+                if (!this.ModelState.IsValid)
+                {
+                    return this.RedirectToAction("Delete", new { id });
+                }
+
+                await this.categoriesService.DeleteCategoryAsync(id);
+
+                return RedirectToAction("Index", "Categories", new { area = "Shopping" });
+            }
+            catch (Exception ex)
+            {
+                return this.View("Error", ex.Message);
             }
 
-            await this.categoriesService.DeleteCategoryAsync(id);
-
-            return RedirectToAction("Index", "Categories", new { area = "Shopping" });
         }
 
     }

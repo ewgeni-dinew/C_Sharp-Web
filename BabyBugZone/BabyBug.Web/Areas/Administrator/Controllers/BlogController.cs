@@ -19,7 +19,7 @@ namespace BabyBug.Web.Areas.Administrator.Controllers
         public BlogController(IBlogService blogService)
         {
             this.blogService = blogService;
-        }       
+        }
 
         public ActionResult Create()
         {
@@ -34,20 +34,19 @@ namespace BabyBug.Web.Areas.Administrator.Controllers
             {
                 if (!ModelState.IsValid)
                 {
-                    return this.View();
-                }
+                    throw new ArgumentException("Invalid input parameters.");
+                }               
 
                 await this.blogService
                     .CreateBlogPageAsync(model);
 
                 return this.RedirectToAction("Index", "Blog");
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-
-                throw;
+                return this.View("Error", ex.Message);
             }
-            
+
         }
 
         public async Task<ActionResult> Edit(int id)
@@ -71,16 +70,15 @@ namespace BabyBug.Web.Areas.Administrator.Controllers
 
                 await this.blogService.EditBlogPageAsync(id, model);
 
-                return this.RedirectToAction("Index", "Home");
+                return this.RedirectToAction("Index", "Blog");
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-
-                throw;
+                return this.View("Error", ex.Message);
             }
-           
+
         }
-        
+
         [HttpPost]
         [AutoValidateAntiforgeryToken]
         public async Task<ActionResult> Delete(int id)
@@ -90,14 +88,12 @@ namespace BabyBug.Web.Areas.Administrator.Controllers
                 await this.blogService
                         .DeleteBlogAsync(id);
 
-                return this.RedirectToAction("Index", "Home");
+                return this.RedirectToAction("Index", "Blog");
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-
-                throw;
+                return this.View("Error", ex.Message);
             }
-            
         }
     }
 }

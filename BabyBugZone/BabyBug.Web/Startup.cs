@@ -134,9 +134,7 @@ namespace BabyBug.Web
                 MinimumSameSitePolicy = SameSiteMode.None
             });
 
-            app.UseAuthentication();
-
-            // X-Content-Type-Options header
+            //X - Content - Type - Options header
             app.UseXContentTypeOptions();
             // Referrer-Policy header.
             app.UseReferrerPolicy(opts => opts.NoReferrer());
@@ -145,17 +143,19 @@ namespace BabyBug.Web
             // X-Frame-Options header
             app.UseXfo(options => options.Deny());
             // Content-Security-Policy header
-            app.UseCsp(opts => opts
-                .BlockAllMixedContent()
-                .StyleSources(s => s.Self())
-                .StyleSources(s => s.UnsafeInline())
-                .FontSources(s => s.Self())
-                .FormActions(s => s.Self())
-                .FrameAncestors(s => s.Self())
-                .ImageSources(s => s.Self())
-                .ScriptSources(s => s.Self())
-            );
+            //app.UseCsp(opts => opts
+            //    .BlockAllMixedContent()
+            //    .StyleSources(s => s.Self())
+            //    .StyleSources(s => s.UnsafeInline())
+            //    .FontSources(s => s.Self())
+            //    .FormActions(s => s.Self())
+            //    .FrameAncestors(s => s.Self())
+            //    .ImageSources(s=>s.Self())
+            //    .ImageSources(s => s.CustomSources(@"https://cloudinary.com/"))
+            //    .ScriptSources(s => s.Self())
+            //);
 
+            app.UseAuthentication();
 
             app.UseMvc(routes =>
             {                

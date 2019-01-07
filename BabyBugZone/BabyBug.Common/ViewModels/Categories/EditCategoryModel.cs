@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using BabyBug.Common.Constants;
+using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -11,7 +12,8 @@ namespace BabyBug.Common.ViewModels.Categories
         public int Id { get; set; }
 
         [Required]
-        [RegularExpression("^[A-z]+$", ErrorMessage = "Invalid Category name.")]
+        [StringLength(ModelConstants.CATEGORY_LENGTH_MAX, ErrorMessage = ModelConstants.ERROR_MSG, MinimumLength = ModelConstants.CATEGORY_LENGTH_MIN)]
+        [RegularExpression(ModelConstants.ALPHABETS_RGX, ErrorMessage = ModelConstants.CATEGORY_NAME_RGX_ERROR)]
         public string Name { get; set; }
         
         [Display(Name = "Picture")]

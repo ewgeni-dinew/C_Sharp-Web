@@ -40,37 +40,77 @@ namespace BabyBug.Web.Areas.Shopping.Controllers
 
         public async Task<ActionResult> IndexPage(int pageIndex, HomeCatalogModel model)
         {
-            var homeModel = await this.catalogService.SetPaginationModelAsync(pageIndex, model);
+            try
+            {
+                var homeModel = await this.catalogService.SetPaginationModelAsync(pageIndex, model);
 
-            return this.View("Index", homeModel);
+                return this.View("Index", homeModel);
+            }
+            catch (Exception ex)
+            {
+                return this.View("Error", ex.Message);
+            }
+
         }
 
         public async Task<ActionResult> FilterByType(string type)
         {
-            var model = await this.catalogService.GetHomeModelByTypeAsync(type);
+            try
+            {
+                var model = await this.catalogService.GetHomeModelByTypeAsync(type);
 
-            return this.View("Index", model);
+                return this.View("Index", model);
+            }
+            catch (Exception ex)
+            {
+                return this.View("Error", ex.Message);
+            }
+            
         }
 
         public async Task<ActionResult> FilterByCategory(string name)
         {
-            var model = await this.catalogService.GetHomeModelByCategoryAsync(name);
+            try
+            {
+                var model = await this.catalogService.GetHomeModelByCategoryAsync(name);
 
-            return this.View("Index", model);
+                return this.View("Index", model);
+            }
+            catch (Exception ex)
+            {
+                return this.View("Error", ex.Message);
+            }
+            
         }
 
         public async Task<ActionResult> FilterByCriteria(HomeCatalogModel model)
         {
-            var homeModel = await this.catalogService.GetHomeModelByCriteriaAsync(model);
+            try
+            {
+                var homeModel = await this.catalogService.GetHomeModelByCriteriaAsync(model);
 
-            return this.View("Index", homeModel);
+                return this.View("Index", homeModel);
+            }
+            catch (Exception ex)
+            {
+                return this.View("Error", ex.Message);
+
+            }
         }
 
         public async Task<ActionResult> FilterByGender(string gender)
         {
-            var model = await this.catalogService.GetHomeModelByGenderAsync(gender);
+            try
+            {
+                var model = await this.catalogService.GetHomeModelByGenderAsync(gender);
 
-            return this.View("Index", model);
+                return this.View("Index", model);
+            }
+            catch (Exception ex)
+            {
+                return this.View("Error", ex.Message);
+            }
+            
         }
     }
 }

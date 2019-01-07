@@ -21,11 +21,6 @@ namespace BabyBug.Web.Areas.Administrator.Controllers
             this.productService = garmentService;
         }
 
-        public ActionResult Index()
-        {
-            return View();
-        }
-
         public ActionResult Create()
         {
             var model = this.productService
@@ -38,16 +33,23 @@ namespace BabyBug.Web.Areas.Administrator.Controllers
         [AutoValidateAntiforgeryToken]
         public async Task<ActionResult> Create(CreateProductModel model)
         {
-            if (!this.ModelState.IsValid)
+            try
             {
-                //TODO implement better response
-                return this.View();
+                if (!this.ModelState.IsValid)
+                {
+                    return this.View();
+                }
+
+                await this.productService
+                    .CreateProductAsync(model);
+
+                return RedirectToAction("Index", "Home", new { area = "" });
+            }
+            catch (Exception ex)
+            {
+                return this.View("Error", ex.Message);
             }
 
-            await this.productService
-                .CreateProductAsync(model);
-
-            return RedirectToAction("Index", "Home", new { area = "" });
         }
 
         public async Task<ActionResult> Edit(int id)
@@ -61,14 +63,22 @@ namespace BabyBug.Web.Areas.Administrator.Controllers
         [AutoValidateAntiforgeryToken]
         public async Task<ActionResult> Edit(int id, EditProductModel model)
         {
-            if (!this.ModelState.IsValid)
+            try
             {
-                return this.View();
+                if (!this.ModelState.IsValid)
+                {
+                    return this.View();
+                }
+
+                await this.productService.EditProductAsync(id, model);
+
+                return RedirectToAction("Index", "Home", new { area = "" });
+            }
+            catch (Exception ex)
+            {
+                return this.View("Error", ex.Message);
             }
 
-            await this.productService.EditProductAsync(id, model);
-
-            return RedirectToAction("Index", "Home", new { area = "" });
         }
 
         public async Task<ActionResult> Delete(int id)
@@ -82,14 +92,22 @@ namespace BabyBug.Web.Areas.Administrator.Controllers
         [AutoValidateAntiforgeryToken]
         public async Task<ActionResult> Delete(DeleteProductModel model)
         {
-            if (!this.ModelState.IsValid)
+            try
             {
-                return this.View();
+                if (!this.ModelState.IsValid)
+                {
+                    return this.View();
+                }
+
+                await this.productService.DeleteProductAsync(model.Id);
+
+                return RedirectToAction("Index", "Home", new { area = "" });
+            }
+            catch (Exception ex)
+            {
+                return this.View("Error", ex.Message);
             }
 
-            await this.productService.DeleteProductAsync(model.Id);
-
-            return RedirectToAction("Index", "Home", new { area = "" });
         }
     }
 }

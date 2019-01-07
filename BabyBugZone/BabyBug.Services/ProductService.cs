@@ -48,6 +48,11 @@ namespace BabyBug.Services
 
         public async Task CreateProductAsync(CreateProductModel model)
         {
+            if (!this.IsValidImageFile(model.Picture))
+            {
+                throw new ArgumentException("Invalid file type!");
+            }
+
             //get category id
             var category = await this.DbContext
                 .ProductCategories
@@ -197,6 +202,11 @@ namespace BabyBug.Services
 
         public async Task EditProductAsync(int id, EditProductModel model)
         {
+            if (!this.IsValidImageFile(model.Picture))
+            {
+                throw new ArgumentException("Invalid file type!");
+            }
+
             var product = await this.DbContext
                 .Products
                 .FirstOrDefaultAsync(x => x.Id.Equals(id));

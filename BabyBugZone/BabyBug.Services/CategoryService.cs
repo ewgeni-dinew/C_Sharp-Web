@@ -95,6 +95,11 @@ namespace BabyBug.Services
 
         public async Task CreateCategoryAsync(CreateCategoryModel model)
         {
+            if (!this.IsValidImageFile(model.Picture))
+            {
+                throw new ArgumentException("Invalid file type!");
+            }
+
             var file = model.Picture;
 
             //upload image to Cloudinary
@@ -150,6 +155,11 @@ namespace BabyBug.Services
 
         public async Task EditCategoryAsync(int id, EditCategoryModel model)
         {
+            if (!this.IsValidImageFile(model.Picture))
+            {
+                throw new ArgumentException("Invalid file type!");
+            }
+
             var category = await this.DbContext
                 .ProductCategories
                 .FirstOrDefaultAsync(x => x.Id.Equals(id));

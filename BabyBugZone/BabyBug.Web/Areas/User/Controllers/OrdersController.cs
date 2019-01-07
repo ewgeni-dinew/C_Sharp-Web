@@ -28,28 +28,35 @@ namespace BabyBug.Web.Areas.User.Controllers
             try
             {
                 if (!ModelState.IsValid)
-                {
-                    throw new ArgumentException("Order not made. Invalid Model State!");
+                {                    
+                    throw new ArgumentException("Order not made. Invalid order parameters!");
                 }
                 await this.ordersService
                     .OrderProductAsync(id, this.User.Identity.Name, model);
 
                 return this.RedirectToAction("MyOrders", "Orders");
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-
-                throw;
+                return this.View("Error", ex.Message);
             }
 
         }
 
         public async Task<ActionResult> MyOrders()
         {
-            var model = await this.ordersService
+            try
+            {
+                var model = await this.ordersService
                 .GetOrderedProductsUserAsync(this.User.Identity.Name);
 
-            return this.View(model);
+                return this.View(model);
+            }
+            catch (Exception ex)
+            {
+                return this.View("Error", ex.Message);
+            }
+
         }
 
         [HttpPost]
@@ -63,10 +70,9 @@ namespace BabyBug.Web.Areas.User.Controllers
 
                 return this.RedirectToAction("MyOrders", "Orders");
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-
-                throw;
+                return this.View("Error", ex.Message);
             }
 
         }
@@ -95,10 +101,9 @@ namespace BabyBug.Web.Areas.User.Controllers
 
                 return this.RedirectToAction("FinishedOrder", "Orders", new { id });
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-
-                throw;
+                return this.View("Error", ex.Message);
             }
 
         }

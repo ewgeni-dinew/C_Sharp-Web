@@ -55,20 +55,36 @@ namespace BabyBug.Web.Areas.Administrator.Controllers
         [AutoValidateAntiforgeryToken]
         public async Task<ActionResult> Approve(int id)
         {
-            await this.ordersService
+            try
+            {
+                await this.ordersService
                 .ApproveOrderAsync(id);
 
-            return this.RedirectToAction("Awaiting", "Orders");
+                return this.RedirectToAction("Awaiting", "Orders");
+            }
+            catch (Exception ex)
+            {
+                return this.View("Error", ex.Message);
+            }
+            
         }
 
         [HttpPost]
         [AutoValidateAntiforgeryToken]
         public async Task<ActionResult> RemoveOrder(int id)
         {
-            await this.ordersService
+            try
+            {
+                await this.ordersService
                 .RemoveOrderAsync(id);
 
-            return this.RedirectToAction("Awaiting", "Orders");
+                return this.RedirectToAction("Awaiting", "Orders");
+            }
+            catch (Exception ex)
+            {
+                return this.View("Error", ex.Message);
+            }
+            
         }
     }
 }

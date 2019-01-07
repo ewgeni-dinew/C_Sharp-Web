@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using BabyBug.Common.Constants;
+using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -11,16 +12,17 @@ namespace BabyBug.Common.ViewModels.Blog
         public int Id { get; set; }
 
         [Display(Name = "Author")]
-        [StringLength(25, ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.", MinimumLength = 5)]
-        [RegularExpression("^[A-z]+$", ErrorMessage = "Invalid Author name.")]
+        [StringLength(ModelConstants.AUTHOR_NAME_MAX, ErrorMessage = ModelConstants.ERROR_MSG, MinimumLength = ModelConstants.AUTHOR_NAME_MIN)]
+        [RegularExpression(ModelConstants.ALPHABETS_RGX, ErrorMessage = ModelConstants.BLOG_AUTHOR_RGX_ERROR)]
         public string Author { get; set; }
         
         [Display(Name = "Header")]
-        [StringLength(30, ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.", MinimumLength = 5)]
+        [StringLength(ModelConstants.HEADER_LENGTH_MAX, ErrorMessage = ModelConstants.ERROR_MSG, MinimumLength = ModelConstants.HEADER_LENGTH_MIN)]
+        [RegularExpression(ModelConstants.ALPHA_NUMERIC_RGX, ErrorMessage = ModelConstants.BLOG_HEADER_RGX_ERROR)]
         public string Header { get; set; }
 
         [Display(Name = "PageContent")]
-        [StringLength(5000, ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.", MinimumLength = 10)]
+        [StringLength(ModelConstants.CONTENT_LENGTH_MAX, ErrorMessage = ModelConstants.ERROR_MSG, MinimumLength = ModelConstants.CONTENT_LENGTH_MIN)]
         public string PageContent { get; set; }
 
         [Display(Name = "Picture")]

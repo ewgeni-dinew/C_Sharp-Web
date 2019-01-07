@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
 using BabyBug.Common.ViewModels.Blog;
+using Microsoft.AspNetCore.Http;
 
 namespace BabyBug.Services.Contracts
 {

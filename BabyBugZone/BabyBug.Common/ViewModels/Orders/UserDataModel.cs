@@ -1,4 +1,5 @@
-﻿using System;
+﻿using BabyBug.Common.Constants;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Text;
@@ -7,41 +8,39 @@ namespace BabyBug.Common.ViewModels.Orders
 {
     public class UserDataModel
     {
-        [Required]
-        [RegularExpression("^[A-z]+$", ErrorMessage = "Invalid Username.")]
         public string Username { get; set; }
 
         public int OrderId { get; set; }
 
         [Required]
         [Display(Name = "FirstName")]
-        [StringLength(15, ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.", MinimumLength = 3)]
-        [RegularExpression("^[A-z]+$", ErrorMessage = "Invalid name.")]
+        [StringLength(ModelConstants.USER_NAME_LENGTH_MAX, ErrorMessage = ModelConstants.ERROR_MSG, MinimumLength = ModelConstants.USER_NAME_LENGTH_MIN)]
+        [RegularExpression(ModelConstants.ALPHABETS_RGX, ErrorMessage = ModelConstants.USER_NAME_RGX_ERROR)]
         public string FirstName { get; set; }
 
         [Required]
         [Display(Name = "LastName")]
-        [StringLength(15, ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.", MinimumLength = 3)]
-        [RegularExpression("^[A-z]+$", ErrorMessage = "Invalid name.")]   
+        [StringLength(ModelConstants.USER_NAME_LENGTH_MAX, ErrorMessage = ModelConstants.ERROR_MSG, MinimumLength = ModelConstants.USER_NAME_LENGTH_MIN)]
+        [RegularExpression(ModelConstants.ALPHABETS_RGX, ErrorMessage = ModelConstants.USER_NAME_RGX_ERROR)]   
         public string LastName { get; set; }
 
         [Required]
         [Display(Name = "Telephone")]
         [DataType(DataType.PhoneNumber)]
-        [StringLength(13, ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.", MinimumLength = 6)]        
-        [RegularExpression("^[0-9]+$", ErrorMessage = "Invalid {0} number.")]
+        [StringLength(ModelConstants.PHONE_VALUE_MAX, ErrorMessage = ModelConstants.ERROR_MSG , MinimumLength = ModelConstants.PHONE_VALUE_MIN)]        
+        [RegularExpression(ModelConstants.NUMERICS_RGX, ErrorMessage = ModelConstants.PHONE_VALUE_RGX_ERROR)]
         public string Telephone { get; set; }
 
         [Required]
         [Display(Name = "City")]
-        [StringLength(20, ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.", MinimumLength = 4)]
-        [RegularExpression("^[A-z]+$", ErrorMessage = "Invalid {0} name.")]
+        [StringLength(20, ErrorMessage = ModelConstants.ERROR_MSG, MinimumLength = 4)]
+        [RegularExpression(ModelConstants.ALPHABETS_RGX, ErrorMessage = ModelConstants.CITY_NAME_RGX_ERROR)]
         public string City { get; set; }
 
         [Required]
         [Display(Name = "Address")]
-        [StringLength(30, ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.", MinimumLength = 8)]
-        [RegularExpression(@"^[a-zA-Z0-9\.\-\s\,]*$", ErrorMessage = "Invalid {0} name.")]
+        [StringLength(30, ErrorMessage = ModelConstants.ERROR_MSG, MinimumLength = 8)]
+        [RegularExpression(ModelConstants.ALPHA_NUMERIC_RGX, ErrorMessage = ModelConstants.ADDRESS_NAME_RGX_ERROR)]
         public string Address { get; set; }
 
         public HashSet<string> PaymentTypes { get; set; }
@@ -54,7 +53,7 @@ namespace BabyBug.Common.ViewModels.Orders
         [Required]
         public string DeliveryType { get; set; }
 
-        [StringLength(30, ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.", MinimumLength = 5)]    
+        [StringLength(ModelConstants.DESTINATION_NAME_LENGTH_MAX, ErrorMessage = ModelConstants.ERROR_MSG, MinimumLength = ModelConstants.DESTINATION_NAME_LENGTH_MIN)]    
         public string DeliveryDestination { get; set; }
     }
 }
