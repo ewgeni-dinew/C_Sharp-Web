@@ -1,66 +1,66 @@
-﻿@model BabyBug.Common.ViewModels.Orders.UserDataModel
+﻿@model BabyBug.Common.ViewModels.Orders.ManageDeliveryModel
 @addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
 
-<form method="post" asp-area="User" asp-controller="Orders" asp-action="ManageDelivery" asp-route-id=@Model.OrderId>
+<form method="post" asp-area="User" asp-controller="Orders" asp-action="ManageDelivery" asp-route-id=@Model.UserDataModel.OrderId>
     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
     <input asp-for="Username" type="hidden" placeholder=@Model.Username />
     <div class="col">
         <div class="row">
             <div class="col form-group">
-                <label asp-for="FirstName" class="control-label"></label>
-                <input asp-for="FirstName" class="form-control" placeholder=@Model.FirstName />
-                <span asp-validation-for="FirstName" class="text-danger"></span>
+                <label asp-for="UserDataModel.FirstName" class="control-label"></label>
+                <input asp-for="UserDataModel.FirstName" class="form-control" placeholder=@Model.UserDataModel.FirstName />
+                <span asp-validation-for="UserDataModel.FirstName" class="text-danger"></span>
             </div>
             <div class="col form-group">
-                <label asp-for="LastName" class="control-label"></label>
-                <input asp-for="LastName" class="form-control" placeholder=@Model.LastName />
-                <span asp-validation-for="LastName" class="text-danger"></span>
+                <label asp-for="UserDataModel.LastName" class="control-label"></label>
+                <input asp-for="UserDataModel.LastName" class="form-control" placeholder=@Model.UserDataModel.LastName />
+                <span asp-validation-for="UserDataModel.LastName" class="text-danger"></span>
             </div>
         </div>
         <div class="form-group">
-            <label asp-for="Telephone" class="control-label"></label>
-            <input asp-for="Telephone" class="form-control" placeholder=@Model.Telephone />
-            <span asp-validation-for="Telephone" class="text-danger"></span>
+            <label asp-for="UserDataModel.Telephone" class="control-label"></label>
+            <input asp-for="UserDataModel.Telephone" class="form-control" placeholder=@Model.UserDataModel.Telephone />
+            <span asp-validation-for="UserDataModel.Telephone" class="text-danger"></span>
         </div>
         <div class="form-group">
-            <label asp-for="City" class="control-label"></label>
-            <input asp-for="City" class="form-control" placeholder=@Model.City />
-            <span asp-validation-for="City" class="text-danger"></span>
+            <label asp-for="UserDataModel.City" class="control-label"></label>
+            <input asp-for="UserDataModel.City" class="form-control" placeholder=@Model.UserDataModel.City />
+            <span asp-validation-for="UserDataModel.City" class="text-danger"></span>
         </div>
         <div class="form-group">
-            <label asp-for="Address" class="control-label"></label>
-            <input asp-for="Address" class="form-control" placeholder=@Model.Address />
-            <span asp-validation-for="Address" class="text-danger"></span>
+            <label asp-for="UserDataModel.Address" class="control-label"></label>
+            <input asp-for="UserDataModel.Address" class="form-control" placeholder=@Model.UserDataModel.Address />
+            <span asp-validation-for="UserDataModel.Address" class="text-danger"></span>
         </div>
     </div>
     <hr class="mt-5" />
     <div class="col">
         <div class="funkyradio">
             <h5>Choose payment type:</h5>
-            @foreach (var paymentType in Model.PaymentTypes)
+            @foreach (var paymentType in Model.DeliveryDataModel.PaymentTypes)
             {
                 <div class="funkyradio-danger">
-                    <input asp-for="PaymentType" type="radio" value=@paymentType id="radio1" />
-                    <label asp-for="PaymentType" for="radio1">@paymentType</label>
+                    <input asp-for="DeliveryDataModel.PaymentType" type="radio" value=@paymentType id="radio1" />
+                    <label asp-for="DeliveryDataModel.PaymentType" for="radio1">@paymentType</label>
                 </div>
             }
-            <span asp-validation-for="PaymentType" class="text-danger"></span>
+            <span asp-validation-for="DeliveryDataModel.PaymentType" class="text-danger"></span>
         </div>
         <div class="funkyradio">
             <h5>Choose delivery type:</h5>
-            @foreach (var deliveryType in Model.DeliveryTypes)
+            @foreach (var deliveryType in Model.DeliveryDataModel.DeliveryTypes)
             {
                 <div class="funkyradio-danger">
-                    <input asp-for="DeliveryType" type="radio" value=@deliveryType id=@deliveryType onclick="javascript:deliveryOfficeCheck();" />
-                    <label asp-for="DeliveryType" for=@deliveryType>@deliveryType</label>
+                    <input asp-for="DeliveryDataModel.DeliveryType" type="radio" value=@deliveryType id=@deliveryType onclick="javascript:deliveryOfficeCheck();" />
+                    <label asp-for="DeliveryDataModel.DeliveryType" for=@deliveryType>@deliveryType</label>
                 </div>
-                <span asp-validation-for="DeliveryType" class="text-danger"></span>
+                <span asp-validation-for="DeliveryDataModel.DeliveryType" class="text-danger"></span>
             }
         </div>
         <div class="form-group" id="officeName" style="display:none">
-            <label asp-for="DeliveryDestination" class="control-label">Input office name:</label>
-            <input asp-for="DeliveryDestination" class="form-control" />
-            <span asp-validation-for="DeliveryDestination" class="text-danger"></span>
+            <label asp-for="DeliveryDataModel.DeliveryDestination" class="control-label">Input office name:</label>
+            <input asp-for="DeliveryDataModel.DeliveryDestination" class="form-control" />
+            <span asp-validation-for="DeliveryDataModel.DeliveryDestination" class="text-danger"></span>
         </div>
     </div>
     <hr />

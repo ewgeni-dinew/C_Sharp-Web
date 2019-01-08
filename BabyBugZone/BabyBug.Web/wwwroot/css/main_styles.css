@@ -654,11 +654,11 @@ section
 }
 .hamburger_menu
 {
-	position: fixed;
+	position: absolute;
 	top: 0;
 	right: -400px;
 	width: 400px;
-	height: 100vh;
+	height: 20%;
 	background: rgba(255,255,255,0.95);
 	z-index: 10;
 	-webkit-transition: all 300ms ease;

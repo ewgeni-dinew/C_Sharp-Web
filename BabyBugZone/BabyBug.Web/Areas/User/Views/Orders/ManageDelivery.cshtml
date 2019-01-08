@@ -1,4 +1,4 @@
-﻿@model BabyBug.Common.ViewModels.Orders.UserDataModel
+﻿@model BabyBug.Common.ViewModels.Orders.ManageDeliveryModel
 @addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
 
 @{
@@ -27,19 +27,23 @@
 
         </div>
     </div>
-    <h4 class="pt-5">Confirm delivery information for <span>@Model.Username</span>:</h4>
-    <hr />
-    <div class="row">
-        <div class="col-lg-6">
-            <partial name="_ManageDeliveryFormPartial" model=@Model />
+    @if (Model.ErrorMessage.Any())
+    {
+        <h2 class="text-danger">We are sorry to inform you, but there was a change in the products you ordered:</h2>
+        <h3>@Model.ErrorMessage</h3>
+        <h4>Please, check your shopping cart and feel free to contact us.</h4>
+        <a class="btn btn-primary" asp-area="User" asp-controller="Orders" asp-action="MyOrders">Shopping cart</a>
+    }
+    else
+    {
+        <h4 class="pt-5">Confirm delivery information for <span>@Model.Username</span>:</h4>
+        <hr />
+        <div class="row">
+            <div class="col-lg-6">
+                <partial name="_ManageDeliveryFormPartial" model=@Model />
+            </div>
         </div>
-    </div>
-</div>
-
-
-
-<div>
-    <a asp-action="Index">Back to List</a>
+    }
 </div>
 
 @section Scripts {

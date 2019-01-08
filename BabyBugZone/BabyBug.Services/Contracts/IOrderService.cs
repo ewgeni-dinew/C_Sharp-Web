@@ -26,13 +26,11 @@ namespace BabyBug.Services.Contracts
 
         Task RemoveProductFromOrderAsync(int orderId, int productId, string size);
 
-        Task<UserDataModel> GetUserDataModelAsync(string username);
+        Task<ManageDeliveryModel> GetUserDataModelAsync(string username);
 
-        Task SetDeliveryInfoAsync(int orderId, UserDataModel model);
+        Task<FinishedOrderModel> SetDeliveryInfoAsync(int orderId, ManageDeliveryModel model);
 
         Task ApproveOrderAsync(int id);
-
-        Task<string> SetOrderDateAsync(int id);
 
         Task RemoveOrderAsync(int id);
     }

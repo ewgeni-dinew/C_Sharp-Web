@@ -28,7 +28,7 @@ namespace BabyBug.Web.Areas.User.Controllers
             try
             {
                 if (!ModelState.IsValid)
-                {                    
+                {
                     throw new ArgumentException("Order not made. Invalid order parameters!");
                 }
                 await this.ordersService
@@ -87,7 +87,7 @@ namespace BabyBug.Web.Areas.User.Controllers
 
         [HttpPost]
         [AutoValidateAntiforgeryToken]
-        public async Task<ActionResult> ManageDelivery(int id, UserDataModel model)
+        public async Task<ActionResult> ManageDelivery(int id, ManageDeliveryModel deliveryModel)
         {
             try
             {
@@ -96,24 +96,16 @@ namespace BabyBug.Web.Areas.User.Controllers
                     return this.RedirectToAction("ManageDelivery", "Orders", new { username = this.User.Identity.Name });
                 }
 
-                await this.ordersService
-                    .SetDeliveryInfoAsync(id, model);
+                var model = await this.ordersService
+                    .SetDeliveryInfoAsync(id, deliveryModel);
 
-                return this.RedirectToAction("FinishedOrder", "Orders", new { id });
+                return this.View("FinishedOrder", model);
             }
             catch (Exception ex)
             {
                 return this.View("Error", ex.Message);
             }
 
-        }
-
-        public async Task<ActionResult> FinishedOrder(int id)
-        {
-            var model = await this.ordersService
-                .SetOrderDateAsync(id);
-
-            return this.View(model);
         }
     }
 }

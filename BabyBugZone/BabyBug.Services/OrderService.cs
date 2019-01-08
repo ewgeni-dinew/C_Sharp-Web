@@ -9,6 +9,7 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 
 namespace BabyBug.Services
@@ -188,6 +189,183 @@ namespace BabyBug.Services
             return await GetOrderedProductsAdminByOrderStatusAsync(id, OrderStatus.Approved);
         }
 
+        public async Task RemoveProductFromOrderAsync(int orderId, int productId, string size)
+        {
+            var orderProduct = await this.DbContext.OrderProducts
+                .FirstOrDefaultAsync(x => x.OrderId.Equals(orderId) &&
+                                    x.ProductId.Equals(productId)
+                                    && x.Size.Equals(size));
+
+            if (orderProduct != null)
+            {
+                this.DbContext
+                    .OrderProducts
+                    .Remove(orderProduct);
+
+                await this.DbContext
+                    .SaveChangesAsync();
+            }
+        }
+
+        public async Task<ManageDeliveryModel> GetUserDataModelAsync(string username)
+        {
+            var user = await this.DbContext
+                .Users
+                .FirstOrDefaultAsync(x => x.UserName.Equals(username));
+
+            var model = new ManageDeliveryModel()
+            {
+                ErrorMessage = string.Empty,
+                Username = user.UserName,
+            };
+
+            var order = await this.DbContext
+                .Orders
+                .FirstOrDefaultAsync(x => x.UserId.Equals(user.Id)
+                                    && x.Status.Equals(OrderStatus.Created));
+
+            //validate order quantity
+            var errorMsg = await this.ValidateOrderQuantity(order.Id);
+
+            //there is an error
+            if (!errorMsg.Equals(string.Empty))
+            {
+                model.ErrorMessage = errorMsg;
+                return model;
+            }
+
+            var paymentTypes = this.DbContext
+                .PaymentTypes
+                .Select(x => x.Type)
+                .ToHashSet();
+
+            var deliveryTypes = this.DbContext
+                .DeliveryTypes
+                .Select(x => x.Type)
+                .ToHashSet();
+
+            var userModel = new UserDataModel
+            {
+                FirstName = user.FirstName,
+                LastName = user.LastName,
+                Telephone = user.PhoneNumber,
+                City = user.City,
+                Address = user.Address,
+                OrderId = order.Id,
+            };
+
+            var deliveryModel = new DeliveryDataModel
+            {
+                PaymentTypes = paymentTypes,
+                DeliveryTypes = deliveryTypes,
+            };
+
+            model.DeliveryDataModel = deliveryModel;
+            model.UserDataModel = userModel;
+
+            return model;
+        }
+
+        public async Task<FinishedOrderModel> SetDeliveryInfoAsync(int orderId, ManageDeliveryModel model)
+        {
+            var user = await this.DbContext
+                .Users
+                .FirstOrDefaultAsync(x => x.UserName.Equals(model.Username));
+
+            var order = await this.DbContext
+                .Orders
+                .FirstOrDefaultAsync(x => x.UserId.Equals(user.Id)
+                                    && x.Status.Equals(OrderStatus.Created));
+
+
+            //update user info
+            if (!model.UserDataModel.FirstName.Equals(user.FirstName))
+            {
+                user.FirstName = model.UserDataModel.FirstName;
+            }
+            if (!model.UserDataModel.LastName.Equals(user.LastName))
+            {
+                user.LastName = model.UserDataModel.LastName;
+            }
+            if (!model.UserDataModel.Telephone.Equals(user.PhoneNumber))
+            {
+                user.PhoneNumber = model.UserDataModel.Telephone;
+            }
+            if (!model.UserDataModel.City.Equals(user.City))
+            {
+                user.City = model.UserDataModel.City;
+            }
+            if (!model.UserDataModel.Address.Equals(user.Address))
+            {
+                user.Address = model.UserDataModel.Address;
+            }
+
+            //set payment type
+            var paymentType = await this.DbContext
+                .PaymentTypes
+                .FirstOrDefaultAsync(x => x.Type.Equals(model.DeliveryDataModel.PaymentType));
+
+            order.PaymentTypeId = paymentType.Id;
+
+            //set delivery type
+            var deliveryType = await this.DbContext
+                .DeliveryTypes
+                .FirstOrDefaultAsync(x => x.Type.Equals(model.DeliveryDataModel.DeliveryType));
+
+            order.DeliveryTypeId = deliveryType.Id;
+
+            if (!deliveryType.Type.Contains("Office"))
+            {
+                order.DeliveryDestination = user.Address;
+            }
+            else
+            {
+                order.DeliveryDestination = model.DeliveryDataModel.DeliveryDestination;
+            }
+
+            //decrease order products quantity
+            var error = await this.DecreaseOrderProductsQuantity(order.Id);
+
+            order.MadeOn_Date = DateTime.UtcNow;
+
+            await this.DbContext
+                .SaveChangesAsync();
+
+            var finishedModel = new FinishedOrderModel
+            {
+                Error = error,
+                OrderId = String.Format($"XF1:+{order.Id:D6}")
+            };
+
+            return finishedModel;
+        }
+
+        public async Task ApproveOrderAsync(int id)
+        {
+            var order = await this.DbContext
+                .Orders
+                .FirstOrDefaultAsync(x => x.Id.Equals(id));
+
+            order.Status = OrderStatus.Approved;
+
+            await this.DbContext.SaveChangesAsync();
+        }
+
+        public async Task RemoveOrderAsync(int id)
+        {
+            var order = await this.DbContext
+                .Orders
+                .FirstOrDefaultAsync(x => x.Id.Equals(id)
+                                     && x.Status.Equals(OrderStatus.Awaiting));
+
+            this.DbContext
+                .Orders
+                .Remove(order);
+
+            await this.DbContext
+                .SaveChangesAsync();
+        }
+
         private async Task<AllOrderedProductsModel> GetOrderedProductsAdminByOrderStatusAsync(int id, OrderStatus orderStatus)
         {
             var order = await this.DbContext
@@ -268,167 +446,6 @@ namespace BabyBug.Services
             return type.Type;
         }
 
-        public async Task RemoveProductFromOrderAsync(int orderId, int productId, string size)
-        {
-            var orderProduct = await this.DbContext.OrderProducts
-                .FirstOrDefaultAsync(x => x.OrderId.Equals(orderId) &&
-                                    x.ProductId.Equals(productId)
-                                    && x.Size.Equals(size));
-
-            if (orderProduct != null)
-            {
-                this.DbContext
-                    .OrderProducts
-                    .Remove(orderProduct);
-
-                await this.DbContext
-                    .SaveChangesAsync();
-            }
-        }
-
-        public async Task<UserDataModel> GetUserDataModelAsync(string username)
-        {
-            var user = await this.DbContext
-                .Users
-                .FirstOrDefaultAsync(x => x.UserName.Equals(username));
-
-            var order = await this.DbContext
-                .Orders
-                .FirstOrDefaultAsync(x => x.UserId.Equals(user.Id)
-                                    && x.Status.Equals(OrderStatus.Created));
-
-            var paymentTypes = this.DbContext
-                .PaymentTypes
-                .Select(x => x.Type)
-                .ToHashSet();
-
-            var deliveryTypes = this.DbContext
-                .DeliveryTypes
-                .Select(x => x.Type)
-                .ToHashSet();
-
-            var model = new UserDataModel
-            {
-                Username = user.UserName,
-                FirstName = user.FirstName,
-                LastName = user.LastName,
-                Telephone = user.PhoneNumber,
-                City = user.City,
-                Address = user.Address,
-                OrderId = order.Id,
-                PaymentTypes = paymentTypes,
-                DeliveryTypes = deliveryTypes,
-            };
-
-            return model;
-        }
-
-        public async Task SetDeliveryInfoAsync(int orderId, UserDataModel model)
-        {
-            var user = await this.DbContext
-                .Users
-                .FirstOrDefaultAsync(x => x.UserName.Equals(model.Username));
-
-            var order = await this.DbContext
-                .Orders
-                .FirstOrDefaultAsync(x => x.UserId.Equals(user.Id)
-                                    && x.Status.Equals(OrderStatus.Created));
-
-            //update user info
-            if (!model.FirstName.Equals(user.FirstName))
-            {
-                user.FirstName = model.FirstName;
-            }
-            if (!model.LastName.Equals(user.LastName))
-            {
-                user.LastName = model.LastName;
-            }
-            if (!model.Telephone.Equals(user.PhoneNumber))
-            {
-                user.PhoneNumber = model.Telephone;
-            }
-            if (!model.City.Equals(user.City))
-            {
-                user.City = model.City;
-            }
-            if (!model.Address.Equals(user.Address))
-            {
-                user.Address = model.Address;
-            }
-
-            await this.DbContext
-                .SaveChangesAsync();
-
-            //set payment type
-            var paymentType = await this.DbContext
-                .PaymentTypes
-                .FirstOrDefaultAsync(x => x.Type.Equals(model.PaymentType));
-
-            order.PaymentTypeId = paymentType.Id;
-
-            //set delivery type
-            var deliveryType = await this.DbContext
-                .DeliveryTypes
-                .FirstOrDefaultAsync(x => x.Type.Equals(model.DeliveryType));
-
-            order.DeliveryTypeId = deliveryType.Id;
-
-            if (!deliveryType.Type.Contains("Office"))
-            {
-                order.DeliveryDestination = user.Address;
-            }
-            else
-            {
-                order.DeliveryDestination = model.DeliveryDestination;
-            }
-
-            order.Status = OrderStatus.Awaiting;
-
-            await this.DbContext
-                .SaveChangesAsync();
-        }
-
-        public async Task ApproveOrderAsync(int id)
-        {
-            var order = await this.DbContext
-                .Orders
-                .FirstOrDefaultAsync(x => x.Id.Equals(id));
-
-            order.Status = OrderStatus.Approved;
-
-            await this.DbContext.SaveChangesAsync();
-        }
-
-        public async Task<string> SetOrderDateAsync(int id)
-        {
-            var order = await this.DbContext
-                .Orders
-                .FirstOrDefaultAsync(x => x.Id.Equals(id)
-                                     && x.Status.Equals(OrderStatus.Awaiting));
-
-            order.MadeOn_Date = DateTime.UtcNow;
-
-            await this.DbContext
-                .SaveChangesAsync();
-
-            return String.Format($"XF1:+{id:D6}");
-        }
-
-        public async Task RemoveOrderAsync(int id)
-        {
-            var order = await this.DbContext
-                .Orders
-                .FirstOrDefaultAsync(x => x.Id.Equals(id)
-                                     && x.Status.Equals(OrderStatus.Awaiting));
-
-            this.DbContext
-                .Orders
-                .Remove(order);
-
-            await this.DbContext
-                .SaveChangesAsync();
-        }
-
         private async Task<string> GetProductTypeAsync(int categoryId)
         {
             var category = await this.DbContext
@@ -451,5 +468,134 @@ namespace BabyBug.Services
 
             return productType.Type;
         }
+
+        private async Task<string> DecreaseOrderProductsQuantity(int orderId)
+        {
+            var sb = new StringBuilder();
+
+            var orderProducts = this.DbContext
+                .OrderProducts
+                .Where(x => x.OrderId.Equals(orderId))
+                .ToHashSet();
+
+            foreach (var op in orderProducts)
+            {
+                var product = await this.DbContext
+                    .Products
+                    .FirstOrDefaultAsync(x => x.Id.Equals(op.ProductId));
+
+                var size = await this.DbContext
+                    .ProductSizes
+                    .FirstOrDefaultAsync(x => x.Value.Equals(op.Size));
+
+                var spec = await this.DbContext
+                    .ProductSpecifications
+                    .FirstOrDefaultAsync(x => x.ProductId.Equals(product.Id)
+                                        && x.ProductSizeId.Equals(size.Id));
+
+                if (spec.Quantity.Equals(0))
+                {
+                    //product is out of stock, someone has already ordered the product...
+
+                    this.DbContext.OrderProducts.Remove(op);
+
+                    await this.DbContext.SaveChangesAsync();
+
+                    sb.AppendLine($">Product \"{product.Name}\" (size: {op.Size}) has been removed from your cart due to lack of stock.");
+                }
+                else if (spec.Quantity < op.Quantity && spec.Quantity != 0)
+                {
+                    //set order quantity to the max available
+
+                    op.Quantity = spec.Quantity;
+                    spec.Quantity = 0;
+
+                    await this.DbContext.SaveChangesAsync();
+
+                    sb.AppendLine($">Product \"{product.Name}\" (size: {op.Size}) has a new (lower) quantity amount set.");
+                }
+                else if (spec.Quantity.Equals(op.Quantity))
+                {
+                    spec.Quantity = 0;
+                    await this.DbContext.SaveChangesAsync();
+                }
+                else
+                {
+                    spec.Quantity -= op.Quantity;
+                    await this.DbContext.SaveChangesAsync();
+                }
+
+                //check if product has quantity left
+                if (this.DbContext.ProductSpecifications
+                    .Where(x => x.ProductId.Equals(product.Id))
+                    .All(x => x.Quantity <= 0))
+                {
+                    product.IsAvailable = false;
+                }
+                await this.DbContext.SaveChangesAsync();
+            }
+
+            //change order status if any products left
+            if (orderProducts.Any())
+            {
+                var order = await this.DbContext.Orders.FirstOrDefaultAsync(x => x.Id.Equals(orderId));
+
+                order.Status = OrderStatus.Awaiting;
+
+                await this.DbContext.SaveChangesAsync();
+            }
+
+            return sb.ToString();
+        }
+
+        private async Task<string> ValidateOrderQuantity(int orderId)
+        {
+            var sb = new StringBuilder();
+
+            var orderProducts = this.DbContext
+                .OrderProducts
+                .Where(x => x.OrderId.Equals(orderId))
+                .ToHashSet();
+
+            foreach (var op in orderProducts)
+            {
+                var product = await this.DbContext
+                    .Products
+                    .FirstOrDefaultAsync(x => x.Id.Equals(op.ProductId));
+
+                var size = await this.DbContext
+                    .ProductSizes
+                    .FirstOrDefaultAsync(x => x.Value.Equals(op.Size));
+
+                var spec = await this.DbContext
+                    .ProductSpecifications
+                    .FirstOrDefaultAsync(x => x.ProductSizeId.Equals(size.Id)
+                                        && x.ProductId.Equals(op.ProductId));
+
+                if (spec.Quantity.Equals(0))
+                {
+                    //product is out of stock, someone has already ordered the product...
+
+                    this.DbContext.OrderProducts.Remove(op);
+
+                    await this.DbContext.SaveChangesAsync();
+
+                    sb.AppendLine($">Product \"{product.Name}\" (size: {op.Size}) has been removed from your cart due to lack of stock.");
+                }
+                else if (spec.Quantity < op.Quantity && spec.Quantity != 0)
+                {
+                    //set order quantity to the max available
+
+                    op.Quantity = spec.Quantity;
+
+                    await this.DbContext.SaveChangesAsync();
+
+                    sb.AppendLine($">Product \"{product.Name}\" (size: {op.Size}) has a new (lower) quantity amount set.");
+                }
+            }
+
+            return sb.ToString();
+        }
+
     }
 }

@@ -8,8 +8,6 @@ namespace BabyBug.Common.ViewModels.Orders
 {
     public class UserDataModel
     {
-        public string Username { get; set; }
-
         public int OrderId { get; set; }
 
         [Required]
@@ -43,17 +41,5 @@ namespace BabyBug.Common.ViewModels.Orders
         [RegularExpression(ModelConstants.ALPHA_NUMERIC_RGX, ErrorMessage = ModelConstants.ADDRESS_NAME_RGX_ERROR)]
         public string Address { get; set; }
 
-        public HashSet<string> PaymentTypes { get; set; }
-
-        [Required]
-        public string PaymentType { get; set; }
-
-        public HashSet<string> DeliveryTypes { get; set; }
-
-        [Required]
-        public string DeliveryType { get; set; }
-
-        [StringLength(ModelConstants.DESTINATION_NAME_LENGTH_MAX, ErrorMessage = ModelConstants.ERROR_MSG, MinimumLength = ModelConstants.DESTINATION_NAME_LENGTH_MIN)]    
-        public string DeliveryDestination { get; set; }
     }
 }
