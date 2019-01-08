@@ -1,0 +1,39 @@
+﻿@model  ICollection<BabyBug.Common.ViewModels.Reviews.BaseDisplayProductReviewModel>
+
+<div class="col-lg-6 reviews_col">
+    <div class="tab_title reviews_title">
+        <h4>Reviews</h4>
+    </div>
+
+    <!-- User Review -->
+    @foreach (var review in Model)
+    {
+        <div class="user_review_container d-flex flex-column flex-sm-row">
+            <div class="user">
+                <div class="user_pic"></div>
+                <div class="user_rating">
+                    <ul class="star_rating">
+                        @for (int i = 1; i <= 5; i++)
+                        {
+                            if (i <= review.Rating)
+                            {
+                                <li><i class="fa fa-star" aria-hidden="true"></i></li>
+                            }
+                            else
+                            {
+                                <li><i class="fa fa-star-o" aria-hidden="true"></i></li>
+                            }
+                        }
+                    </ul>
+                </div>
+            </div>
+            <div class="review">
+                <div class="review_date">@review.CreatedOn</div>
+                <div class="user_name">@review.Author</div>
+                <p>@review.Content</p>
+            </div>
+        </div>
+
+    }
+
+</div>

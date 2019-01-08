@@ -33,6 +33,10 @@ namespace BabyBugZone.Data
 
         public DbSet<BlogPage> BlogPages { get; set; }
 
+        public DbSet<Review> Reviews { get; set; }
+
+        public DbSet<UserReviews> UserReviews { get; set; }
+
         public BabyBugDbContext(DbContextOptions<BabyBugDbContext> options)
             : base(options)
         {
@@ -40,6 +44,24 @@ namespace BabyBugZone.Data
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
+            builder.Entity<UserReviews>()
+                .HasKey(x => x.ReviewId);
+
+            builder.Entity<UserReviews>()
+                .HasOne(x => x.Review)
+                .WithMany(r => r.UserReviews)
+                .HasForeignKey(x => x.ReviewId);
+
+            builder.Entity<UserReviews>()
+                .HasOne(x => x.Product)
+                .WithMany(p => p.UserReviews)
+                .HasForeignKey(x => x.ProductId);
+
+            builder.Entity<UserReviews>()
+                .HasOne(x => x.User)
+                .WithMany(u => u.UserReviews)
+                .HasForeignKey(x => x.UserId);
+
             builder.Entity<DeliveryType>()
                 .Property(x => x.Type)
                 .IsRequired(false);

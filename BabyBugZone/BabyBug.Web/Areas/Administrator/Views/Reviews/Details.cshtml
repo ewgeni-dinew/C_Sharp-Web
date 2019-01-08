@@ -1,0 +1,80 @@
+﻿@model BabyBug.Common.ViewModels.Reviews.AdminReviewDetailsModel
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+
+@{
+    ViewData["Title"] = "Details";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@section Styles{
+    <partial name="_SingleStylesPartial" />
+    <link rel="stylesheet" type="text/css" href="~/css/datatables.css">
+}
+
+<div class="container single_product_container">
+    <div class="row">
+        <div class="col">
+
+            <!-- Breadcrumbs -->
+
+            <div class="breadcrumbs d-flex flex-row align-items-center">
+                <ul>
+                    <li><a asp-controller="Home" asp-action="Index">Home</a></li>
+                    <li><a><i class="fa fa-angle-right" aria-hidden="true"></i>Reviews</a></li>
+                    <li class="active"><a asp-area="Administrator" asp-controller="Reviews" asp-action="Index"><i class="fa fa-angle-right" aria-hidden="true"></i>Awaiting</a></li>
+                </ul>
+            </div>
+
+        </div>
+    </div>
+
+    <div>
+        <h4>Review details</h4>
+        <hr />
+        <dl class="row">
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.AuthorName)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.AuthorName)
+            </dd>
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.Rating)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.Rating)
+            </dd>
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.CreatedOn)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.CreatedOn)
+            </dd>
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.ProductName)
+            </dt>
+            <dd class="col-sm-10">
+                <a asp-area="Shopping" asp-controller="Products" asp-action="Details" asp-route-id=@Model.ProductId>@Model.ProductName</a>
+            </dd>
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.Content)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.Content)
+            </dd>
+        </dl>
+    </div>
+    <div>
+        <div class="row">
+            <div class="col-md-3">
+                <form method="post" asp-area="Administrator" asp-controller="Reviews" asp-action="Approve" asp-route-id=@Model.ReviewId>
+                    <input type="submit" class="btn btn-primary" value="Approve" />
+                </form>
+            </div>
+            <div class="col-md-3">
+                <form method="post" asp-area="Administrator" asp-controller="Reviews" asp-action="Remove" asp-route-id=@Model.ReviewId>
+                    <input type="submit" class="btn btn-danger" value="Remove" />
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

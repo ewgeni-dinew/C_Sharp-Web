@@ -28,7 +28,12 @@
                             </ul>
                         </li>
                         <li class="account pr-3">
-                            <partial name="_LoginPartial" />
+                            <a asp-area="Identity" asp-page="/Account/Manage/Index">
+                                My Account<i class="fa fa-angle-down"></i>
+                            </a>
+                            <ul class="account_selection">
+                                <partial name="_LoginPartial" />
+                            </ul>
                         </li>
                         @if (User.IsInRole("Admin"))
                         {
@@ -45,6 +50,7 @@
                                     <li><a asp-area="Administrator" asp-controller="TypeManagement" asp-action="Index">Types</a></li>
                                     <li><a asp-area="Administrator" asp-controller="ProductSize" asp-action="Index">Sizes</a></li>
                                     <li><a asp-area="Administrator" asp-controller="Products" asp-action="Index">Products</a></li>
+                                    <li><a asp-area="Administrator" asp-controller="Reviews" asp-action="Index">Reviews</a></li>
                                 </ul>
                             </li>
                         }

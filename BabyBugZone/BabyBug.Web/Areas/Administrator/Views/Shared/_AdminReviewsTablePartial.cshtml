@@ -1,0 +1,32 @@
+﻿@model ICollection<BabyBug.Common.ViewModels.Reviews.AdminReviewBaseModel>
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+
+<table id="table_reviews" class="table table-striped">
+    <thead>
+        <tr>
+            <th scope="col">#</th>
+            <th scope="col">Name</th>
+            <th scope="col">Product</th>
+            <th scope="col">Made On</th>
+            <th scope="col">Action</th>
+        </tr>
+    </thead>
+    @{ var index = 1; }
+    @foreach (var review in Model)
+    {
+        <tr>
+            <th scope="row">@index</th>
+            <td>@review.AuthorName</td>
+            <td>
+                <a asp-area="Shopping" asp-controller="Products" asp-action="Details" asp-route-id=@review.ProductId>
+                    @review.ProductName
+                </a>
+            </td>
+            <td>@review.CreatedOn</td>
+            <td>
+                <a class="btn btn-success" asp-area="Administrator" asp-controller="Reviews" asp-action="Details" asp-route-id=@review.ReviewId>Details</a>
+            </td>
+        </tr>
+        index++;
+    }
+</table>

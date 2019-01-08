@@ -14,8 +14,73 @@
         color: black
     }
 
+    /*star rating*/
+.rating {
+    display: inline-block;
+    position: absolute;
+    height: 23px;
+    line-height: 23px;
+    font-size: 23px;
+}
 
+    .rating label {
+        position: absolute;
+        top: 0;
+        left: 0;
+        height: 100%;
+        cursor: pointer;
+    }
 
+        .rating label:last-child {
+            position: static;
+        }
+
+        .rating label:nth-child(1) {
+            z-index: 5;
+        }
+
+        .rating label:nth-child(2) {
+            z-index: 4;
+        }
+
+        .rating label:nth-child(3) {
+            z-index: 3;
+        }
+
+        .rating label:nth-child(4) {
+            z-index: 2;
+        }
+
+        .rating label:nth-child(5) {
+            z-index: 1;
+        }
+
+        .rating label input {
+            position: absolute;
+            top: 0;
+            left: 0;
+            opacity: 0;
+        }
+
+        .rating label .icon {
+            float: left;
+            color: transparent;
+        }
+
+        .rating label:last-child .icon {
+            color: #fff3b2;
+        }
+
+    .rating:not(:hover) label input:checked ~ .icon,
+    .rating:hover label:hover input ~ .icon {
+        color: gold;
+    }
+
+    .rating label input:focus:not(:checked) ~ .icon:last-child {
+        color: #fff3b2;
+        text-shadow: 0 0 5px gold;
+    }
+    /*this datalist bottom*/
 .btn-select {
     position: relative;
     padding: 0;

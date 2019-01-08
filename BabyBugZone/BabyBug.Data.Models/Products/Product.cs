@@ -18,6 +18,8 @@ namespace BabyBug.Data.Models.Products
 
             this.OrderProducts = new HashSet<OrderProduct>();
 
+            this.UserReviews = new HashSet<UserReviews>();
+
             this.IsAvailable = false;
 
             this.CreatedOn = DateTime.UtcNow;
@@ -52,5 +54,7 @@ namespace BabyBug.Data.Models.Products
         public ICollection<ProductSpecification> Specifications { get; set; }
 
         public ICollection<OrderProduct> OrderProducts { get; set; }
+
+        public ICollection<UserReviews> UserReviews { get; set; }        
     }
 }

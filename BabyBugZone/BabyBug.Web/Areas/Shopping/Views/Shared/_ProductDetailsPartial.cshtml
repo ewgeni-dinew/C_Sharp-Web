@@ -11,9 +11,15 @@
 <div class="original_price"></div>
 <div class="product_price"><span style="color:black">Price: </span> $@Model.Price</div>
 <ul class="star_rating">
-    <li><i class="fa fa-star" aria-hidden="true"></i></li>
-    <li><i class="fa fa-star" aria-hidden="true"></i></li>
-    <li><i class="fa fa-star" aria-hidden="true"></i></li>
-    <li><i class="fa fa-star" aria-hidden="true"></i></li>
-    <li><i class="fa fa-star-o" aria-hidden="true"></i></li>
+    @for (int i = 1; i <= 5; i++)
+    {
+        if (i <= Model.Rating)
+        {
+            <li><i class="fa fa-star" aria-hidden="true"></i></li>
+        }
+        else
+        {
+            <li><i class="fa fa-star-o" aria-hidden="true"></i></li>
+        }
+    }
 </ul>

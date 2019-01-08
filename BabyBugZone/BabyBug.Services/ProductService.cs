@@ -1,6 +1,8 @@
 ﻿using BabyBug.Common.ViewModels.Garments;
 using BabyBug.Common.ViewModels.Products;
+using BabyBug.Common.ViewModels.Reviews;
 using BabyBug.Data.Models;
+using BabyBug.Data.Models.Enums;
 using BabyBug.Data.Models.Products;
 using BabyBug.Services.Contracts;
 using BabyBugZone.Data;
@@ -20,6 +22,7 @@ namespace BabyBug.Services
     public class ProductService : BaseCloudinaryService, IProductService
     {
         private const string IMAGE_PATH = @"Products";
+        private const int DISPLAY_REVIEW_COUNT = 3;
 
         public ProductService(BabyBugDbContext DbContext)
             : base(DbContext)
@@ -97,9 +100,9 @@ namespace BabyBug.Services
         {
             var product = await this.DbContext
                 .Products
-                .FirstOrDefaultAsync(x => x.Id.Equals(id) && x.IsAvailable==true);
+                .FirstOrDefaultAsync(x => x.Id.Equals(id) && x.IsAvailable == true);
 
-            if (product==null)
+            if (product == null)
             {
                 throw new ArgumentException("Product is unavailable at the moment.");
             }
@@ -113,6 +116,41 @@ namespace BabyBug.Services
                 })
                 .FirstOrDefaultAsync(x => x.Id.Equals(product.CategoryId));
 
+            //get avrg(rating) and all product revies ->
+            var reviews = new HashSet<BaseDisplayProductReviewModel>();
+            
+            var ratings = new List<int>();
+
+            var user_reviews = this.DbContext
+                .UserReviews
+                .Where(x => x.ProductId.Equals(id))
+                .ToHashSet();
+
+            foreach (var ur in user_reviews)
+            {
+                var review = await this.DbContext
+                    .Reviews
+                    .FirstOrDefaultAsync(x => x.Id.Equals(ur.ReviewId) && x.Status==ReviewStatus.Approved);
+
+                if (review!=null)
+                {
+                    reviews.Add(new BaseDisplayProductReviewModel
+                    {
+                        Author = review.UserName,
+                        Content = review.Content,
+                        CreatedOn = review.CreatedOn.ToString("dd/MM/yyyy"),
+                        Rating = review.Rating
+                    });
+                    ratings.Add(review.Rating);
+                }
+            }
+            if (!ratings.Any())
+            {
+                ratings.Add(0);
+            }
+
+
+            //get product sizes
             var productSizes = this.DbContext
                 .ProductSpecifications
                 .Where(x => x.ProductId.Equals(id))
@@ -140,12 +178,14 @@ namespace BabyBug.Services
                 Price = product.Price,
                 Gender = product.Gender,
                 CreatedOn = product.CreatedOn.ToString("dd-MM-yyyy"),
-                ImageUrl = product.ImageUrl
+                ImageUrl = product.ImageUrl,
+                ProductReviews = reviews.Take(DISPLAY_REVIEW_COUNT).ToHashSet(),
+                Rating=(int)Math.Round(ratings.Average()),
             };
-
+            
             return model;
         }
-
+        
         public async Task<DeleteProductModel> GetDeleteModelAsync(int id)
         {
             var product = await this.DbContext
@@ -280,16 +320,16 @@ namespace BabyBug.Services
                     CreatedOn = product.CreatedOn.ToString("dd/MM/yyyy HH:mm"),
                 });
             }
-            return model;            
+            return model;
         }
 
-        private Dictionary<int,string> GetProductTypes()
+        private Dictionary<int, string> GetProductTypes()
         {
             var result = this.DbContext.ProductTypes.ToDictionary(x => x.Id, x => x.Type);
 
             //var result = await this.DbContext.ProductTypes.FirstOrDefaultAsync(x => x.Id.Equals(typeId));
 
             return result;
-        }
+        }             
     }
 }

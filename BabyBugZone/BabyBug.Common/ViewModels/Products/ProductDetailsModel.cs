@@ -1,4 +1,5 @@
-﻿using System;
+﻿using BabyBug.Common.ViewModels.Reviews;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Text;
@@ -15,6 +16,8 @@ namespace BabyBug.Common.ViewModels.Garments
 
         public string Name { get; set; }
 
+        public int Rating { get; set; }
+
         public char Gender { get; set; }
 
         public string Description { get; set; }
@@ -25,14 +28,14 @@ namespace BabyBug.Common.ViewModels.Garments
 
         public string ImageUrl { get; set; }
 
-        public HashSet<string> AvailableSizes { get; set; }
-
-        [Required]
+        public HashSet<string> AvailableSizes { get; set; }        
+        
         public string Size { get; set; }
-
-        [Required]
-        [Display(Name="Quantity")]
-        [Range(0,5, ErrorMessage ="The quantity must be between 0 and 5!")]
+        
         public uint Quantity { get; set; }
+
+        public ICollection<BaseDisplayProductReviewModel> ProductReviews { get; set; }
+
+        public CreateReviewProductModel ReviewModel { get; set; }
     }
 }
