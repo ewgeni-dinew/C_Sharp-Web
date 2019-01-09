@@ -8,8 +8,8 @@ namespace BabyBug.Common.Constants
     {
         public const string ERROR_MSG = "The {0} must be at least {2} and at max {1} characters long.";
 
-        public const int CONTENT_LENGTH_MAX = 5000;
-        public const int CONTENT_LENGTH_MIN = 100;
+        public const int BLOG_CONTENT_LENGTH_MAX = 5000;
+        public const int BLOG_CONTENT_LENGTH_MIN = 100;
         public const int AUTHOR_NAME_MAX = 25;
         public const int AUTHOR_NAME_MIN = 5;
         public const int HEADER_LENGTH_MIN = 5;
@@ -28,8 +28,10 @@ namespace BabyBug.Common.Constants
         public const int DESTINATION_NAME_LENGTH_MAX = 30;
         public const int PRODUCT_NAME_MAX = 25;
         public const int PRODUCT_NAME_MIN = 3;
-        public const int PRODUCT_DESCRIPTION_MAX = 800;
+        public const int PRODUCT_DESCRIPTION_MAX = 1200;
         public const int PRODUCT_DESCRIPTION_MIN = 10;
+        public const int CONTENT_DESCRIPTION_MAX = 500;
+        public const int CONTENT_DESCRIPTION_MIN = 10;
 
         public const string CATEGORY_NAME_RGX_ERROR = "Invalid Category name.";
         public const string BLOG_AUTHOR_RGX_ERROR = "Invalid Author name.";
@@ -41,6 +43,8 @@ namespace BabyBug.Common.Constants
         public const string CITY_NAME_RGX_ERROR = "Invalid City name.";
         public const string ADDRESS_NAME_RGX_ERROR = "Invalid Address.";
         public const string PRODUCT_NAME_RGX_ERROR = "Invalid Product name.";
+        public const string REVIEW_NAME_RGX_ERROR = "Invalid Author name.";
+        public const string REVIEW_CONTENT_RGX_ERROR = "Invalid Review content.";
 
         public const string ALPHABETS_RGX = @"^[A-z\s\-]+$";
         public const string NUMERICS_RGX = @"^[0-9]+$";

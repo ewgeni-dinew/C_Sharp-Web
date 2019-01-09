@@ -2,7 +2,7 @@
 @addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
 
 @{
-    ViewData["Title"] = "ManageUser";
+    ViewData["Title"] = "Manage Delivery";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
@@ -47,6 +47,8 @@
 </div>
 
 @section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+
     <script type="text/javascript">
         function deliveryOfficeCheck() {
             if (document.getElementById("To Econt Office").checked ||
@@ -58,6 +60,5 @@
             }
         }
     </script>
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 }
 

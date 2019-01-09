@@ -20,6 +20,7 @@ using BabyBug.Services;
 using BabyBug.Services.Contracts;
 using System.Globalization;
 using Microsoft.AspNetCore.CookiePolicy;
+using AutoMapper;
 
 namespace BabyBug.Web
 {
@@ -65,6 +66,7 @@ namespace BabyBug.Web
                  facebookOptions.AppSecret = Configuration["Authentication:Facebook:AppSecret"];
              });
 
+            services.AddAutoMapper();
 
             //Services
             services.AddScoped<ICategoryService, CategoryService>();

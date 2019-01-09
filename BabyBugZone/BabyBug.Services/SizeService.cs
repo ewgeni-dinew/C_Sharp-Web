@@ -1,4 +1,5 @@
-﻿using BabyBug.Common.ViewModels.ProductSize;
+﻿using AutoMapper;
+using BabyBug.Common.ViewModels.ProductSize;
 using BabyBug.Data.Models;
 using BabyBug.Data.Models.ProductSpecifications;
 using BabyBug.Services.Contracts;
@@ -14,9 +15,12 @@ namespace BabyBug.Services
 {
     public class SizeService : BaseDbService, ISizeService
     {
-        public SizeService(BabyBugDbContext DbContext)
+        public IMapper Mapper { get; set; }
+
+        public SizeService(BabyBugDbContext DbContext, IMapper Mapper)
             : base(DbContext)
         {
+            this.Mapper = Mapper;
         }
 
         public async Task<ICollection<BaseProductSizeModel>> GetAllProductSizesAsync()
@@ -128,7 +132,7 @@ namespace BabyBug.Services
                 .FirstOrDefaultAsync(x => x.Id.Equals(id));
         }
 
-        public async Task<ProductManageSizesModel> GetCurrentProductSizeDetails(int productId, int typeId)
+        public async Task<ProductManageSizesModel> GetCurrentProductSizeDetailsAsync(int productId, int typeId)
         {
             var allProductSizes = this.DbContext
                 .ProductSizes
@@ -161,6 +165,7 @@ namespace BabyBug.Services
                 ProductId = productId,
                 CurrentSizes = dictionary,
                 AllProductSizes = allProductSizes,
+                TypeId = typeId,
             };
 
             return model;

@@ -22,7 +22,7 @@ namespace BabyBug.Common.ViewModels.Blog
         public string Header { get; set; }
 
         [Display(Name = "PageContent")]
-        [StringLength(ModelConstants.CONTENT_LENGTH_MAX, ErrorMessage = ModelConstants.ERROR_MSG, MinimumLength = ModelConstants.CONTENT_LENGTH_MIN)]
+        [StringLength(ModelConstants.BLOG_CONTENT_LENGTH_MAX, ErrorMessage = ModelConstants.ERROR_MSG, MinimumLength = ModelConstants.BLOG_CONTENT_LENGTH_MIN)]
         public string PageContent { get; set; }
 
         [Display(Name = "Picture")]

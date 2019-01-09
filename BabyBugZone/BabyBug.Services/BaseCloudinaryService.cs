@@ -1,4 +1,5 @@
 ﻿using BabyBug.Common.Validation;
+using BabyBug.Services.Contracts;
 using BabyBugZone.Data;
 using CloudinaryDotNet;
 using CloudinaryDotNet.Actions;
@@ -10,7 +11,7 @@ using System.Text;
 
 namespace BabyBug.Services
 {
-    public abstract class BaseCloudinaryService : BaseDbService
+    public abstract class BaseCloudinaryService : BaseDbService, IBaseCloudinaryService
     {
         protected const string BASE_PATH = @"https://res.cloudinary.com/dm6qsz74d/image/upload/v1545506271/";
 
@@ -29,7 +30,7 @@ namespace BabyBug.Services
 
         public Cloudinary Cloudinary { get; set; }
 
-        protected ImageUploadResult UploadImageToCloudinary(IFormFile file, string path)
+        public ImageUploadResult UploadImageToCloudinary(IFormFile file, string path)
         {
             var uploadParams = new ImageUploadParams()
             {
@@ -42,7 +43,7 @@ namespace BabyBug.Services
             return uploadResult;
         }
 
-        protected void RemoveImageFromCloudinary(string imageId)
+        public void RemoveImageFromCloudinary(string imageId)
         {
             var imageIdParams = new DeletionParams(imageId);
 

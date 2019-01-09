@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace BabyBug.Services.Contracts
 {
-    public interface IProductCatalogService
+    public interface IProductCatalogService : IBaseDbService
     {
         Task<HomeCatalogModel> GetHomeViewModelAsync();
 

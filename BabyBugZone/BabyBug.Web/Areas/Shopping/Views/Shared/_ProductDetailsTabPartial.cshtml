@@ -52,12 +52,27 @@
                         <partial name="_ProductReviewsTabPartial" model=@Model.ProductReviews />
 
                         <!-- Add Review -->
-                        <partial name="_AddProductReviewPartial" model=@Model />
+                        <div class="col-lg-6 add_review_col">
 
+                            <div class="add_review">
+                                <form id="review_form" method="post" asp-area="User" asp-controller="Reviews" asp-action="Submit" asp-route-username=@this.User.Identity.Name>
+                                    @if (User.Identity.IsAuthenticated)
+                                    {
+                                        <partial name="_AddProductReviewFormPartial" model=@Model />
+                                    }
+                                    else
+                                    {
+                                        <fieldset disabled>
+                                            <partial name="_AddProductReviewFormPartial" model=@Model />
+                                        </fieldset>
+                                    }
+                                </form>
+                            </div>
+                        </div>
                     </div>
                 </div>
-
             </div>
         </div>
     </div>
 </div>
+

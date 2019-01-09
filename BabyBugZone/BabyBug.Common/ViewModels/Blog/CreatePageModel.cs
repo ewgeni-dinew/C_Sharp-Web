@@ -21,7 +21,7 @@ namespace BabyBug.Common.ViewModels.Blog
 
         [Required]
         [Display(Name = "Content")]
-        [StringLength(ModelConstants.CONTENT_LENGTH_MAX, ErrorMessage =ModelConstants.ERROR_MSG, MinimumLength = ModelConstants.CONTENT_LENGTH_MIN)]
+        [StringLength(ModelConstants.BLOG_CONTENT_LENGTH_MAX, ErrorMessage =ModelConstants.ERROR_MSG, MinimumLength = ModelConstants.BLOG_CONTENT_LENGTH_MIN)]
         public string Content { get; set; }
 
         [Required]

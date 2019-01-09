@@ -65,12 +65,7 @@ namespace BabyBug.Services
         }
 
         public async Task EditBlogPageAsync(int id, PageEditModel model)
-        {
-            if (!this.IsValidImageFile(model.Picture))
-            {
-                throw new ArgumentException("Invalid file type!");
-            }
-
+        {            
             var page = await this.DbContext
                 .BlogPages
                 .FirstOrDefaultAsync(x => x.Id.Equals(id));
@@ -89,7 +84,11 @@ namespace BabyBug.Services
             }
             if (model.Picture != null)
             {
-                //update picture
+                //check if valid picture
+                if (!this.IsValidImageFile(model.Picture))
+                {
+                    throw new ArgumentException("Invalid file type!");
+                }
 
                 //remove old image from Cloudinary
                 this.RemoveImageFromCloudinary(page.ImageId);

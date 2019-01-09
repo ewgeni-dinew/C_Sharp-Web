@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using BabyBug.Common.Constants;
 using BabyBug.Common.ViewModels.Garments;
 using BabyBug.Services.Contracts;
 using Microsoft.AspNetCore.Authorization;
@@ -9,7 +10,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace BabyBug.Web.Areas.User.Controllers
 {
-    [Area("User")]
+    [Area(AreaConstants.USER)]
     [Authorize()]
     public class ReviewsController : Controller
     {
@@ -26,10 +27,10 @@ namespace BabyBug.Web.Areas.User.Controllers
         {
             try
             {
-                //if (!ModelState.IsValid)
-                //{
-                //    throw new ArgumentException("Review not submitted. Invalid input parameters!");
-                //}
+                if (!ModelState.IsValid)
+                {
+                    throw new ArgumentException("Ops...Something went wrong with your review.");
+                }
                 await this.reviewService
                     .SubmitReviewAsync(username, model);
 
@@ -38,7 +39,7 @@ namespace BabyBug.Web.Areas.User.Controllers
             }
             catch (Exception ex)
             {
-                return this.View("Error", ex.InnerException.Message);
+                return this.View("Error", ex.Message);
             }
 
         }

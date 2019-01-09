@@ -1,0 +1,50 @@
+﻿@model BabyBug.Common.ViewModels.Garments.ProductDetailsModel
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+
+<div>
+    <h1>Add Review</h1>
+    <input asp-for=@Model.Id type="hidden" value=@Model.Id />
+    <input asp-for=@Model.ReviewModel.AuthorName id="review_name" class="form_input input_name" type="text" placeholder="Name*" required="required" data-error="Name is required.">
+    <span asp-validation-for=@Model.ReviewModel.AuthorName class="text-danger"></span>
+</div>
+<div>
+    <h1>Your Rating:</h1>
+    <div class="rating ml-2">
+        <label>
+            <input asp-for=@Model.ReviewModel.Rating type="radio" value=1 required="required" />
+            <span class="icon"><i class="fa fa-star" aria-hidden="true"></i></span>
+        </label>
+        <label>
+            <input asp-for=@Model.ReviewModel.Rating type="radio" value=2 />
+            <span class="icon"><i class="fa fa-star" aria-hidden="true"></i></span>
+            <span class="icon"><i class="fa fa-star" aria-hidden="true"></i></span>
+        </label>
+        <label>
+            <input asp-for=@Model.ReviewModel.Rating type="radio" value=3 />
+            <span class="icon"><i class="fa fa-star" aria-hidden="true"></i></span>
+            <span class="icon"><i class="fa fa-star" aria-hidden="true"></i></span>
+            <span class="icon"><i class="fa fa-star" aria-hidden="true"></i></span>
+        </label>
+        <label>
+            <input asp-for=@Model.ReviewModel.Rating type="radio" value=4 />
+            <span class="icon"><i class="fa fa-star" aria-hidden="true"></i></span>
+            <span class="icon"><i class="fa fa-star" aria-hidden="true"></i></span>
+            <span class="icon"><i class="fa fa-star" aria-hidden="true"></i></span>
+            <span class="icon"><i class="fa fa-star" aria-hidden="true"></i></span>
+        </label>
+        <label>
+            <input asp-for=@Model.ReviewModel.Rating type="radio" value=5 />
+            <span class="icon"><i class="fa fa-star" aria-hidden="true"></i></span>
+            <span class="icon"><i class="fa fa-star" aria-hidden="true"></i></span>
+            <span class="icon"><i class="fa fa-star" aria-hidden="true"></i></span>
+            <span class="icon"><i class="fa fa-star" aria-hidden="true"></i></span>
+            <span class="icon"><i class="fa fa-star" aria-hidden="true"></i></span>
+        </label>
+    </div>
+    <textarea asp-for=@Model.ReviewModel.Content id="review_message" class="input_review" placeholder="Your Review" rows="4" required data-error="Please, leave us a review."></textarea>
+    <span asp-validation-for=@Model.ReviewModel.Content class="text-danger"></span>
+</div>
+<div class="text-left text-sm-right">
+    <button id="review_submit" type="submit" class="red_button review_submit_btn trans_300" value="Submit">submit</button>
+</div>
+

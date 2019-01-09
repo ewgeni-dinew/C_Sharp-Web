@@ -2,14 +2,15 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using BabyBug.Common.Constants;
 using BabyBug.Services.Contracts;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BabyBug.Web.Areas.Administrator.Controllers
 {
-    [Area("Administrator")]
-    [Authorize(Roles = "Admin")]
+    [Area(AreaConstants.ADMIN)]
+    [Authorize(Roles = RoleConstants.ADMIN)]
     public class ReviewsController : Controller
     {
         private readonly IReviewService reviewService;

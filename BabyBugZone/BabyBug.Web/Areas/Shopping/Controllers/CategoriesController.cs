@@ -2,12 +2,13 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using BabyBug.Common.Constants;
 using BabyBug.Services.Categories.Contracts;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BabyBug.Web.Areas.Shopping.Controllers
 {
-    [Area("Shopping")]
+    [Area(AreaConstants.SHOPPING)]
     public class CategoriesController : Controller
     {
         private readonly ICategoryService categoryService;

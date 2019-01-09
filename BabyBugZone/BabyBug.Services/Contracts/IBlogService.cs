@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Http;
 
 namespace BabyBug.Services.Contracts
 {
-    public interface IBlogService
+    public interface IBlogService : IBaseCloudinaryService
     {
         Task CreateBlogPageAsync(CreatePageModel model);
 

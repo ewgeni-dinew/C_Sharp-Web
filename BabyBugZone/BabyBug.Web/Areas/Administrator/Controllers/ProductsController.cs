@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using BabyBug.Common.Constants;
 using BabyBug.Common.ViewModels.Garments;
 using BabyBug.Services.Contracts;
 using Microsoft.AspNetCore.Authorization;
@@ -10,8 +11,8 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace BabyBug.Web.Areas.Administrator.Controllers
 {
-    [Area("Administrator")]
-    [Authorize(Roles = "Admin")]
+    [Area(AreaConstants.ADMIN)]
+    [Authorize(Roles = RoleConstants.ADMIN)]
     public class ProductsController : Controller
     {
         private readonly IProductService productService;
@@ -79,7 +80,7 @@ namespace BabyBug.Web.Areas.Administrator.Controllers
 
                 await this.productService.EditProductAsync(id, model);
 
-                return RedirectToAction("Index", "Home", new { area = "" });
+                return RedirectToAction("Details", "Products", new { id, area = "Shopping" });
             }
             catch (Exception ex)
             {

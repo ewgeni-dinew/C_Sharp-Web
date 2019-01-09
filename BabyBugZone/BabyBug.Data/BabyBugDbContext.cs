@@ -110,7 +110,7 @@ namespace BabyBugZone.Data
                 .IsRequired(false);
 
             builder.Entity<OrderProduct>()
-                .HasKey(x => new { x.ProductId, x.OrderId });
+                .HasKey(x => new { x.ProductId, x.OrderId, x.Size });
 
             builder.Entity<OrderProduct>()
                 .Property(x => x.Price)

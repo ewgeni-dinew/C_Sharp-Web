@@ -36,6 +36,7 @@ namespace BabyBug.Services
                 .FirstOrDefaultAsync(x => x.UserId.Equals(user.Id)
                                     && x.Status.Equals(OrderStatus.Created)
                                     && x.OrderProducts.Any(g => g.ProductId.Equals(id)
+                                                        && g.OrderId.Equals(x.Id)
                                                         && g.Size.Equals(model.Size)));
 
             if (order == null)
@@ -55,21 +56,22 @@ namespace BabyBug.Services
                     await this.DbContext
                         .Orders
                         .AddAsync(order);
-
-                    await this.DbContext
-                    .SaveChangesAsync();
                 }
+
+                await this.DbContext
+                    .SaveChangesAsync();
 
                 var orderProduct = new OrderProduct
                 {
+                    OrderId = order.Id,
                     ProductId = id,
                     Price = product.Price,
                     Size = model.Size,
                     Quantity = model.Quantity,
                 };
 
-                order.OrderProducts
-                    .Add(orderProduct);
+                await this.DbContext.OrderProducts
+                    .AddAsync(orderProduct);
             }
             else
             {
@@ -81,7 +83,6 @@ namespace BabyBug.Services
 
                 temp.Quantity += model.Quantity;
             }
-
             await this.DbContext
                     .SaveChangesAsync();
         }

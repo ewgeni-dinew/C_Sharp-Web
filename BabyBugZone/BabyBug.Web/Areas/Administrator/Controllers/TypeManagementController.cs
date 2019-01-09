@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using BabyBug.Common.Constants;
 using BabyBug.Common.ViewModels.TypeManagement;
 using BabyBug.Services.Contracts;
 using Microsoft.AspNetCore.Authorization;
@@ -10,8 +11,8 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace BabyBug.Web.Areas.Administrator.Controllers
 {
-    [Area("Administrator")]
-    [Authorize(Roles = "Admin")]
+    [Area(AreaConstants.ADMIN)]
+    [Authorize(Roles = RoleConstants.ADMIN)]
     public class TypeManagementController : Controller
     {
         private readonly ITypeManagementService managementService;

@@ -8,7 +8,7 @@ using BabyBug.Common.ViewModels.Reviews;
 
 namespace BabyBug.Services.Contracts
 {
-    public interface IReviewService
+    public interface IReviewService : IBaseDbService
     {
         Task SubmitReviewAsync(string username, ProductDetailsModel model);
 

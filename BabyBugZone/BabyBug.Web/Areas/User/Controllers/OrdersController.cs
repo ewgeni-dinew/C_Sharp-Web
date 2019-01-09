@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using BabyBug.Common.Constants;
 using BabyBug.Common.ViewModels.Garments;
 using BabyBug.Common.ViewModels.Orders;
 using BabyBug.Services.Contracts;
@@ -10,7 +11,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace BabyBug.Web.Areas.User.Controllers
 {
-    [Area("User")]
+    [Area(AreaConstants.USER)]
     [Authorize()]
     public class OrdersController : Controller
     {

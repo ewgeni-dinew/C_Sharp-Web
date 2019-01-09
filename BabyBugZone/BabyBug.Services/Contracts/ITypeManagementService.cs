@@ -7,10 +7,8 @@ using System.Threading.Tasks;
 
 namespace BabyBug.Services.Contracts
 {
-    public interface ITypeManagementService
+    public interface ITypeManagementService : IBaseDbService
     {
-        BabyBugDbContext DbContext { get; set; }
-
         AllTypesModel GetAllTypes();
 
         CreateTypeModel GetCreateTypeModel();

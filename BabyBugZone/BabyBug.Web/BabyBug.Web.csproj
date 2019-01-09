@@ -8,6 +8,8 @@
 
 
   <ItemGroup>
+    <PackageReference Include="AutoMapper" Version="8.0.0" />
+    <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="6.0.0" />
     <PackageReference Include="Microsoft.AspNetCore.App" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.Facebook" Version="2.2.0" />
     <PackageReference Include="Microsoft.AspNetCore.Razor.Design" Version="2.2.0" PrivateAssets="All" />
@@ -21,12 +23,6 @@
     <ProjectReference Include="..\BabyBug.Data.Models\BabyBug.Data.Models.csproj" />
     <ProjectReference Include="..\BabyBug.Data\BabyBug.Data.csproj" />
     <ProjectReference Include="..\BabyBug.Services\BabyBug.Services.csproj" />
-  </ItemGroup>
-
-
-  <ItemGroup>
-    <Folder Include="Areas\Shopping\Models\" />
-    <Folder Include="Areas\User\Models\" />
   </ItemGroup>
 
 </Project>

@@ -8,10 +8,8 @@ using System.Threading.Tasks;
 
 namespace BabyBug.Services.Contracts
 {
-    public interface IOrderService
+    public interface IOrderService : IBaseDbService
     {
-        BabyBugDbContext DbContext { get; set; }
-
         Task OrderProductAsync(int id, string userName, ProductDetailsModel model);
 
         Task<ICollection<OrderViewModel>> GetAwaitingOrdersAsync();

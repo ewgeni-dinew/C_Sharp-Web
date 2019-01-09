@@ -23,6 +23,7 @@ namespace BabyBug.Services
     {
         private const string IMAGE_PATH = @"Products";
         private const int DISPLAY_REVIEW_COUNT = 3;
+        private const int PRODUCT_SHORT_DESCRIPTION_COUNT = 90;
 
         public ProductService(BabyBugDbContext DbContext)
             : base(DbContext)
@@ -118,7 +119,7 @@ namespace BabyBug.Services
 
             //get avrg(rating) and all product revies ->
             var reviews = new HashSet<BaseDisplayProductReviewModel>();
-            
+
             var ratings = new List<int>();
 
             var user_reviews = this.DbContext
@@ -130,9 +131,9 @@ namespace BabyBug.Services
             {
                 var review = await this.DbContext
                     .Reviews
-                    .FirstOrDefaultAsync(x => x.Id.Equals(ur.ReviewId) && x.Status==ReviewStatus.Approved);
+                    .FirstOrDefaultAsync(x => x.Id.Equals(ur.ReviewId) && x.Status == ReviewStatus.Approved);
 
-                if (review!=null)
+                if (review != null)
                 {
                     reviews.Add(new BaseDisplayProductReviewModel
                     {
@@ -153,7 +154,7 @@ namespace BabyBug.Services
             //get product sizes
             var productSizes = this.DbContext
                 .ProductSpecifications
-                .Where(x => x.ProductId.Equals(id))
+                .Where(x => x.ProductId.Equals(id) && x.Quantity > 0)
                 .ToList();
 
             var availableSizes = new HashSet<string>();
@@ -174,18 +175,19 @@ namespace BabyBug.Services
                 CategoryName = category.Name,
                 Id = product.Id,
                 Name = product.Name,
+                ShortDescription = product.Description.Substring(0, PRODUCT_SHORT_DESCRIPTION_COUNT),
                 Description = product.Description,
                 Price = product.Price,
                 Gender = product.Gender,
                 CreatedOn = product.CreatedOn.ToString("dd-MM-yyyy"),
                 ImageUrl = product.ImageUrl,
                 ProductReviews = reviews.Take(DISPLAY_REVIEW_COUNT).ToHashSet(),
-                Rating=(int)Math.Round(ratings.Average()),
+                Rating = (int)Math.Round(ratings.Average()),
             };
-            
+
             return model;
         }
-        
+
         public async Task<DeleteProductModel> GetDeleteModelAsync(int id)
         {
             var product = await this.DbContext
@@ -254,11 +256,6 @@ namespace BabyBug.Services
 
         public async Task EditProductAsync(int id, EditProductModel model)
         {
-            if (!this.IsValidImageFile(model.Picture))
-            {
-                throw new ArgumentException("Invalid file type!");
-            }
-
             var product = await this.DbContext
                 .Products
                 .FirstOrDefaultAsync(x => x.Id.Equals(id));
@@ -285,7 +282,11 @@ namespace BabyBug.Services
             }
             if (model.Picture != null)
             {
-                //update picture
+                //check if valid picture
+                if (!this.IsValidImageFile(model.Picture))
+                {
+                    throw new ArgumentException("Invalid file type!");
+                }
 
                 //remove old image from Cloudinary
                 this.RemoveImageFromCloudinary(product.ImageId);
@@ -330,6 +331,6 @@ namespace BabyBug.Services
             //var result = await this.DbContext.ProductTypes.FirstOrDefaultAsync(x => x.Id.Equals(typeId));
 
             return result;
-        }             
+        }
     }
 }

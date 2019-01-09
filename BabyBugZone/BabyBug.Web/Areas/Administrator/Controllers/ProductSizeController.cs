@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using BabyBug.Common.Constants;
 using BabyBug.Common.ViewModels.ProductSize;
 using BabyBug.Services.Contracts;
 using Microsoft.AspNetCore.Authorization;
@@ -10,8 +11,8 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace BabyBug.Web.Areas.Administrator.Controllers
 {
-    [Area("Administrator")]
-    [Authorize(Roles = "Admin")]
+    [Area(AreaConstants.ADMIN)]
+    [Authorize(Roles = RoleConstants.ADMIN)]
     public class ProductSizeController : Controller
     {
         private readonly ISizeService garmentSizeService;
@@ -77,7 +78,7 @@ namespace BabyBug.Web.Areas.Administrator.Controllers
         public async Task<ActionResult> ManageSizes(int id, int typeId)
         {
             var model = await this.garmentSizeService
-                .GetCurrentProductSizeDetails(id, typeId);
+                .GetCurrentProductSizeDetailsAsync(id, typeId);
 
             return this.View(model);
         }
@@ -118,7 +119,7 @@ namespace BabyBug.Web.Areas.Administrator.Controllers
 
                 await this.garmentSizeService.AddQuantityToProductAsync(id, model);
 
-                return this.RedirectToAction("ManageSizes", "ProductSize", new { id });
+                return this.RedirectToAction("ManageSizes", "ProductSize", new { id, typeId = model.TypeId });
             }
             catch (Exception ex)
             {
@@ -139,7 +140,7 @@ namespace BabyBug.Web.Areas.Administrator.Controllers
 
                 await this.garmentSizeService.RemoveQuantityFromProductAsync(id, model);
 
-                return this.RedirectToAction("ManageSizes", "ProductSize", new { id });
+                return this.RedirectToAction("ManageSizes", "ProductSize", new { id, typeId = model.TypeId });
             }
             catch (Exception ex)
             {

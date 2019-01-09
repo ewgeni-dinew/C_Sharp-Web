@@ -21,7 +21,7 @@
                 <ul>
                     <li><a asp-controller="Home" asp-action="Index">Home</a></li>
                     <li><a asp-area="Shopping" asp-controller="Categories" asp-action="Index"><i class="fa fa-angle-right" aria-hidden="true"></i>Categories</a></li>
-                    <li class="active"><a asp-area="Shopping" asp-controller="Categories" asp-action="Index"><i class="fa fa-angle-right" aria-hidden="true"></i>@Model.CategoryName</a></li>
+                    <li class="active"><a asp-area="Shopping" asp-controller="Products" asp-action="FilterByCategory" asp-route-name=@Model.CategoryName><i class="fa fa-angle-right" aria-hidden="true"></i>@Model.CategoryName</a></li>
                 </ul>
             </div>
 
@@ -44,6 +44,9 @@
 <partial name="_ProductDetailsTabPartial" model=@Model />
 
 @section Scripts {
+
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+
     <script src="~/plugins/jquery-ui-1.12.1.custom/jquery-ui.js" asp-append-version="true"></script>
 
     <script src="~/js/single_custom.js" asp-append-version="true"></script>

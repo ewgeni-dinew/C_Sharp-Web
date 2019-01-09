@@ -9,10 +9,13 @@ namespace BabyBug.Common.ViewModels.ProductSize
     {
         public int ProductId { get; set; }
 
+        public int TypeId { get; set; }
+
         public IDictionary<string, uint> CurrentSizes { get; set; }
 
         public HashSet<string> AllProductSizes { get; set; }
 
+        [Required]
         public string ChoosenSize { get; set; }
 
         public string CategoryName { get; set; }

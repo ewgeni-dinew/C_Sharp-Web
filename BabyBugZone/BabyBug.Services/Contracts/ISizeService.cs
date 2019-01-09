@@ -1,4 +1,5 @@
-﻿using BabyBug.Common.ViewModels.ProductSize;
+﻿using AutoMapper;
+using BabyBug.Common.ViewModels.ProductSize;
 using BabyBugZone.Data;
 using System;
 using System.Collections.Generic;
@@ -7,10 +8,8 @@ using System.Threading.Tasks;
 
 namespace BabyBug.Services.Contracts
 {
-    public interface ISizeService
+    public interface ISizeService : IBaseDbService
     {
-        BabyBugDbContext DbContext { get; set; }
-
         Task<ICollection<BaseProductSizeModel>> GetAllProductSizesAsync();
 
         CreateProductSizeModel GetCreateSizeModel();
@@ -21,7 +20,7 @@ namespace BabyBug.Services.Contracts
 
         Task DeleteSizeAsync(int id);
 
-        Task<ProductManageSizesModel> GetCurrentProductSizeDetails(int productId, int typeId);
+        Task<ProductManageSizesModel> GetCurrentProductSizeDetailsAsync(int productId, int typeId);
 
         Task AddQuantityToProductAsync(int id, ProductManageSizesModel model);
 

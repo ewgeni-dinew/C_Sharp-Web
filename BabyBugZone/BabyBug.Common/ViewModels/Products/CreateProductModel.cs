@@ -24,8 +24,7 @@ namespace BabyBug.Common.ViewModels.Garments
         [Display(Name = "Description")]
         [StringLength(ModelConstants.PRODUCT_DESCRIPTION_MAX, ErrorMessage = ModelConstants.ERROR_MSG, MinimumLength = ModelConstants.PRODUCT_DESCRIPTION_MIN)]
         public string Description { get; set; }
-
-        [Display(Name = "CategoryNames")]
+        
         public HashSet<string> CategoryNames { get; set; }
 
         [Required]

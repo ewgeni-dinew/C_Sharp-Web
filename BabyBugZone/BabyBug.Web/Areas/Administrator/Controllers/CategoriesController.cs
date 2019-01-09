@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using BabyBug.Common.Constants;
 using BabyBug.Common.ViewModels.Categories;
 using BabyBug.Services.Categories.Contracts;
 using BabyBug.Services.Contracts;
@@ -11,8 +12,8 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace BabyBug.Web.Areas.Administrator.Controllers
 {
-    [Area("Administrator")]
-    [Authorize(Roles = "Admin")]
+    [Area(AreaConstants.ADMIN)]
+    [Authorize(Roles = RoleConstants.ADMIN)]
     public class CategoriesController : Controller
     {
         private readonly ICategoryService categoriesService;
@@ -80,17 +81,15 @@ namespace BabyBug.Web.Areas.Administrator.Controllers
             {
                 return this.View("Error", ex.Message);
             }
-
         }
-
-
+        
         [HttpGet]
         public async Task<ActionResult> Delete(int id)
         {
             var model = await this.categoriesService
                 .GetEditCategoryModelAsync(id);
 
-            return View(model);
+            return this.View(model);
         }
 
         [HttpPost]

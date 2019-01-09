@@ -20,6 +20,8 @@ namespace BabyBug.Common.ViewModels.Garments
 
         public char Gender { get; set; }
 
+        public string ShortDescription { get; set; }
+
         public string Description { get; set; }
 
         public decimal Price { get; set; }

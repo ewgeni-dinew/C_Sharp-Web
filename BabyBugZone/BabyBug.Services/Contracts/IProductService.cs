@@ -8,10 +8,8 @@ using System.Threading.Tasks;
 
 namespace BabyBug.Services.Contracts
 {
-    public interface IProductService
+    public interface IProductService: IBaseCloudinaryService
     {
-        BabyBugDbContext DbContext { get; set; }
-
         CreateProductModel GetProductCreateModel();
 
         Task<DeleteProductModel> GetDeleteModelAsync(int id);

@@ -1,4 +1,5 @@
 ﻿using BabyBug.Common.ViewModels.Categories;
+using BabyBug.Services.Contracts;
 using BabyBugZone.Data;
 using Microsoft.AspNetCore.Http;
 using System;
@@ -8,10 +9,8 @@ using System.Threading.Tasks;
 
 namespace BabyBug.Services.Categories.Contracts
 {
-    public interface ICategoryService
+    public interface ICategoryService: IBaseCloudinaryService
     {
-        BabyBugDbContext DbContext { get; set; }
-
         AllCategoriesModel GetAllProductCategories();
 
         CreateCategoryModel GetCreateCategoryModel();

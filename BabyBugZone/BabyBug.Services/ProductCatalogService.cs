@@ -14,7 +14,7 @@ namespace BabyBug.Services
     public class ProductCatalogService : BaseDbService, IProductCatalogService
     {
         private const int CURRENT_START_PAGE = 1;
-        private const int PRODUCTS_PER_PAGE_COUNT = 1;
+        private const int PRODUCTS_PER_PAGE_COUNT = 2;
         private const string GENDER_VALUE = "";
 
         //private const int PAGE_ITEMS_MAXCOUNT = 3;
@@ -26,12 +26,16 @@ namespace BabyBug.Services
 
         public async Task<HomeCatalogModel> GetHomeViewModelAsync()
         {
-            return await this.GetHomeModelByTypeAsync("Garment", GENDER_VALUE);
+            var type = await this.DbContext.ProductTypes.FirstOrDefaultAsync();
+
+            return await this.GetHomeModelByTypeAsync(type.Type, GENDER_VALUE);
         }
 
         public async Task<HomeCatalogModel> GetHomeModelByGenderAsync(string gender)
         {
-            return await this.GetHomeModelByTypeAsync("Garment", gender);
+            var type = await this.DbContext.ProductTypes.FirstOrDefaultAsync();
+
+            return await this.GetHomeModelByTypeAsync(type.Type, gender);
         }
 
         public async Task<HomeCatalogModel> GetHomeModelByTypeAsync(string type)
